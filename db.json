@@ -1,0 +1,47 @@
+{
+  "owner": [
+    {
+      "id": "donoMais",
+      "email": "sorvetesGerente@gmail.com",
+      "password": "sorvetesadm"
+    }
+  ],
+  "company": [
+    {
+      "id": "sovetes-mais",
+      "idOwner": "donoMais",
+      "name": "Sorvetes Mais"
+    }
+  ],
+  "manager": [
+    {
+      "idStore": "sorvetes-mais-calama",
+      "email": "sorvetes@gmail.com",
+      "password": "sorvetesadm"
+    }
+  ],
+  "store": [
+    {
+      "id": "sorvetes-mais-calama",
+      "idCompany": "sovetes-mais",
+      "stock": {
+        "flavors": [
+          {
+            "name": "baunilha",
+            "quantity": 10
+          },
+          {
+            "name": "chocolate",
+            "quantity": 10
+          }
+        ],
+        "cone": 50
+
+      },
+      "revenue": {
+        "profit": 1000,
+        "expenses": 100
+      }
+    }
+  ]
+}
