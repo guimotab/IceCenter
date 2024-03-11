@@ -1,6 +1,5 @@
 import { IStore } from "@/interface/IStore";
 import { HttpService } from "./HttpService";
-import axios from "axios";
 
 export class StoreService extends HttpService<IStore> {
   private static storeService: StoreService | undefined

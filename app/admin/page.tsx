@@ -1,15 +1,19 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { OwnerController } from "@/controller/OwnerController";
+import { useUpdateCurrentOwner } from "@/state/hooks/useUpdateCurrentOwner";
+import { LocalStorageUtils } from "@/utils/LocalStorageUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { Form, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 export default function Login() {
   const router = useRouter()
+  const setCurrentOwner = useUpdateCurrentOwner()
   const formSchema = z.object({
     // email: z.string().min(2).max(50),
     // password: z.string().min(4).max(30)
@@ -24,9 +28,13 @@ export default function Login() {
       password: ""
     },
   })
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const owner = await OwnerController.findCurrent()
+    setCurrentOwner(owner)
+    LocalStorageUtils.saveOwner(owner.id)
     router.push("admin/i2/home")
   }
+
   return (
     <main className="flex w-screen min-h-screen flex-col items-center justify-between p-24">
       <div className="max-w-[30rem] w-full">

@@ -1,48 +1,57 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import { CompanyController } from "@/controller/CompanyController"
-import { OwnerController } from "@/controller/OwnerController"
-import { ICompany } from "@/interface/ICompany"
-import { IOwner } from "@/interface/IOwner"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { StoreController } from "@/controller/StoreController"
+import { IStore } from "@/interface/IStore"
+import useCurrentCompany from "@/state/hooks/useCurrentCompany"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
 const Home = () => {
-  const [owners, setOwners] = useState<IOwner[]>()
-  const [companys, setCompanys] = useState<ICompany[]>()
+  const company = useCurrentCompany()
+  const [stores, setStores] = useState<IStore[]>()
+
   useEffect(() => {
-    async function teste() {
-      const [owner, company] = await Promise.all([OwnerController.getAll(), CompanyController.getAll()])
-      setOwners(owner)
-      setCompanys(company)
+    async function load() {
+      setStores(
+        await StoreController.findByCompany(company.id)
+      )
     }
-    teste()
-    console.log("teste");
-    
-  })
+    if (company) {
+      load()
+    }
+  }, [company])
   return (
-    <main className="w-screen h-screen">
-      <div className="w-full flex flex-col items-center">
-        <div className="flex flex-col max-w-[40rem] items-center gap-5">
-          <div>
-            <h1>Lojas Atuais</h1>
-            <div>
-              {owners ?
-                owners.map(owner =>
-                  <div>{owner.email}</div>
-                )
-                : ""
-              }
-              {companys ?
-                companys.map(company =>
-                  <div>{company.name}</div>
-                ) : ""
-              }
-            </div>
+    <main className="flex flex-col items-center w-full h-screen">
+      <div className="w-full flex flex-col items-center mt-10 max-w-[70rem]">
+        <div className="flex flex-col w-full gap-5">
+          <div className="flex items-center gap-3">
+            <h1 className="text-xl font-medium">Lojas Atuais</h1>
+            <Link href={"./create-stores"}>
+              <Button>Nova Loja</Button>
+            </Link>
           </div>
-          <Link href={""}>
-            <Button>Nova Loja</Button>
-          </Link>
+          <div className="grid grid-cols-2 gap-x-10">
+            {stores ? stores.map(store =>
+              <Card>
+                <CardHeader className="py-4">
+                  <CardTitle className="text-lg">
+                    {store.name}
+                  </CardTitle>
+                  <CardDescription>
+                    <div>{store.name}</div>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Link href={""}>
+                    <Button>Ver Loja</Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            )
+              : ""
+            }
+          </div>
         </div>
       </div>
     </main>

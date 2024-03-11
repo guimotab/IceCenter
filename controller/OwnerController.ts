@@ -20,5 +20,9 @@ export abstract class OwnerController {
     await this.ownerService.deleteData(id)
   }
 
+  static async findCurrent(){
+    return this.get("donoMais")
+  }
+
 }
 

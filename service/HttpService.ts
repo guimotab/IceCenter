@@ -8,7 +8,6 @@ export abstract class HttpService<T> implements IHttpService<T> {
     this._url = "http://localhost:4000/" + url
   }
 
-
   async get(id: string): Promise<T> {
     const resp = await axios.get(`${this._url}/${id}`)
     return resp.data

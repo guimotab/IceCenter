@@ -2,21 +2,26 @@ import { IStore } from "@/interface/IStore"
 import { StoreService } from "@/service/StoreService"
 
 export abstract class StoreController  {
-  private storeService = StoreService.getInstance()
+  private static storeService = StoreService.getInstance()
   
-  async getAll(): Promise<IStore[]> {
+  static async getAll(): Promise<IStore[]> {
     return await this.storeService.getAll()
   }
 
-  async get(id: string): Promise<IStore> {
+  static async get(id: string): Promise<IStore> {
     return await this.storeService.get(id)
   }
 
-  async put(id: string, data: IStore): Promise<void> {
+  static async put(id: string, data: IStore): Promise<void> {
     await this.storeService.putData(id, data)
   }
   
-  async delete(id: string): Promise<void> {
+  static async delete(id: string): Promise<void> {
     await this.storeService.deleteData(id)
   }
+
+  static async findByCompany(idCompany: string){
+    return (await this.getAll()).filter(store=> store.idCompany === idCompany)
+  }
+
 }
