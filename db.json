@@ -22,7 +22,8 @@
     {
       "idStore": "sorvetes-mais-calama",
       "email": "sorvetes@gmail.com",
-      "password": "sorvetesadm"
+      "password": "sorvetesadm",
+      "id": "c939"
     }
   ],
   "store": [
@@ -30,9 +31,6 @@
       "id": "sorvetes-mais-calama",
       "idCompany": "sovetes-mais",
       "name": "Sorvetes Mais Calama",
-      "rua": "",
-      "bairro": "",
-      "numero": "",
       "stock": {
         "flavors": [
           {
@@ -45,7 +43,6 @@
           }
         ],
         "cone": 50
-
       },
       "revenue": {
         "profit": 1000,
@@ -53,7 +50,7 @@
       }
     },
     {
-      "id": "sorvetes-mais-novaPortoVelho",
+      "id": "sorvetes-mais-nova-porto-velho",
       "idCompany": "sovetes-mais",
       "name": "Sorvetes Mais Nova Porto Velho",
       "stock": {
@@ -68,11 +65,25 @@
           }
         ],
         "cone": 50
-
       },
       "revenue": {
         "profit": 1000,
         "expenses": 100
+      }
+    },
+    {
+      "id": "sorvetes-mais-central",
+      "idCompany": "sovetes-mais",
+      "name": "Sorvetes Mais Central",
+      "revenue": {},
+      "stock": {},
+      "address":{
+        "cep": "78550130",
+        "city": "Sinop",
+        "neighborhood": "Setor Comercial",
+        "number": "5500",
+        "street": "Rua dos Barus",
+        "uf": "MT"
       }
     }
   ]

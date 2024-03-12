@@ -3,6 +3,11 @@ import { StoreService } from "@/service/StoreService"
 
 export abstract class StoreController  {
   private static storeService = StoreService.getInstance()
+
+  static async createStore(data: IStore){
+    this.post(data)
+    return true
+  }
   
   static async getAll(): Promise<IStore[]> {
     return await this.storeService.getAll()
@@ -12,11 +17,15 @@ export abstract class StoreController  {
     return await this.storeService.get(id)
   }
 
-  static async put(id: string, data: IStore): Promise<void> {
+  static async put(id: string, data: IStore) {
     await this.storeService.putData(id, data)
   }
+
+  static async post(data: IStore) {
+    await this.storeService.postData(data)
+  }
   
-  static async delete(id: string): Promise<void> {
+  static async delete(id: string) {
     await this.storeService.deleteData(id)
   }
 

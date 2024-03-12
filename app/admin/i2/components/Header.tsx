@@ -6,6 +6,7 @@ import { useUpdateCurrentCompany } from "@/state/hooks/useUpdateCurrentCompany"
 import { useUpdateCurrentOwner } from "@/state/hooks/useUpdateCurrentOwner"
 import { LocalStorageUtils } from "@/utils/LocalStorageUtils"
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
@@ -18,7 +19,7 @@ const Header = () => {
   useEffect(() => {
     async function verify() {
       if (!owner) {
-        const resultStorage = LocalStorageUtils.getOwner()
+        const resultStorage = LocalStorageUtils.getIdOwner()
         if (resultStorage) {
           setOnwer(await OwnerController.findCurrent())
           setCompany(await CompanyController.findCurrent())
@@ -30,7 +31,7 @@ const Header = () => {
     verify()
   }, [])
   return (
-    <header className="flex flex-col items-center w-full border-b border-primary">
+    <header className="flex flex-col items-center w-full border-b">
       <div className="flex items-center justify-between py-3 px-8 max-w-[80rem] w-full">
         {owner && company ?
           <>
@@ -41,7 +42,7 @@ const Header = () => {
               <div className="flex items-center gap-6">
                 <p>Home</p>
                 <p>Lojas</p>
-                <p>Nova Loja</p>
+                <Link href={"./create-store"}>Nova Loja</Link>
               </div>
             </div>
             <div className="flex items-center gap-3">

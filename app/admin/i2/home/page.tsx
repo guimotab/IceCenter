@@ -27,11 +27,11 @@ const Home = () => {
         <div className="flex flex-col w-full gap-5">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-medium">Lojas Atuais</h1>
-            <Link href={"./create-stores"}>
+            <Link href={"./create-store"}>
               <Button>Nova Loja</Button>
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-x-10">
+          <div className="grid grid-cols-2 gap-x-10 gap-y-6">
             {stores ? stores.map(store =>
               <Card>
                 <CardHeader className="py-4">
@@ -43,7 +43,7 @@ const Home = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href={""}>
+                  <Link href={"./store/"+ store.id}>
                     <Button>Ver Loja</Button>
                   </Link>
                 </CardContent>
