@@ -20,59 +20,68 @@
   ],
   "manager": [
     {
-      "idStore": "sorvetes-mais-calama",
-      "email": "sorvetes@gmail.com",
-      "password": "sorvetesadm"
+      "idStore": "sorvetes-mais-cohab",
+      "email": "sorvetescohab@gmail.com",
+      "password": "1234",
+      "id": "c939"
+    },
+    {
+      "idStore": "sorvetes-mais-centro",
+      "email": "sorvetescentro@gmail.com",
+      "password": "1234",
+      "id": "c938"
+    },
+    {
+      "id": "aa9e",
+      "idStore": "sorvetes-mais-central",
+      "email": "centralSorvetes@gmail.com",
+      "password": "1234"
     }
   ],
   "store": [
     {
-      "id": "sorvetes-mais-calama",
+      "id": "sorvetes-mais-cohab",
       "idCompany": "sovetes-mais",
-      "name": "Sorvetes Mais Calama",
-      "rua": "",
-      "bairro": "",
-      "numero": "",
-      "stock": {
-        "flavors": [
-          {
-            "name": "baunilha",
-            "quantity": 10
-          },
-          {
-            "name": "chocolate",
-            "quantity": 10
-          }
-        ],
-        "cone": 50
-
-      },
-      "revenue": {
-        "profit": 1000,
-        "expenses": 100
+      "name": "Sorvetes Mais Cohab",
+      "revenue": {},
+      "stock": {},
+      "address": {
+        "cep": "76807714",
+        "city": "Porto Velho",
+        "neighborhood": "Cohab",
+        "number": "261",
+        "street": "Rua Navegantes",
+        "uf": "RO"
       }
     },
     {
-      "id": "sorvetes-mais-novaPortoVelho",
+      "id": "sorvetes-mais-centro",
       "idCompany": "sovetes-mais",
-      "name": "Sorvetes Mais Nova Porto Velho",
-      "stock": {
-        "flavors": [
-          {
-            "name": "baunilha",
-            "quantity": 10
-          },
-          {
-            "name": "chocolate",
-            "quantity": 10
-          }
-        ],
-        "cone": 50
-
-      },
-      "revenue": {
-        "profit": 1000,
-        "expenses": 100
+      "name": "Sorvetes Mais Centro",
+      "revenue": {},
+      "stock": {},
+      "address": {
+        "cep": "76801132",
+        "city": "Porto Velho",
+        "neighborhood": "Centro",
+        "number": "100",
+        "street": "Rua Gonçalves Dias",
+        "uf": "RO"
+      }
+    },
+    {
+      "id": "sorvetes-mais-central",
+      "idCompany": "sovetes-mais",
+      "name": "Sorvetes Mais Central",
+      "revenue": {},
+      "stock": {},
+      "address": {
+        "cep": "78550130",
+        "city": "Sinop",
+        "neighborhood": "Setor Comercial",
+        "number": "123",
+        "street": "Rua dos Barus",
+        "uf": "MT"
       }
     }
   ]

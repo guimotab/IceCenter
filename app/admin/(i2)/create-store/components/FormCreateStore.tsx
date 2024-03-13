@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { ManagerController } from "@/controller/ManagerController"
 import { StoreController } from "@/controller/StoreController"
 import { ViaCepController } from "@/controller/ViaCepController"
 import { ICompany } from "@/interface/ICompany"
+import { IManager } from "@/interface/IManager"
 import { IRevenueStore } from "@/interface/IRevenueStore"
 import { IStockStore } from "@/interface/IStockStore"
 import { IStore } from "@/interface/IStore"
@@ -50,19 +52,29 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+
+    const idStore = `${company.name} ${nameStore.trim()}`.toLocaleLowerCase().replaceAll(" ", "-")
     const newAddress = {
       cep, city, neighborhood, number, street, uf
     } as IAddress
     const newStore = {
-      id: `${company.name} ${nameStore.trim()}`.toLocaleLowerCase().replace(" ", "-"),
+      id: idStore,
       idCompany: company.id,
       name: `${company.name} ${nameStore.trim()}`,
       revenue: {} as IRevenueStore,
       stock: {} as IStockStore,
-      address: newAddress
+      address: newAddress,
     } as IStore
-    const result = await StoreController.createStore(newStore)
-    if (result) {
+
+    const newManager = {
+      idStore: idStore,
+      email: email,
+      password: password,
+    } as IManager
+
+    const [resultStore, resultManager] = await Promise.all([StoreController.createStore(newStore), ManagerController.createManager(newManager)])
+
+    if (resultStore && resultManager) {
       router.push("./home")
     }
   }

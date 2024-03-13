@@ -13,9 +13,7 @@ const Home = () => {
 
   useEffect(() => {
     async function load() {
-      setStores(
-        await StoreController.findByCompany(company.id)
-      )
+      setStores(await StoreController.findByCompany(company.id))
     }
     if (company) {
       load()
@@ -33,13 +31,13 @@ const Home = () => {
           </div>
           <div className="grid grid-cols-2 gap-x-10 gap-y-6">
             {stores ? stores.map(store =>
-              <Card>
+              <Card key={store.id}>
                 <CardHeader className="py-4">
                   <CardTitle className="text-lg">
                     {store.name}
                   </CardTitle>
                   <CardDescription>
-                    <div>{store.name}</div>
+                    {store.name}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

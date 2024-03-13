@@ -1,12 +1,13 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { OwnerController } from "@/controller/OwnerController";
 import { useUpdateCurrentOwner } from "@/state/hooks/useUpdateCurrentOwner";
 import { LocalStorageUtils } from "@/utils/LocalStorageUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -32,7 +33,7 @@ export default function Login() {
     const owner = await OwnerController.findCurrent()
     setCurrentOwner(owner)
     LocalStorageUtils.saveOwner(owner.id)
-    router.push("admin/i2/home")
+    router.push("admin/home")
   }
 
   return (
@@ -45,7 +46,7 @@ export default function Login() {
           <CardHeader className="flex flex-col items-center">
             <CardTitle className="text-xl">Login - Admin</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pb-5">
             <div>
               <FormProvider  {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
@@ -80,6 +81,9 @@ export default function Login() {
               </FormProvider >
             </div>
           </CardContent>
+          <CardFooter className="pl-3">
+            <Link href={"/"}><Button variant={"link"}>Ir para login de usuários</Button></Link>
+          </CardFooter>
         </Card>
       </div>
     </main>

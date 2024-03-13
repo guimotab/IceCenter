@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ManagerController } from "@/controller/ManagerController";
+import { LocalStorageUtils } from "@/utils/LocalStorageUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
@@ -13,21 +15,30 @@ export default function Login() {
   const formSchema = z.object({
     // email: z.string().min(2).max(50),
     // password: z.string().min(4).max(30)
+    idStore: z.string(),
     email: z.string(),
     password: z.string()
   })
-  // 1. Define your form.
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: ""
+      idStore: "sorvetes-mais-centro",
+      email: "sorvetescentro@gmail.com",
+      password: "1234"
     },
   })
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    
-    router.push("i2/home")
+    const manager = await ManagerController.getByIdStore(values.idStore)
+    const isEmailCorrect = manager.email === values.email
+    const isPassowordCorrect = manager.password === values.password
+    if( isEmailCorrect && isPassowordCorrect){
+      LocalStorageUtils.saveManager(manager.id)
+      router.push("home")
+    }
   }
+  
   return (
     <main className="flex w-screen min-h-screen flex-col items-center justify-between p-24">
       <div className="max-w-[30rem] w-full">
@@ -35,13 +46,30 @@ export default function Login() {
           <h1 className="text-xl font-semibold">IceCenter</h1>
         </div>
         <Card className="w-full">
+          
           <CardHeader className="flex flex-col items-center">
             <CardTitle className="text-xl">Login</CardTitle>
           </CardHeader>
+
           <CardContent>
             <div>
               <FormProvider  {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+
+                <FormField
+                    control={form.control}
+                    name="idStore"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Id loja</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Digite o id da loja" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="email"
@@ -55,6 +83,7 @@ export default function Login() {
                       </FormItem>
                     )}
                   />
+
                   <FormField
                     control={form.control}
                     name="password"
@@ -68,11 +97,14 @@ export default function Login() {
                       </FormItem>
                     )}
                   />
+
                   <Button className="w-full" type="submit">Entrar</Button>
+
                 </form>
               </FormProvider >
             </div>
           </CardContent>
+          
         </Card>
       </div>
     </main>

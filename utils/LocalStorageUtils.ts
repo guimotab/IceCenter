@@ -2,6 +2,9 @@ export abstract class LocalStorageUtils{
   static saveOwner(id: string){
     localStorage.setItem("owner", JSON.stringify(id))
   }
+  static saveManager(id: string){
+    localStorage.setItem("manager", JSON.stringify(id))
+  }
   static getIdOwner(){
     const storage = localStorage.getItem("owner")
     if(storage){
@@ -10,5 +13,6 @@ export abstract class LocalStorageUtils{
     }
   }
   static deleteOwner(){
+    localStorage.removeItem("owner")
   }
 }

@@ -1,3 +1,4 @@
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { CompanyController } from "@/controller/CompanyController"
 import { OwnerController } from "@/controller/OwnerController"
 import useCurrentCompany from "@/state/hooks/useCurrentCompany"
@@ -30,6 +31,10 @@ const Header = () => {
     }
     verify()
   }, [])
+  function handleLogout(){
+    LocalStorageUtils.deleteOwner()
+    router.push("/admin")
+  }
   return (
     <header className="flex flex-col items-center w-full border-b">
       <div className="flex items-center justify-between py-3 px-8 max-w-[80rem] w-full">
@@ -40,22 +45,29 @@ const Header = () => {
                 IceCenter
               </h1>
               <div className="flex items-center gap-6">
-                <p>Home</p>
-                <p>Lojas</p>
-                <Link href={"./create-store"}>Nova Loja</Link>
+                <Link href={"/admin/home"}>Home</Link>
+                <Link href={"/admin/create-store"}>Lojas</Link>
+                <Link href={"/admin/create-store"}>Nova Loja</Link>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <h2>
-                {company.name}
-              </h2>
-              <Avatar>
-                <div className="flex items-center justify-center w-10 h-10 bg-slate-300 rounded-full">
-                  {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
-                  <AvatarFallback className="font-medium">{company.name[0].toLocaleUpperCase()}</AvatarFallback>
-                </div>
-              </Avatar>
-            </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="outline-none">
+                  <div className="flex items-center gap-3">
+                    <h2>
+                      {company.name}
+                    </h2>
+                    <Avatar>
+                      <div className="flex items-center justify-center w-10 h-10 bg-slate-300 rounded-full">
+                        {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
+                        <AvatarFallback className="font-medium">{company.name[0].toLocaleUpperCase()}</AvatarFallback>
+                      </div>
+                    </Avatar>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={handleLogout}>Deslogar</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
           </>
           : ""}
       </div>

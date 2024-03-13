@@ -6,16 +6,42 @@ import { ICompany } from "@/interface/ICompany"
 import { IStore } from "@/interface/IStore"
 import { useState } from "react"
 import GoogleMaps from "./GoogleMaps"
+import Link from "next/link"
+import { toast } from "sonner"
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { MdContentCopy } from "react-icons/md";
+import { FaMapLocationDot } from "react-icons/fa6";
 
 interface StoreInformationsProps {
   company: ICompany
   store: IStore
 }
+
 const StoreInformations = ({ company, store }: StoreInformationsProps) => {
 
-  const [openMap, setOpenMap] = useState(true)
-  function handleMap() {
+  const address = `${store.address.street}, ${store.address.number} - ${store.address.neighborhood}, ${store.address.city} - ${store.address.uf}, Brasil`
+  const [openMap, setOpenMap] = useState(false)
+  const [position, setPosition] = useState({ lat: 0, lng: 0 })
+
+  async function handleMap() {
+    const geocoder = new google.maps.Geocoder()
+    const result = (await geocoder.geocode({ address })).results[0]
+    setPosition({
+      lat: result.geometry?.location?.lat(),
+      lng: result.geometry?.location?.lng()
+    })
+
     setOpenMap(!openMap)
+  }
+  async function handleCopy() {
+    toast("Endereço Copiado!", {
+      description: "Endereço salvo na sua área de transferência.",
+      action: {
+        label: "Entendi",
+        onClick: () => ""
+      }
+    })
+    await navigator.clipboard.writeText(address)
   }
 
   const importantInformations = [
@@ -54,13 +80,12 @@ const StoreInformations = ({ company, store }: StoreInformationsProps) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-6">
-
         <div className="space-y-3">
           <h2 className="text-xl font-semibold">Informações</h2>
 
           <div className="grid grid-cols-3 gap-x-7 gap-y-3">
             {importantInformations.map(info =>
-              <div className="flex flex-col gap-1">
+              <div key={info.label} className="flex flex-col gap-1">
                 <Label>{info.label}</Label>
                 <Badge variant={"outline"} className="self-start text-sm">{info.value}</Badge>
               </div>
@@ -73,7 +98,15 @@ const StoreInformations = ({ company, store }: StoreInformationsProps) => {
 
           <div className="flex items-center gap-3">
             <h2 className="text-xl font-semibold">Localização</h2>
-            <Button size={"sm"} onClick={handleMap} className="self-start">{openMap ? "Fechar Mapa" : "Abrir Mapa"}</Button>
+            <Button size={"sm"} onClick={handleCopy} className="self-start space-x-2">
+              <MdContentCopy className="text-lg" />
+              <p>Copiar endereço</p>
+            </Button>
+
+            <Button size={"sm"} onClick={handleMap} className="self-start space-x-2">
+              <FaMapLocationDot className="text-lg" />
+              <p>{openMap ? "Fechar mapa" : "Abrir mapa"}</p>
+            </Button>
           </div>
 
           <div className="grid grid-cols-3 gap-x-7 gap-y-4">
@@ -86,13 +119,19 @@ const StoreInformations = ({ company, store }: StoreInformationsProps) => {
           </div>
 
         </div>
-
       </div>
-
       {openMap ?
-        <div className="w-full h-[30rem] border-2">
-          <GoogleMaps address={store.address} />
-        </div>
+        <>
+          <div className="w-full h-[30rem] border-2">
+            <GoogleMaps startingPosition={position} address={store.address} />
+          </div>
+          <Link href={`https://www.google.com.br/maps/@${position.lat},${position.lng},20z?`} target="_blank">
+            <Button className="space-x-2">
+              <FaMapMarkerAlt />
+              <p>Abrir endereço no maps</p>
+            </Button>
+          </Link>
+        </>
         : ""
       }
 
