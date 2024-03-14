@@ -1,6 +1,6 @@
+import { IAddress } from "./IAddress"
 import { IRevenueStore } from "./IRevenueStore"
 import { IStockStore } from "./IStockStore"
-import { IAddress } from "./iAddress"
 
 export interface IStore {
   id: string

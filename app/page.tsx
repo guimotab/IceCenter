@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ManagerController } from "@/controller/ManagerController";
+import { useUpdateCurrentManager } from "@/state/hooks/useUpdateCurrentManager";
+import { useUpdateCurrentStore } from "@/state/hooks/useUpdateCurrentStore";
 import { LocalStorageUtils } from "@/utils/LocalStorageUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -12,6 +14,7 @@ import { z } from "zod";
 
 export default function Login() {
   const router = useRouter()
+  const setManager = useUpdateCurrentManager()
   const formSchema = z.object({
     // email: z.string().min(2).max(50),
     // password: z.string().min(4).max(30)
@@ -35,7 +38,8 @@ export default function Login() {
     const isPassowordCorrect = manager.password === values.password
     if( isEmailCorrect && isPassowordCorrect){
       LocalStorageUtils.saveManager(manager.id)
-      router.push("home")
+      setManager(manager)
+      router.push("store")
     }
   }
   

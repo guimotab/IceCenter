@@ -4,12 +4,12 @@ import { Label } from "@/components/ui/label"
 import { ManagerController } from "@/controller/ManagerController"
 import { StoreController } from "@/controller/StoreController"
 import { ViaCepController } from "@/controller/ViaCepController"
+import { IAddress } from "@/interface/IAddress"
 import { ICompany } from "@/interface/ICompany"
 import { IManager } from "@/interface/IManager"
 import { IRevenueStore } from "@/interface/IRevenueStore"
 import { IStockStore } from "@/interface/IStockStore"
 import { IStore } from "@/interface/IStore"
-import { IAddress } from "@/interface/iAddress"
 import { useRouter } from "next/navigation"
 import { FormEvent, useState } from "react"
 import { v4 as uuid } from 'uuid';
@@ -61,7 +61,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       id: idStore,
       idCompany: company.id,
       name: `${company.name} ${nameStore.trim()}`,
-      revenue: {} as IRevenueStore,
+      revenue: {cash: 1000} as IRevenueStore,
       stock: {} as IStockStore,
       address: newAddress,
     } as IStore
@@ -72,7 +72,10 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       password: password,
     } as IManager
 
-    const [resultStore, resultManager] = await Promise.all([StoreController.createStore(newStore), ManagerController.createManager(newManager)])
+    const [resultStore, resultManager] = await Promise.all([
+      StoreController.createStore(newStore), 
+      ManagerController.createManager(newManager)
+    ])
 
     if (resultStore && resultManager) {
       router.push("./home")

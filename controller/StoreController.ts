@@ -8,6 +8,16 @@ export abstract class StoreController  {
     this.post(data)
     return true
   }
+  static async findByCompany(idCompany: string){
+    return (await this.getAll()).filter(store=> store.idCompany === idCompany)
+  }
+  static async findById(idStore: string){
+    return (await this.getAll()).filter(store=> store.id === idStore)[0]
+  }
+  static async findCurrent(idStore: string){
+    return await this.get(idStore)
+  }
+  
   
   static async getAll(): Promise<IStore[]> {
     return await this.storeService.getAll()
@@ -29,8 +39,5 @@ export abstract class StoreController  {
     await this.storeService.deleteData(id)
   }
 
-  static async findByCompany(idCompany: string){
-    return (await this.getAll()).filter(store=> store.idCompany === idCompany)
-  }
 
 }

@@ -1,0 +1,84 @@
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { CompanyController } from "@/controller/CompanyController"
+import { ManagerController } from "@/controller/ManagerController"
+import { OwnerController } from "@/controller/OwnerController"
+import { StoreController } from "@/controller/StoreController"
+import useCurrentCompany from "@/state/hooks/useCurrentCompany"
+import useCurrentManager from "@/state/hooks/useCurrentManager"
+import useCurrentOwner from "@/state/hooks/useCurrentOwner"
+import useCurrentStore from "@/state/hooks/useCurrentStore"
+import { useUpdateCurrentCompany } from "@/state/hooks/useUpdateCurrentCompany"
+import { useUpdateCurrentManager } from "@/state/hooks/useUpdateCurrentManager"
+import { useUpdateCurrentOwner } from "@/state/hooks/useUpdateCurrentOwner"
+import { useUpdateCurrentStore } from "@/state/hooks/useUpdateCurrentStore"
+import { LocalStorageUtils } from "@/utils/LocalStorageUtils"
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
+
+const Header = () => {
+  const manager = useCurrentManager()
+  const store = useCurrentStore()
+  const setManager = useUpdateCurrentManager()
+  const setStore = useUpdateCurrentStore()
+  const router = useRouter()
+  useEffect(() => {
+    async function verify() {
+      if (!manager) {
+        const resultStorage = LocalStorageUtils.getIdManager()
+        if (resultStorage) {
+          const manager = await ManagerController.findCurrent(resultStorage)
+          setManager(manager)
+          setStore(await StoreController.findCurrent(manager.idStore))
+          return
+        }
+        router.push("/admin")
+      }
+    }
+    verify()
+  }, [])
+  function handleLogout(){
+    LocalStorageUtils.deleteOwner()
+    router.push("/")
+  }
+  return (
+    <header className="flex flex-col items-center w-full border-b">
+      <div className="flex items-center justify-between py-3 px-8 max-w-[80rem] w-full">
+        {manager && store ?
+          <>
+            <div className="flex items-center gap-7">
+              <h1 className="text-2xl font-semibold">
+                IceCenter
+              </h1>
+              <div className="flex items-center gap-6">
+                <Link href={"store"}>Loja</Link>
+                <Link href={"stock"}>Estoque</Link>
+              </div>
+            </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="outline-none">
+                  <div className="flex items-center gap-3">
+                    <h2>
+                      {store.name}
+                    </h2>
+                    <Avatar>
+                      <div className="flex items-center justify-center w-10 h-10 bg-slate-300 rounded-full">
+                        {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
+                        <AvatarFallback className="font-medium">{store.name[0].toLocaleUpperCase()}</AvatarFallback>
+                      </div>
+                    </Avatar>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={handleLogout}>Deslogar</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+          </>
+          : ""}
+      </div>
+    </header>
+  )
+}
+
+export default Header

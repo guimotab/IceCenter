@@ -1,6 +1,6 @@
 import { IFlavorsIceCream } from "./IFlavorsIceCream"
 
 export interface IStockStore{
-  flavors: IFlavorsIceCream
+  flavors: IFlavorsIceCream[]
   cone: number
 }

@@ -12,6 +12,9 @@ export abstract class ManagerController {
     const result = await this.getAll()
     return result.filter(manager=> manager.idStore === idStore)[0]
   }
+  static async findCurrent(idManager: string){
+    return await this.get(idManager)
+  }
   
   static async getAll(): Promise<IManager[]> {
     return await this.managerController.getAll()
