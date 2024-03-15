@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "dist/js",
+        "target": "ES2019",
+        "module": "esnext",
+        "noEmitOnError": false,
+        "noImplicitAny": true,
+        "removeComments": true,
+        "strictNullChecks": true,
+        "sourceMap": true,
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true
+    },
+    "include": ["src/**/*", "app.ts"]
+}
