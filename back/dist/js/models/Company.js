@@ -1,6 +1,6 @@
 import { DataTypes, Sequelize } from 'sequelize';
-import mysql from '../config/mysql';
-import Owner from './Owner';
+import mysql from '../config/mysql.js';
+import Owner from './Owner.js';
 const sequelize = new Sequelize(mysql);
 const Company = sequelize.define('Company', {
     id: {

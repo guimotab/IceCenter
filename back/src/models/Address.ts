@@ -1,10 +1,10 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
-import { IAddress } from '../interface/IAddress';
-import mysql from '../config/mysql';
+import { IAddress } from '../interface/IAddress.js';
+import mysql from '../config/mysql.js';
 
 const sequelize = new Sequelize(mysql)
 
-const Address = sequelize.define<Model<any, any>, IAddress>('Address', {
+const Address = sequelize.define<Model<IAddress>, IAddress>('Address', {
   id: {
     type: DataTypes.STRING,
     allowNull: false,

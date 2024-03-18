@@ -1,16 +1,15 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
-import { IManager } from '../interface/IManager';
-import mysql from '../config/mysql';
-import Owner from './Owner';
-import Store from './Store';
+import { IManager } from '../interface/IManager.js';
+import mysql from '../config/mysql.js';
+import Store from './Store.js';
 
 const sequelize = new Sequelize(mysql)
 
-const Manager = sequelize.define<Model<any, any>, IManager>('Manager', {
+const Manager = sequelize.define<Model<IManager>, IManager>('Manager', {
   id: {
     type: DataTypes.STRING,
-    allowNull: false,
-    primaryKey: true
+    primaryKey: true,
+    autoIncrement: true
   },
   idStore: {
     type: DataTypes.STRING,

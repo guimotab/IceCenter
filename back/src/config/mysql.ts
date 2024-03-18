@@ -1,4 +1,6 @@
 import { Options } from "sequelize";
-
-const mysql = { dialect: "mysql", host: "localhost", username: "root", password: "#Sm4shero", database: "icecenter" } as Options
+import dot from "dotenv"
+dot.config()
+const dbPassword = process.env.PASS_DB!
+const mysql = { dialect: "mysql", host: "localhost", username: "root", password: dbPassword, database: "icecenter", define: { timestamps: false } } as Options
 export default mysql

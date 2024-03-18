@@ -1,11 +1,11 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
-import { ICompany } from '../interface/ICompany';
-import mysql from '../config/mysql';
-import Owner from './Owner';
+import { ICompany } from '../interface/ICompany.js';
+import mysql from '../config/mysql.js';
+import Owner from './Owner.js';
 
 const sequelize = new Sequelize(mysql)
 
-const Company = sequelize.define<Model<any, any>, ICompany>('Company', {
+const Company = sequelize.define<Model<ICompany>, ICompany>('Company', {
   id: {
     type: DataTypes.STRING,
     allowNull: false,

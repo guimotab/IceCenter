@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize } from 'sequelize';
-import mysql from '../config/mysql';
+import mysql from '../config/mysql.js';
 const sequelize = new Sequelize(mysql);
 const Address = sequelize.define('Address', {
     id: {

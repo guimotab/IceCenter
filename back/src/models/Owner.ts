@@ -1,10 +1,11 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
-import { IOwner } from '../interface/IOwner';
-import mysql from '../config/mysql';
+import { IOwner } from '../interface/IOwner.js';
+import mysql from '../config/mysql.js';
 
 const sequelize = new Sequelize(mysql)
 
-const Owner = sequelize.define<Model<any, any>, IOwner>('Owner', {
+const Owner = sequelize.define<Model<IOwner, IOwner>, IOwner>('Owner', {
+  
   id: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -19,7 +20,6 @@ const Owner = sequelize.define<Model<any, any>, IOwner>('Owner', {
     allowNull: false,
   }
 }, {
-  // Other model options go here
 });
 
 export default Owner

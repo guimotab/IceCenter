@@ -1,12 +1,12 @@
 import { DataTypes, Sequelize } from 'sequelize';
-import mysql from '../config/mysql';
-import Store from './Store';
+import mysql from '../config/mysql.js';
+import Store from './Store.js';
 const sequelize = new Sequelize(mysql);
 const Manager = sequelize.define('Manager', {
     id: {
         type: DataTypes.STRING,
-        allowNull: false,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     idStore: {
         type: DataTypes.STRING,

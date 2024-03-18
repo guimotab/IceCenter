@@ -1,12 +1,14 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
-import { IStore } from '../interface/IStore';
-import mysql from '../config/mysql';
-import Owner from './Owner';
-import Company from './Company';
-
+import { IStore } from '../interface/IStore.js';
+import mysql from '../config/mysql.js';
+import Company from './Company.js';
+import RevenueStore from './RevenueStore.js';
+import StockStore from './StockStore.js';
+import Address from './Address.js';
+ 
 const sequelize = new Sequelize(mysql)
 
-const Store = sequelize.define<Model<any, any>, IStore>('Store', {
+const Store = sequelize.define<Model<IStore>, IStore>('Store', {
   id: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -24,17 +26,29 @@ const Store = sequelize.define<Model<any, any>, IStore>('Store', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  revenue: {
+  idRevenue: {
     type: DataTypes.STRING,
     allowNull: false,
+    references: {
+      model: RevenueStore,
+      key: "id"
+    }
   },
-  stock: {
+  idStock: {
     type: DataTypes.STRING,
     allowNull: false,
+    references: {
+      model: StockStore,
+      key: "id"
+    }
   },
-  address: {
+  idAddress: {
     type: DataTypes.STRING,
     allowNull: false,
+    references: {
+      model: Address,
+      key: "id"
+    }
   },
 }, {
   // Other model options go here

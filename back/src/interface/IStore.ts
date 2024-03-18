@@ -1,12 +1,9 @@
-import { IAddress } from "./IAddress"
-import { IRevenueStore } from "./IRevenueStore"
-import { IStockStore } from "./IStockStore"
 
 export interface IStore {
   id: string
   idCompany: string
+  idAddress: string
+  idRevenue: string
+  idStock: string
   name: string
-  address: IAddress
-  stock: IStockStore
-  revenue: IRevenueStore
 }

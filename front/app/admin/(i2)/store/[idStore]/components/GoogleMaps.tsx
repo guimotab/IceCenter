@@ -1,6 +1,6 @@
 "use client"
 import { Input } from '@/components/ui/input';
-import { IAddress } from '@/interface/iAddress';
+import { IAddress } from '@/interface/IAddress';
 import { GoogleMap, Marker, StandaloneSearchBox } from '@react-google-maps/api'
 import { useState } from 'react';
 interface GoogleMapsProps {
