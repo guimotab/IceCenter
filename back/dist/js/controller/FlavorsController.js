@@ -1,17 +1,16 @@
-import Manager from '../models/Manager.js';
-import createUuid from '../createUuidUtil.js';
-import FlavorsIceCream from '../models/FlavorsIceCream.js';
+import createUuid from '../util/createUuidUtil.js';
+import prisma from '../app.js';
 class FlavorsController {
     static async create({ name, quantity }) {
         try {
-            const flavor = await FlavorsIceCream.create({
-                id: createUuid(),
-                name,
-                quantity
+            const flavor = await prisma.flavorsIceCream.create({
+                data: {
+                    id: createUuid(),
+                    name,
+                    quantity
+                }
             });
-            const flavorId = flavor.getDataValue('id');
-            await flavor.save();
-            return flavorId;
+            return flavor.id;
         }
         catch (error) {
             console.log(error);
@@ -19,7 +18,7 @@ class FlavorsController {
     }
     static async getAll(req, res) {
         try {
-            const managers = await Manager.findAll({});
+            const managers = await prisma.manager.findMany({});
             if (!managers) {
                 return res.json({ msg: "Gerentes não encontrados" });
             }
@@ -32,8 +31,8 @@ class FlavorsController {
     }
     static async getByStoreId(req, res) {
         try {
-            const { idStore } = req.params;
-            const manager = await Manager.findOne({ where: { idStore: idStore } });
+            const { storeId } = req.params;
+            const manager = await prisma.manager.findUnique({ where: { storeId } });
             if (!manager) {
                 return res.json({ msg: "Gerente não encontrado" });
             }

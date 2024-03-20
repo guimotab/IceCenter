@@ -1,25 +1,23 @@
 import * as bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import Manager from '../models/Manager.js';
-import createUuid from '../createUuidUtil.js';
+import createUuid from '../util/createUuidUtil.js';
+import prisma from '../app.js';
 class ManagerController {
     static async createManager(req, res) {
-        const { email, password, idStore } = req.body;
-        const userExist = await Manager.findOne({ where: { email: email } });
+        const { email, password, storeId } = req.body;
+        const userExist = await prisma.manager.findUnique({ where: { email } });
         if (userExist) {
             return res.json({ resp: "Este email já existe!" });
         }
         try {
             const salt = await bcrypt.genSalt(12);
             const passwordHash = await bcrypt.hash(password, salt);
-            const manager = await Manager.create({ id: createUuid(), email, password: passwordHash, idStore });
-            const managerId = manager.getDataValue('id');
-            await manager.save();
+            const manager = await prisma.manager.create({ data: { id: createUuid(), email, password: passwordHash, storeId } });
             const secret = process.env.SECRET;
             const secretRefresh = process.env.REFRESH;
-            const token = jwt.sign({ id: managerId, }, secret, { expiresIn: "180" });
-            const refresh = jwt.sign({ id: managerId, }, secretRefresh, { expiresIn: "30m" });
-            res.status(201).json({ resp: "Sucess", token: token, refresh: refresh, currentUser: { _id: managerId, name: name, email: email } });
+            const token = jwt.sign({ id: manager.id, }, secret, { expiresIn: "180" });
+            const refresh = jwt.sign({ id: manager.id, }, secretRefresh, { expiresIn: "30m" });
+            res.status(201).json({ resp: "Sucess", token: token, refresh: refresh, currentUser: { _id: manager.id, name: name, email: email } });
         }
         catch (error) {
             console.log(error);
@@ -28,7 +26,7 @@ class ManagerController {
     }
     static async getAll(req, res) {
         try {
-            const managers = await Manager.findAll({});
+            const managers = await prisma.manager.findMany({});
             if (!managers) {
                 return res.json({ msg: "Gerentes não encontrados" });
             }
@@ -41,8 +39,8 @@ class ManagerController {
     }
     static async getByStoreId(req, res) {
         try {
-            const { idStore } = req.params;
-            const manager = await Manager.findOne({ where: { idStore: idStore } });
+            const { storeId } = req.params;
+            const manager = await prisma.manager.findUnique({ where: { storeId } });
             if (!manager) {
                 return res.json({ msg: "Gerente não encontrado" });
             }

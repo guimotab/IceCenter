@@ -1,5 +1,5 @@
 export interface ICompany {
   id: string
-  idOwner: string
+  ownerId: string
   name: string
 }

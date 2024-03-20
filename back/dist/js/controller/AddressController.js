@@ -1,21 +1,12 @@
-import Manager from '../models/Manager.js';
-import Address from '../models/Address.js';
-import createUuid from '../createUuidUtil.js';
+import createUuid from '../util/createUuidUtil.js';
+import prisma from '../app.js';
 class AddressController {
-    static async create({ cep, city, neighborhood, number, street, uf }) {
-        try {
-            const address = await Address.create({ id: createUuid(), cep, city, neighborhood, number, street, uf });
-            const addressId = address.getDataValue('id');
-            await address.save();
-            return addressId;
-        }
-        catch (error) {
-            console.log(error);
-        }
+    static create({ cep, city, neighborhood, number, street, uf }) {
+        return { id: createUuid(), cep, city, neighborhood, number, street, uf };
     }
     static async getAll(req, res) {
         try {
-            const managers = await Manager.findAll({});
+            const managers = await prisma.manager.findMany({});
             if (!managers) {
                 return res.json({ msg: "Gerentes não encontrados" });
             }
@@ -28,8 +19,8 @@ class AddressController {
     }
     static async getByStoreId(req, res) {
         try {
-            const { idStore } = req.params;
-            const manager = await Manager.findOne({ where: { idStore: idStore } });
+            const { storeId } = req.params;
+            const manager = await prisma.manager.findUnique({ where: { storeId } });
             if (!manager) {
                 return res.json({ msg: "Gerente não encontrado" });
             }
