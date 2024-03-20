@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -14,67 +14,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Owner {
-  id       Int       @id
-  email    String    @unique
-  password String
-  company  Company[]
-  Store    Store[]
-}
-
-model Company {
-  id      Int    @id
-  name    String
-  store   Store  @relation(fields: [storeId], references: [id])
-  storeId Int
-  Owner   Owner? @relation(fields: [ownerId], references: [id])
-  ownerId Int?
-}
-
-model Store {
-  id      Int         @id
-  name    String
-  revenue String
-  owner   Owner       @relation(fields: [ownerId], references: [id])
-  ownerId Int
-  manager Manager?
-  address Address?
-  stock   StockStore?
-  Company Company[]
-}
-
-model Manager {
-  id       Int    @id
-  store    Store  @relation(fields: [storeId], references: [id])
-  storeId  Int    @unique
-  email    String @unique
-  password String
-}
-
-model StockStore {
-  id             Int               @id
-  store          Store             @relation(fields: [storeId], references: [id])
-  storeId        Int               @unique
-  cone           Int
-  flavors        FlavorsIceCream[]
-}
-
-model FlavorsIceCream {
-  id             Int              @id
-  stock          StockStore       @relation(fields: [stockId], references: [id])
-  stockId        Int
-  name           String
-  quantity       Int
-}
-
-model Address {
-  id           Int    @id
-  store        Store  @relation(fields: [storeId], references: [id])
-  storeId      Int @unique
-  email        String @unique
-  city         String
-  neighborhood String
-  number       String
-  street       String
-  uf           String
+model Address{
+  id Int @id 
+  email String @unique
+  city String
+  neighborhood String 
+  number String 
+  street String 
+  uf String 
 }
