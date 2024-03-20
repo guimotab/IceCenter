@@ -1,6 +1,5 @@
 export abstract class LocalStorageUtils {
 
-
   static saveTokens(token: string, refresh: string) {
     const tokens = { token, refresh }
     localStorage.setItem("tokens", JSON.stringify(tokens))
@@ -8,7 +7,7 @@ export abstract class LocalStorageUtils {
   static getTokens() {
     const storage = localStorage.getItem("tokens")
     if (storage) {
-      const json = JSON.parse(storage) as string
+      const json = JSON.parse(storage) as { token: string, refresh: string }
       return json
     }
   }

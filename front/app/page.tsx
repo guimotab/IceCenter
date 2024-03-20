@@ -5,9 +5,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { ManagerController } from "@/controller/ManagerController";
 import { useUpdateCurrentManager } from "@/state/hooks/useUpdateCurrentManager";
-import { useUpdateCurrentStore } from "@/state/hooks/useUpdateCurrentStore";
 import { AuthController } from "@/controller/AuthController";
-import { LocalStorageUtils } from "@/utils/LocalStorageUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
@@ -36,7 +34,7 @@ export default function Login() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const manager = await ManagerController.getByIdStore(values.idStore)
     if (manager) {
-      const result = await AuthController.login(values.email, values.password, manager)
+      const result = await AuthController.loginUser(values.email, values.password, manager)
       if (result) {
         setManager(manager)
         router.push("store")

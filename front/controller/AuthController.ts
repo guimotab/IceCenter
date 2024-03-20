@@ -1,22 +1,25 @@
-import { IManager } from "@/interface/IManager";
 import { Response } from "../utils/Response";
-import { CryptoUtils } from "../utils/CryptoUtils";
-import { TokenService } from "../service/TokenService";
 import { LocalStorageUtils } from "../utils/LocalStorageUtils";
-import { IReturnResponse } from "@/interface/IReturnResponse";
+import { AuthService } from "@/service/AuthService";
 
 export abstract class AuthController {
-  static signinAdmin() {
+  static async loginAdmin(email: string, password: string) {
+    const respAuth = await AuthService.loginAdmin(email, password)
+    if (respAuth.resp === "Sucess") {
+      LocalStorageUtils.saveTokens(respAuth.token, respAuth.refresh)
+    }
+    return respAuth
   }
-  
-  static async login(email: string, password: string, manager: IManager): Promise<IReturnResponse<string>> {
-    if (manager.email === email) {
-      const checkPassword = await CryptoUtils.resolve(password, manager.password)
-      if (checkPassword) {
-        //criaToken e salva no localStorage      
-        const [token, refresh] = TokenService.createToken(manager.id).data
-        LocalStorageUtils.saveTokens(token, refresh)
-        return Response.return(true) 
+
+  static async loginUser(email: string, password: string){
+    if (email !== "") {
+      if (password !== "") {
+        const respAuth = await AuthService.loginAdmin(email, password)
+        if (respAuth.resp === "Sucess") {
+          //criaToken e salva no localStorage      
+          LocalStorageUtils.saveTokens(respAuth.token, respAuth.refresh)
+          return Response.return(true)
+        }
       }
       return Response.return(false, "Senha inválida")
     }

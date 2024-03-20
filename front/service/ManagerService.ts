@@ -12,4 +12,5 @@ export class ManagerService extends HttpService<IManager> {
     }
     return this.managerService
   }
+
 }

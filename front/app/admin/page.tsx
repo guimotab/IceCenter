@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AuthController } from "@/controller/AuthController";
 import { OwnerController } from "@/controller/OwnerController";
 import { useUpdateCurrentOwner } from "@/state/hooks/useUpdateCurrentOwner";
 import { LocalStorageUtils } from "@/utils/LocalStorageUtils";
@@ -25,15 +26,16 @@ export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: ""
+      email: "guimota22@gmail.com",
+      password: "teste"
     },
   })
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const owner = await OwnerController.findCurrent()
-    setCurrentOwner(owner)
-    LocalStorageUtils.saveOwner(owner.id)
-    router.push("admin/home")
+    const auth = await AuthController.loginAdmin(values.email, values.password)
+    if (auth.resp === "Sucess") {
+      setCurrentOwner(auth.owner)
+      router.push("admin/home")
+    }
   }
 
   return (
@@ -70,7 +72,7 @@ export default function Login() {
                       <FormItem>
                         <FormLabel>Senha</FormLabel>
                         <FormControl>
-                          <Input placeholder="Digite sua senha" {...field} />
+                          <Input type="password" placeholder="Digite sua senha" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

@@ -22,10 +22,12 @@ abstract class AuthController {
             const secret = process.env.SECRET!
             const secretRefresh = process.env.REFRESH!
 
-            const token = jwt.sign({ id: owner.id, }, secret, { expiresIn: "180" })
+            const token = jwt.sign({ id: owner.id, }, secret, { expiresIn: "5m" })
+            const tokenteste = jwt.verify(token, secret)
+            console.log("🚀 ~ AuthController ~ login ~ tokenteste:", tokenteste)
             const refresh = jwt.sign({ id: owner.id, }, secretRefresh, { expiresIn: "30m" })
 
-            res.status(201).json({ resp: "Sucess", token: token, refresh: refresh, id: owner.id })
+            res.status(201).json({ resp: "Sucess", token: token, refresh: refresh, user: owner })
         } catch (error) {
             console.log(error);
             res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" })
@@ -35,21 +37,21 @@ abstract class AuthController {
     public static async login(req: Request<{}, {}, RequestBodyOwner>, res: Response) {
         const { email, password } = req.params as RequestBodyOwner
         //check if user exist
-        const user = await prisma.owner.findUnique({ where: { email: email } })
-        if (!user) {
+        const owner = await prisma.owner.findUnique({ where: { email: email } })
+        if (!owner) {
             return res.json({ resp: "Email ou senha incorretos!" })
         }
         //check if password match
-        const checkPassword = await bcrypt.compare(password, user.password)
+        const checkPassword = await bcrypt.compare(password, owner.password)
         if (!checkPassword) {
             return res.json({ resp: "Email ou senha incorretos!" })
         }
         try {
             const secret = process.env.SECRET!
             const secretRefresh = process.env.REFRESH!
-            const token = jwt.sign({ id: user.id, }, secret, { expiresIn: "180" })
-            const refresh = jwt.sign({ id: user.id, }, secretRefresh, { expiresIn: "30m" })
-            res.status(200).json({ resp: "Sucess", token: token, refresh: refresh, currentUser: { id: user.id } })
+            const token = jwt.sign({ id: owner.id, }, secret, { expiresIn: "5m" })
+            const refresh = jwt.sign({ id: owner.id, }, secretRefresh, { expiresIn: "30m" })
+            res.status(200).json({ resp: "Sucess", token: token, refresh: refresh, owner: owner })
         } catch (error) {
             console.log(error);
             res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" })

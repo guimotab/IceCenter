@@ -1,6 +1,7 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { CompanyController } from "@/controller/CompanyController"
 import { OwnerController } from "@/controller/OwnerController"
+import { TokenService } from "@/service/TokenService"
 import useCurrentCompany from "@/state/hooks/useCurrentCompany"
 import useCurrentOwner from "@/state/hooks/useCurrentOwner"
 import { useUpdateCurrentCompany } from "@/state/hooks/useUpdateCurrentCompany"
@@ -13,6 +14,7 @@ import { useEffect } from "react"
 
 const Header = () => {
   const owner = useCurrentOwner()
+  console.log("🚀 ~ Header ~ owner:", owner)
   const company = useCurrentCompany()
   const setOnwer = useUpdateCurrentOwner()
   const setCompany = useUpdateCurrentCompany()
@@ -20,10 +22,11 @@ const Header = () => {
   useEffect(() => {
     async function verify() {
       if (!owner) {
-        const resultStorage = LocalStorageUtils.getIdOwner()
-        if (resultStorage) {
-          setOnwer(await OwnerController.findCurrent())
-          setCompany(await CompanyController.findCurrent())
+        const resp = TokenService.get()
+        const resultStorage = LocalStorageUtils.getTokens()
+        if (resultStorage && resp.status) {
+          setOnwer(await OwnerController.get(resp.data!.id))
+          // setCompany(await CompanyController.findById())
           return
         }
         router.push("/admin")
@@ -32,7 +35,7 @@ const Header = () => {
     verify()
   }, [])
   function handleLogout(){
-    LocalStorageUtils.deleteOwner()
+    LocalStorageUtils.deleteTokens()
     router.push("/admin")
   }
   return (
