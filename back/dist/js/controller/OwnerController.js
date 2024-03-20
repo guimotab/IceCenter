@@ -1,10 +1,10 @@
-import Company from '../models/Company.js';
+import prisma from "../app";
 class OwnerController {
-    static async getByOwnerId(idOwner) {
+    static async getByOwnerId(ownerId) {
         try {
-            const manager = await Company.findOne({ where: { idOwner: idOwner } });
+            const manager = await prisma.company.findUnique({ where: { ownerId } });
             if (manager) {
-                return manager.getDataValue("id");
+                return manager.id;
             }
         }
         catch (error) {

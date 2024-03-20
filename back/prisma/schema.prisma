@@ -15,66 +15,83 @@ datasource db {
 }
 
 model Owner {
-  id       Int       @id
+  id       String    @id
   email    String    @unique
   password String
   company  Company[]
-  Store    Store[]
 }
 
 model Company {
-  id      Int    @id
+  id      String  @id
   name    String
-  store   Store  @relation(fields: [storeId], references: [id])
-  storeId Int
-  Owner   Owner? @relation(fields: [ownerId], references: [id])
-  ownerId Int?
+  storeId String?
+  Store   Store[]
+  owner   Owner   @relation(fields: [ownerId], references: [id])
+  ownerId String  @unique
 }
 
 model Store {
-  id      Int         @id
-  name    String
-  revenue String
-  owner   Owner       @relation(fields: [ownerId], references: [id])
-  ownerId Int
-  manager Manager?
-  address Address?
-  stock   StockStore?
-  Company Company[]
+  id        String      @id
+  name      String
+  revenue   Revenue?
+  manager   Manager?
+  address   Address?
+  stock     StockStore?
+  company   Company     @relation(fields: [companyId], references: [id])
+  companyId String
 }
 
 model Manager {
-  id       Int    @id
+  id       String @id
   store    Store  @relation(fields: [storeId], references: [id])
-  storeId  Int    @unique
+  storeId  String @unique
   email    String @unique
   password String
 }
 
 model StockStore {
-  id             Int               @id
-  store          Store             @relation(fields: [storeId], references: [id])
-  storeId        Int               @unique
+  id             String            @id
   cone           Int
+  store          Store             @relation(fields: [storeId], references: [id])
+  storeId        String            @unique
   flavors        FlavorsIceCream[]
+  StockOnFlavors StockOnFlavors[]
 }
 
 model FlavorsIceCream {
-  id             Int              @id
-  stock          StockStore       @relation(fields: [stockId], references: [id])
-  stockId        Int
+  id             String           @id
   name           String
   quantity       Int
+  stock          StockStore[]
+  StockOnFlavors StockOnFlavors[]
+}
+
+model StockOnFlavors {
+  stock     StockStore      @relation(fields: [stockId], references: [id])
+  stockId   String
+  flavors   FlavorsIceCream @relation(fields: [flavorsId], references: [id])
+  flavorsId String
+
+  @@id([stockId, flavorsId])
 }
 
 model Address {
-  id           Int    @id
+  id           String @id
   store        Store  @relation(fields: [storeId], references: [id])
-  storeId      Int @unique
-  email        String @unique
+  storeId      String @unique
+  cep          String
   city         String
   neighborhood String
   number       String
   street       String
   uf           String
+}
+
+model Revenue {
+  id       String @id
+  store    Store  @relation(fields: [storeId], references: [id])
+  storeId  String @unique
+  cash     Int
+  profit   Int
+  expenses Int
 }

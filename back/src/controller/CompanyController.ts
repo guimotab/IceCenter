@@ -1,29 +1,27 @@
 import { Request, Response } from "express"
-import Company from '../models/Company.js';
 import { ICompany } from '../interface/ICompany.js';
-import createUuid from "../createUuidUtil.js";
+import createUuid from "../util/createUuidUtil.js";
+import prisma from "../app.js";
 
 
 abstract class CompanyController {
     public static async create(req: Request<{}, {}, ICompany>, res: Response) {
-        const { idOwner, name } = req.body as ICompany
+        const { ownerId, name } = req.body as ICompany
         try {
-            const company = await Company.create({ id: createUuid(), idOwner, name })
-            const companyId = company.getDataValue('id')
-            await company.save() 
+            const company = await prisma.company.create({ data: { id: createUuid(), name, ownerId } })
             res.status(201).json({ resp: "Sucess" })
-            
-            return companyId
+
+            return company.id
         } catch (error) {
             res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" })
             console.log(error);
         }
     }
-    static async getByOwnerId(idOwner: string) {
+    static async getByOwnerId(companyId: string, ownerId: string) {
         try {
-            const manager = await Company.findOne({ where: { idOwner: idOwner } })
+            const manager = await prisma.company.findUnique({ where: { ownerId } })
             if (manager) {
-                return manager.getDataValue("id")
+                return manager.id
             }
         } catch (error) {
             console.log(error);

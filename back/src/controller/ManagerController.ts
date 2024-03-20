@@ -1,23 +1,23 @@
 import { Request, Response } from 'express';
 import * as bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import Manager from '../models/Manager.js';
-import createUuid from '../createUuidUtil.js';
+import createUuid from '../util/createUuidUtil.js';
+import prisma from '../app.js';
 interface RequestBodyPassword {
     myId: string;
     key: string
     myPassword: string
 }
 interface RequestBodyManager {
-    idStore: string;
+    storeId: string;
     email: string;
     password: string;
 }
 abstract class ManagerController {
     public static async createManager(req: Request<{}, {}, RequestBodyManager>, res: Response) {
-        const { email, password, idStore } = req.body
+        const { email, password, storeId } = req.body
 
-        const userExist = await Manager.findOne({ where: { email: email } })
+        const userExist = await prisma.manager.findUnique({ where: { email } })
         if (userExist) {
             return res.json({ resp: "Este email já existe!" })
         }
@@ -27,16 +27,14 @@ abstract class ManagerController {
             const passwordHash = await bcrypt.hash(password, salt)
 
             //create user
-            const manager = await Manager.create({ id: createUuid(), email, password: passwordHash, idStore })
-            const managerId = manager.getDataValue('id')
-            await manager.save()
+            const manager = await prisma.manager.create({ data: { id: createUuid(), email, password: passwordHash, storeId } })
 
             const secret = process.env.SECRET!
             const secretRefresh = process.env.REFRESH!
 
-            const token = jwt.sign({ id: managerId, }, secret, { expiresIn: "180" })
-            const refresh = jwt.sign({ id: managerId, }, secretRefresh, { expiresIn: "30m" })
-            res.status(201).json({ resp: "Sucess", token: token, refresh: refresh, currentUser: { _id: managerId, name: name, email: email } })
+            const token = jwt.sign({ id: manager.id, }, secret, { expiresIn: "180" })
+            const refresh = jwt.sign({ id: manager.id, }, secretRefresh, { expiresIn: "30m" })
+            res.status(201).json({ resp: "Sucess", token: token, refresh: refresh, currentUser: { _id: manager.id, name: name, email: email } })
         } catch (error) {
             console.log(error);
             res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" })
@@ -44,7 +42,7 @@ abstract class ManagerController {
     }
     static async getAll(req: Request, res: Response) {
         try {
-            const managers = await Manager.findAll({})
+            const managers = await prisma.manager.findMany({})
             if (!managers) {
                 return res.json({ msg: "Gerentes não encontrados" })
             }
@@ -56,8 +54,8 @@ abstract class ManagerController {
     }
     static async getByStoreId(req: Request, res: Response) {
         try {
-            const { idStore } = req.params
-            const manager = await Manager.findOne({ where: { idStore: idStore } })
+            const { storeId } = req.params
+            const manager = await prisma.manager.findUnique({ where: { storeId } })
             if (!manager) {
                 return res.json({ msg: "Gerente não encontrado" })
             }

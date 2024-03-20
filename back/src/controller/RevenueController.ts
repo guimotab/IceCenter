@@ -1,24 +1,15 @@
 import { Request, Response } from 'express';
-import Manager from '../models/Manager.js';
-import RevenueStore from '../models/RevenueStore.js';
-import createUuid from '../createUuidUtil.js';
+import createUuid from '../util/createUuidUtil.js';
+import prisma from '../app.js';
 
 
 abstract class RevenueController {
-    public static async create() {
-        try {
-            const revenue = await RevenueStore.create({ id: createUuid(), cash: 1000, expenses: 0, profit: 0 })
-            const revenueId = revenue.getDataValue('id')
-            await revenue.save()
-
-            return revenueId
-        } catch (error) {
-            console.log(error);
-        }
+    public static create() {
+        return { id: createUuid(), cash: 1000, expenses: 0, profit: 0 }
     }
     static async getAll(req: Request, res: Response) {
         try {
-            const managers = await Manager.findAll({})
+            const managers = await prisma.manager.findMany({})
             if (!managers) {
                 return res.json({ msg: "Gerentes não encontrados" })
             }
@@ -30,8 +21,8 @@ abstract class RevenueController {
     }
     static async getByStoreId(req: Request, res: Response) {
         try {
-            const { idStore } = req.params
-            const manager = await Manager.findOne({ where: { idStore: idStore } })
+            const { storeId } = req.params
+            const manager = await prisma.manager.findUnique({ where: { storeId } })
             if (!manager) {
                 return res.json({ msg: "Gerente não encontrado" })
             }

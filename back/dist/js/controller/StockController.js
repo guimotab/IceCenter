@@ -1,28 +1,34 @@
-import Manager from '../models/Manager.js';
-import StockStore from '../models/StockStore.js';
-import createUuid from '../createUuidUtil.js';
-import FlavorsController from './FlavorsController.js';
+import createUuid from '../util/createUuidUtil.js';
+import prisma from '../app.js';
 class StockController {
-    static async create() {
-        try {
-            const flavor1 = await FlavorsController.create({ id: "", name: "Chocolate", quantity: 10 });
-            const flavor2 = await FlavorsController.create({ id: "", name: "Baunilha", quantity: 10 });
-            const flavor3 = await FlavorsController.create({ id: "", name: "Morango", quantity: 10 });
-            const stock = await StockStore.create({
-                id: createUuid(),
-                cone: 50,
-            });
-            const stockId = stock.getDataValue('id');
-            await stock.save();
-            return stockId;
-        }
-        catch (error) {
-            console.log(error);
-        }
+    static create() {
+        return {
+            id: createUuid(),
+            cone: 50,
+            flavors: {
+                create: [
+                    {
+                        id: createUuid(),
+                        name: "Chocolate",
+                        quantity: 10,
+                    },
+                    {
+                        id: createUuid(),
+                        name: "Baunilha",
+                        quantity: 10,
+                    },
+                    {
+                        id: createUuid(),
+                        name: "Morango",
+                        quantity: 10,
+                    },
+                ]
+            },
+        };
     }
     static async getAll(req, res) {
         try {
-            const managers = await Manager.findAll({});
+            const managers = await prisma.manager.findMany({});
             if (!managers) {
                 return res.json({ msg: "Gerentes não encontrados" });
             }
@@ -35,8 +41,8 @@ class StockController {
     }
     static async getByStoreId(req, res) {
         try {
-            const { idStore } = req.params;
-            const manager = await Manager.findOne({ where: { idStore: idStore } });
+            const { storeId } = req.params;
+            const manager = await prisma.manager.findUnique({ where: { storeId: storeId } });
             if (!manager) {
                 return res.json({ msg: "Gerente não encontrado" });
             }
