@@ -2,22 +2,29 @@ import { ICompany } from "@/interface/ICompany"
 import { CompanyService } from "@/service/CompanyService"
 
 export abstract class CompanyController {
-  private static companyController = CompanyService.getInstance()
+  private static companyService = CompanyService.getInstance()
 
-  static async getAll(): Promise<ICompany[]> {
-    return await this.companyController.getAll()
+  static async getByOwnerId(id: string) {
+    const company = await this.companyService.getByOwnerId(id)
+    if(company.data){
+      return company.data
+    }
   }
 
-  static async get(id: string): Promise<ICompany> {
-    return await this.companyController.get(id)
+  static async getAll(): Promise<ICompany[]> {
+    return await this.companyService.getAll()
+  }
+
+  static async get(id: string) {
+    return await this.companyService.get(id)
   }
 
   static async put(id: string, data: ICompany): Promise<void> {
-    await this.companyController.putData(id, data)
+    await this.companyService.putData(id, data)
   }
 
   static async delete(id: string): Promise<void> {
-    await this.companyController.deleteData(id)
+    await this.companyService.deleteData(id)
   }
 
   static async findCurrent() {

@@ -7,6 +7,8 @@ import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import StoreInformations from "./components/StoreInformations"
 import { Libraries, LoadScript, useJsApiLoader, useLoadScript } from "@react-google-maps/api"
+import { AddressController } from "@/controller/AddressController"
+import { IAddress } from "@/interface/IAddress"
 
 const Store = () => {
   const { isLoaded } = useJsApiLoader({
@@ -17,13 +19,17 @@ const Store = () => {
   const searchParams = useParams<{ idStore: string }>()
 
   const [store, setStore] = useState<IStore>()
+  const [address, setAddress] = useState<IAddress>()
   const company = useCurrentCompany()
 
   useEffect(() => {
     async function load() {
-      setStore(
-        await StoreController.get(searchParams.idStore)
-      )
+      const storeResp = await StoreController.get(searchParams.idStore)
+      const addressResp = await AddressController.getByStoreId(searchParams.idStore)
+      if (storeResp.data && addressResp.data) {
+        setStore(storeResp.data)
+        setAddress(addressResp.data)
+      }
     }
     load()
   }, [])
@@ -31,16 +37,15 @@ const Store = () => {
   return (
     <main className="flex flex-col items-center">
       <div className="w-full max-w-[70rem] my-10">
-        {store && company ?
+        {store && company && address &&
           <div>
             <Card className="px-8 py-6">
               {isLoaded ?
-                <StoreInformations company={company} store={store} />
+                <StoreInformations address={address} company={company} store={store} />
                 : ""
               }
             </Card>
           </div>
-          : ""
         }
       </div>
     </main>

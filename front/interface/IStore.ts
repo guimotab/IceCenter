@@ -4,7 +4,7 @@ import { IStockStore } from "./IStockStore"
 
 export interface IStore {
   id: string
-  idCompany: string
+  companyId: string
   name: string
   address: IAddress
   stock: IStockStore

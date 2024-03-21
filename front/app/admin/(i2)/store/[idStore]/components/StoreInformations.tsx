@@ -11,21 +11,23 @@ import { toast } from "sonner"
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { MdContentCopy } from "react-icons/md";
 import { FaMapLocationDot } from "react-icons/fa6";
+import { IAddress } from "@/interface/IAddress"
 
 interface StoreInformationsProps {
   company: ICompany
   store: IStore
+  address: IAddress
 }
 
-const StoreInformations = ({ company, store }: StoreInformationsProps) => {
+const StoreInformations = ({ company, store, address }: StoreInformationsProps) => {
 
-  const address = `${store.address.street}, ${store.address.number} - ${store.address.neighborhood}, ${store.address.city} - ${store.address.uf}, Brasil`
+  const addressString = `${address.street}, ${address.number} - ${address.neighborhood}, ${address.city} - ${address.uf}, Brasil`
   const [openMap, setOpenMap] = useState(false)
   const [position, setPosition] = useState({ lat: 0, lng: 0 })
 
   async function handleMap() {
     const geocoder = new google.maps.Geocoder()
-    const result = (await geocoder.geocode({ address })).results[0]
+    const result = (await geocoder.geocode({ address: addressString })).results[0]
     setPosition({
       lat: result.geometry?.location?.lat(),
       lng: result.geometry?.location?.lng()
@@ -41,7 +43,7 @@ const StoreInformations = ({ company, store }: StoreInformationsProps) => {
         onClick: () => ""
       }
     })
-    await navigator.clipboard.writeText(address)
+    await navigator.clipboard.writeText(addressString)
   }
 
   const importantInformations = [
@@ -59,22 +61,22 @@ const StoreInformations = ({ company, store }: StoreInformationsProps) => {
   const inputsForm = [
     {
       label: "CEP",
-      value: store.address.cep
+      value: address.cep
     }, {
       label: "UF",
-      value: store.address.uf
+      value: address.uf
     }, {
       label: "Cidade",
-      value: store.address.city
+      value: address.city
     }, {
       label: "Rua",
-      value: store.address.street
+      value: address.street
     }, {
       label: "Bairro",
-      value: store.address.neighborhood
+      value: address.neighborhood
     }, {
       label: "Número",
-      value: store.address.number
+      value: address.number
     },
   ]
   return (
@@ -123,7 +125,7 @@ const StoreInformations = ({ company, store }: StoreInformationsProps) => {
       {openMap ?
         <>
           <div className="w-full h-[30rem] border-2">
-            <GoogleMaps startingPosition={position} address={store.address} />
+            <GoogleMaps startingPosition={position} address={address} />
           </div>
           <Link href={`https://www.google.com.br/maps/@${position.lat},${position.lng},20z?`} target="_blank">
             <Button className="space-x-2">

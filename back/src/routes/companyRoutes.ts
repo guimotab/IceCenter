@@ -6,6 +6,7 @@ const companyRoute = express.Router()
 companyRoute
     //coloca do caminho mais específico pro menos específico
     // .get("/admin/login/:email/:password", CompanyController.getAll)
+    .get("/company/owner/:ownerId", CompanyController.getByOwnerId)
     .post("/company/create", CompanyController.create)
     // .delete(`/admin/deleteUser/:id/:userId/:password`, ManagerController.deleteUser)
     // .put("/admin/changeRoleUser", ManagerController.changeRoleUser)

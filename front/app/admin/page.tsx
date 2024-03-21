@@ -1,12 +1,10 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AuthController } from "@/controller/AuthController";
-import { OwnerController } from "@/controller/OwnerController";
 import { useUpdateCurrentOwner } from "@/state/hooks/useUpdateCurrentOwner";
-import { LocalStorageUtils } from "@/utils/LocalStorageUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -27,7 +25,7 @@ export default function Login() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "guimota22@gmail.com",
-      password: "teste"
+      password: "1234"
     },
   })
   async function onSubmit(values: z.infer<typeof formSchema>) {

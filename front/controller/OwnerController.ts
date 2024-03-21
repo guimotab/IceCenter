@@ -8,8 +8,11 @@ export abstract class OwnerController {
     return await this.ownerService.getAll()
   }
 
-  static async get(id: string): Promise<IOwner> {
-    return await this.ownerService.get(id)
+  static async get(id: string) {
+    const owner = (await this.ownerService.get(id))
+    if(owner.data){
+      return owner.data!
+    }
   }
 
   static async put(id: string, data: IOwner): Promise<void> {

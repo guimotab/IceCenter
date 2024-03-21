@@ -54,30 +54,34 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
     event.preventDefault()
 
     const idStore = `${company.name} ${nameStore.trim()}`.toLocaleLowerCase().replaceAll(" ", "-")
+
     const newAddress = {
       cep, city, neighborhood, number, street, uf
     } as IAddress
     const newStore = {
       id: idStore,
-      idCompany: company.id,
+      companyId: company.id,
       name: `${company.name} ${nameStore.trim()}`,
-      revenue: {cash: 1000} as IRevenueStore,
+      revenue: { cash: 1000 } as IRevenueStore,
       stock: {} as IStockStore,
       address: newAddress,
     } as IStore
+    const resultStore = await StoreController.post(newStore)
 
+    if (resultStore.resp !== "Sucess") {
+      return
+    }
     const newManager = {
-      idStore: idStore,
+      storeId: resultStore.data!.id,
       email: email,
       password: password,
     } as IManager
-
-    const [resultStore, resultManager] = await Promise.all([
-      StoreController.createStore(newStore), 
-      ManagerController.createManager(newManager)
-    ])
-
-    if (resultStore && resultManager) {
+    const resultManager = await ManagerController.post(newManager)
+    console.log("🚀 ~ onSubmit ~ resultManager:", resultManager.data)
+    if (resultManager.resp !== "Sucess") {
+      return
+    }
+    if (resultManager.data) {
       router.push("./home")
     }
   }

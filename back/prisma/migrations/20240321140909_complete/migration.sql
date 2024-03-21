@@ -97,7 +97,13 @@ CREATE TABLE "_FlavorsIceCreamToStockStore" (
 CREATE UNIQUE INDEX "Owner_email_key" ON "Owner"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Company_name_key" ON "Company"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Company_ownerId_key" ON "Company"("ownerId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Store_name_key" ON "Store"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Manager_storeId_key" ON "Manager"("storeId");

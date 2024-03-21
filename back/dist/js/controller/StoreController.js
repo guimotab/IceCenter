@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import AddressController from './AddressController.js';
 import RevenueController from './RevenueController.js';
 import StockController from './StockController.js';
@@ -8,48 +7,55 @@ class StoreController {
     static async createStore(req, res) {
         const { name, address, companyId } = req.body;
         try {
-            const store = await prisma.store.create({
-                data: {
-                    id: createUuid(),
-                    name,
-                    address: { create: { ...AddressController.create(address) } },
-                    revenue: { create: { ...RevenueController.create() } },
-                    stock: { create: { ...StockController.create() } },
-                    companyId,
-                }
-            });
-            const secret = process.env.SECRET;
-            const secretRefresh = process.env.REFRESH;
-            const token = jwt.sign({ id: store.id, }, secret, { expiresIn: "180" });
-            const refresh = jwt.sign({ id: store.id, }, secretRefresh, { expiresIn: "30m" });
-            res.status(201).json({ resp: "Sucess", token: token, refresh: refresh, store: { id: store.id } });
+            const checkIfExist = await prisma.store.findUnique({ where: { name } });
+            const idStore = createUuid();
+            if (!checkIfExist) {
+                const company = await prisma.company.update({
+                    where: { id: companyId }, data: {
+                        storeId: idStore,
+                        store: {
+                            create: [{
+                                    id: idStore,
+                                    name,
+                                    address: { create: { ...AddressController.create(address) } },
+                                    revenue: { create: { ...RevenueController.create() } },
+                                    stock: { create: { ...StockController.create() } },
+                                }]
+                        },
+                    },
+                });
+                const store = await prisma.store.findUnique({ where: { id: idStore } });
+                return res.status(201).json({ resp: "Sucess", data: store });
+            }
+            res.status(500).json({ resp: "Esta loja já existe!" });
         }
         catch (error) {
             console.log(error);
             res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
         }
     }
-    static async getAll(req, res) {
+    static async getAllByIdCompany(req, res) {
+        const { companyId } = req.params;
         try {
-            const managers = await prisma.manager.findMany({});
-            if (!managers) {
-                return res.json({ msg: "Gerentes não encontrados" });
+            const store = await prisma.store.findMany({ where: { companyId } });
+            if (!store) {
+                return res.json({ msg: "Lojas não encontradas" });
             }
-            res.status(200).json({ msg: "Sucess", managers: managers });
+            res.status(200).json({ msg: "Sucess", data: store });
         }
         catch (error) {
             console.log(error);
             res.json({ msg: "Ocorreu um erro no servidor" });
         }
     }
-    static async getByStoreId(req, res) {
+    static async get(req, res) {
         try {
             const { storeId } = req.params;
-            const store = await prisma.manager.findUnique({ where: { storeId: storeId } });
+            const store = await prisma.store.findUnique({ where: { id: storeId } });
             if (!store) {
-                return res.json({ msg: "Gerente não encontrado" });
+                return res.json({ msg: "Loja não encontrada" });
             }
-            res.status(200).json({ msg: "Sucess", store: store });
+            res.status(200).json({ msg: "Sucess", data: store });
         }
         catch (error) {
             console.log(error);

@@ -3,20 +3,35 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label";
+import { StockController } from "@/controller/StockController";
+import { IStockStore } from "@/interface/IStockStore";
 import useCurrentStore from "@/state/hooks/useCurrentStore";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { IoEyeSharp } from "react-icons/io5";
 import { IoEyeOutline } from "react-icons/io5";
 
 const Store = () => {
   const store = useCurrentStore()
+  const [stock, setStock] = useState<IStockStore>()
+  console.log("🚀 ~ Store ~ stock:", stock)
   const [showStoreCash, setShowStoreCash] = useState(false)
   function handleCashVisibily() {
     setShowStoreCash(!showStoreCash)
   }
+  useEffect(() => {
+    async function load() {
+      const resp = await StockController.getByStoreId(store.id)
+      if (resp) {
+        setStock(resp)
+      }
+    }
+    if (store) {
+      load()
+    }
+  }, [store])
   return (
     <main className="flex flex-col items-center w-full h-screen">
-      {store &&
+      {store && stock &&
         <div className="w-full flex flex-col items-center mt-10 max-w-[70rem]">
           <Card className="flex flex-col w-full px-6 py-3 gap-3">
             <div className="flex items-center gap-3">
@@ -39,7 +54,7 @@ const Store = () => {
                   <div className="flex flex-col gap-3">
                     <Label>Sabores de Sorvete (10 litros por pacote)</Label>
                     <div className="flex gap-3">
-                      {store.stock.flavors.map(flavor =>
+                      {stock.flavors.map(flavor =>
                         <Badge key={flavor.name} variant={"outline"}>
                           {`${flavor.name}: ${flavor.quantity} pacotes`}
                         </Badge>
@@ -49,7 +64,7 @@ const Store = () => {
                   <div className="flex flex-col gap-3">
                     <Label>Cones (10 unidades por pacote)</Label>
                     <Badge variant={"outline"} className="self-start">
-                      {`${store.stock.cone} pacotes`}
+                      {`${stock.cone} pacotes`}
                     </Badge>
                   </div>
                 </div>

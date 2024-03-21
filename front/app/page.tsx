@@ -25,20 +25,17 @@ export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      idStore: "sorvetes-mais-centro",
-      email: "sorvetescentro@gmail.com",
+      idStore: "2e75e003-afdd-4588-ba85-b1383c494188",
+      email: "centralSorvetes@gmail.com",
       password: "1234"
     },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const manager = await ManagerController.getByIdStore(values.idStore)
-    if (manager) {
-      const result = await AuthController.loginUser(values.email, values.password, manager)
-      if (result) {
-        setManager(manager)
-        router.push("store")
-      } 
+    const result = await AuthController.loginManager(values.idStore, values.email, values.password)
+    if (result && result.resp === "Sucess") {
+      setManager(result.manager)
+      router.push("store")
     }
   }
 

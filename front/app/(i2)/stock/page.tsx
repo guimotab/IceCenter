@@ -13,7 +13,7 @@ const Stock = () => {
   const setStore = useUpdateCurrentStore()
   useEffect(() => {
     async function load() {
-      setStore(await StoreController.findById(manager.idStore))
+      setStore(await StoreController.get(manager.idStore))
     }
     if (manager && store) {
       load()

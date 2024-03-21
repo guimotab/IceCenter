@@ -1,6 +1,6 @@
 export interface IManager {
   id: string
-  idStore: string
+  storeId: string
   email: string
   password: string
 }

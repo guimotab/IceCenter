@@ -12,8 +12,6 @@ class AuthController {
             const secret = process.env.SECRET;
             const secretRefresh = process.env.REFRESH;
             const token = jwt.sign({ id: owner.id, }, secret, { expiresIn: "5m" });
-            const tokenteste = jwt.verify(token, secret);
-            console.log("🚀 ~ AuthController ~ login ~ tokenteste:", tokenteste);
             const refresh = jwt.sign({ id: owner.id, }, secretRefresh, { expiresIn: "30m" });
             res.status(201).json({ resp: "Sucess", token: token, refresh: refresh, user: owner });
         }
@@ -38,6 +36,31 @@ class AuthController {
             const token = jwt.sign({ id: owner.id, }, secret, { expiresIn: "5m" });
             const refresh = jwt.sign({ id: owner.id, }, secretRefresh, { expiresIn: "30m" });
             res.status(200).json({ resp: "Sucess", token: token, refresh: refresh, owner: owner });
+        }
+        catch (error) {
+            console.log(error);
+            res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
+        }
+    }
+    static async loginManager(req, res) {
+        const { storeId, email, password } = req.params;
+        const manager = await prisma.manager.findUnique({ where: { storeId } });
+        if (!manager) {
+            return res.json({ resp: "Id não existe!" });
+        }
+        if (manager.email !== email) {
+            return res.json({ resp: "Email ou senha incorretos!" });
+        }
+        const checkPassword = await bcrypt.compare(password, manager.password);
+        if (!checkPassword) {
+            return res.json({ resp: "Email ou senha incorretos!" });
+        }
+        try {
+            const secret = process.env.SECRET;
+            const secretRefresh = process.env.REFRESH;
+            const token = jwt.sign({ id: manager.id, }, secret, { expiresIn: "5m" });
+            const refresh = jwt.sign({ id: manager.id, }, secretRefresh, { expiresIn: "30m" });
+            res.status(200).json({ resp: "Sucess", token: token, refresh: refresh, manager: manager });
         }
         catch (error) {
             console.log(error);

@@ -12,9 +12,12 @@ const CreateStores = () => {
 
   useEffect(() => {
     async function load() {
-      setStores(
-        await StoreController.findByCompany(company.id)
-      )
+      if (company.storeId) {
+        const resp = await StoreController.findAllByCompanyId(company.id)
+        if(resp){
+          setStores(resp)
+        }
+      }
     }
     if (company) {
       load()

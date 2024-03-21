@@ -6,29 +6,29 @@ class AddressController {
     }
     static async getAll(req, res) {
         try {
-            const managers = await prisma.manager.findMany({});
-            if (!managers) {
-                return res.json({ msg: "Gerentes não encontrados" });
+            const addresses = await prisma.address.findMany({});
+            if (!addresses) {
+                return res.json({ resp: "Endereços não encontrados" });
             }
-            res.status(200).json({ msg: "Sucess", managers: managers });
+            res.status(200).json({ resp: "Sucess", data: addresses });
         }
         catch (error) {
             console.log(error);
-            res.json({ msg: "Ocorreu um erro no servidor" });
+            res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
     static async getByStoreId(req, res) {
         try {
             const { storeId } = req.params;
-            const manager = await prisma.manager.findUnique({ where: { storeId } });
-            if (!manager) {
-                return res.json({ msg: "Gerente não encontrado" });
+            const address = await prisma.address.findUnique({ where: { storeId } });
+            if (!address) {
+                return res.json({ resp: "Endereço não encontrado" });
             }
-            res.status(200).json({ msg: "Sucess", manager: manager });
+            res.status(200).json({ resp: "Sucess", data: address });
         }
         catch (error) {
             console.log(error);
-            res.json({ msg: "Ocorreu um erro no servidor" });
+            res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
 }

@@ -11,18 +11,16 @@ export abstract class AuthController {
     return respAuth
   }
 
-  static async loginUser(email: string, password: string){
+  static async loginManager(storeId:string, email: string, password: string){
     if (email !== "") {
       if (password !== "") {
-        const respAuth = await AuthService.loginAdmin(email, password)
+        const respAuth = await AuthService.loginManager(storeId, email, password)
         if (respAuth.resp === "Sucess") {
           //criaToken e salva no localStorage      
           LocalStorageUtils.saveTokens(respAuth.token, respAuth.refresh)
-          return Response.return(true)
         }
+        return respAuth
       }
-      return Response.return(false, "Senha inválida")
     }
-    return Response.return(false, "Email inválido")
   }
 }

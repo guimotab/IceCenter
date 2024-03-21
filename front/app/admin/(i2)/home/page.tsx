@@ -13,7 +13,12 @@ const Home = () => {
 
   useEffect(() => {
     async function load() {
-      setStores(await StoreController.findByCompany(company.id))
+      if (company.storeId) {
+        const result = await StoreController.findAllByCompanyId(company.id)
+        if (result) {
+          setStores(result)
+        }
+      }
     }
     if (company) {
       load()
@@ -23,14 +28,16 @@ const Home = () => {
     <main className="flex flex-col items-center w-full h-screen">
       <div className="w-full flex flex-col items-center mt-10 max-w-[70rem]">
         <div className="flex flex-col w-full gap-5">
-          <div className="flex items-center gap-3">
-            <h1 className="text-xl font-medium">Lojas Atuais</h1>
-            <Link href={"./create-store"}>
-              <Button>Nova Loja</Button>
-            </Link>
-          </div>
+          {company &&
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl font-medium">Lojas Atuais</h1>
+              <Link href={"./create-store"}>
+                <Button>Nova Loja</Button>
+              </Link>
+            </div>
+          }
           <div className="grid grid-cols-2 gap-x-10 gap-y-6">
-            {stores ? stores.map(store =>
+            {stores && stores.map(store =>
               <Card key={store.id}>
                 <CardHeader className="py-4">
                   <CardTitle className="text-lg">
@@ -41,14 +48,12 @@ const Home = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href={"./store/"+ store.id}>
+                  <Link href={"./store/" + store.id}>
                     <Button>Ver Loja</Button>
                   </Link>
                 </CardContent>
               </Card>
-            )
-              : ""
-            }
+            )}
           </div>
         </div>
       </div>

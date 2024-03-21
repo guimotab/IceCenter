@@ -1,17 +1,11 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { CompanyController } from "@/controller/CompanyController"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ManagerController } from "@/controller/ManagerController"
-import { OwnerController } from "@/controller/OwnerController"
 import { StoreController } from "@/controller/StoreController"
-import useCurrentCompany from "@/state/hooks/useCurrentCompany"
+import { TokenService } from "@/service/TokenService"
 import useCurrentManager from "@/state/hooks/useCurrentManager"
-import useCurrentOwner from "@/state/hooks/useCurrentOwner"
 import useCurrentStore from "@/state/hooks/useCurrentStore"
-import { useUpdateCurrentCompany } from "@/state/hooks/useUpdateCurrentCompany"
 import { useUpdateCurrentManager } from "@/state/hooks/useUpdateCurrentManager"
-import { useUpdateCurrentOwner } from "@/state/hooks/useUpdateCurrentOwner"
 import { useUpdateCurrentStore } from "@/state/hooks/useUpdateCurrentStore"
-import { LocalStorageUtils } from "@/utils/LocalStorageUtils"
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -25,21 +19,24 @@ const Header = () => {
   const router = useRouter()
   useEffect(() => {
     async function verify() {
-      if (!manager) {
-        const resultStorage = LocalStorageUtils.getIdManager()
-        if (resultStorage) {
-          const manager = await ManagerController.findCurrent(resultStorage)
+      const resp = TokenService.get()
+      if (resp.status) {
+        const manager = await ManagerController.get(resp.data!.id)
+        if (manager) {
           setManager(manager)
-          setStore(await StoreController.findCurrent(manager.idStore))
-          return
+          const store = await StoreController.get(manager.storeId)
+          if (store) {
+            setStore(store)
+            return
+          }
         }
-        router.push("/admin")
       }
+      // router.push("/")
     }
     verify()
   }, [])
-  function handleLogout(){
-    LocalStorageUtils.deleteOwner()
+  function handleLogout() {
+    TokenService.deleteTokens()
     router.push("/")
   }
   return (
@@ -56,24 +53,24 @@ const Header = () => {
                 <Link href={"stock"}>Estoque</Link>
               </div>
             </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="outline-none">
-                  <div className="flex items-center gap-3">
-                    <h2>
-                      {store.name}
-                    </h2>
-                    <Avatar>
-                      <div className="flex items-center justify-center w-10 h-10 bg-slate-300 rounded-full">
-                        {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
-                        <AvatarFallback className="font-medium">{store.name[0].toLocaleUpperCase()}</AvatarFallback>
-                      </div>
-                    </Avatar>
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={handleLogout}>Deslogar</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="outline-none">
+                <div className="flex items-center gap-3">
+                  <h2>
+                    {store.name}
+                  </h2>
+                  <Avatar>
+                    <div className="flex items-center justify-center w-10 h-10 bg-slate-300 rounded-full">
+                      {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
+                      <AvatarFallback className="font-medium">{store.name[0].toLocaleUpperCase()}</AvatarFallback>
+                    </div>
+                  </Avatar>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={handleLogout}>Deslogar</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </>
           : ""}
       </div>

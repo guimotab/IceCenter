@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -23,16 +23,16 @@ model Owner {
 
 model Company {
   id      String  @id
-  name    String
+  name    String  @unique
   storeId String?
-  Store   Store[]
+  store   Store[]
   owner   Owner   @relation(fields: [ownerId], references: [id])
   ownerId String  @unique
 }
 
 model Store {
   id        String      @id
-  name      String
+  name      String      @unique
   revenue   Revenue?
   manager   Manager?
   address   Address?
@@ -50,29 +50,19 @@ model Manager {
 }
 
 model StockStore {
-  id             String            @id
-  cone           Int
-  store          Store             @relation(fields: [storeId], references: [id])
-  storeId        String            @unique
-  flavors        FlavorsIceCream[]
-  StockOnFlavors StockOnFlavors[]
+  id      String            @id
+  cone    Int
+  store   Store             @relation(fields: [storeId], references: [id])
+  storeId String            @unique
+  flavors FlavorsIceCream[]
 }
 
 model FlavorsIceCream {
-  id             String           @id
-  name           String
-  quantity       Int
-  stock          StockStore[]
-  StockOnFlavors StockOnFlavors[]
-}
-
-model StockOnFlavors {
-  stock     StockStore      @relation(fields: [stockId], references: [id])
-  stockId   String
-  flavors   FlavorsIceCream @relation(fields: [flavorsId], references: [id])
-  flavorsId String
-
-  @@id([stockId, flavorsId])
+  id       String     @id
+  name     String
+  quantity Int
+  stock    StockStore @relation(fields: [stockId], references: [id])
+  stockId  String     
 }
 
 model Address {

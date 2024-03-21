@@ -7,7 +7,7 @@ class FlavorsController {
                 data: {
                     id: createUuid(),
                     name,
-                    quantity
+                    quantity,
                 }
             });
             return flavor.id;

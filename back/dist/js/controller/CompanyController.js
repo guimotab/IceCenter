@@ -13,14 +13,18 @@ class CompanyController {
             console.log(error);
         }
     }
-    static async getByOwnerId(companyId, ownerId) {
+    static async getByOwnerId(req, res) {
+        const { ownerId } = req.params;
         try {
-            const manager = await prisma.company.findUnique({ where: { ownerId } });
-            if (manager) {
-                return manager.id;
+            const company = await prisma.company.findUnique({ where: { ownerId } });
+            if (company) {
+                res.status(201).json({ resp: "Sucess", data: company });
+                return;
             }
+            res.status(500).json({ resp: "Não foi possível carregar a empresa" });
         }
         catch (error) {
+            res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
             console.log(error);
         }
     }
