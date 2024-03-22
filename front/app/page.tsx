@@ -25,7 +25,7 @@ export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      idStore: "2e75e003-afdd-4588-ba85-b1383c494188",
+      idStore: "1c4d651f-02df-4812-ab05-afdce94445f5",
       email: "centralSorvetes@gmail.com",
       password: "1234"
     },

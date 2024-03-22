@@ -5,7 +5,10 @@ import { AddressService } from "@/service/AddressService"
 export abstract class AddressController {
   private static addressService = AddressService.getInstance()
   static async getByStoreId(idCompany: string) {
-    return await this.addressService.getByStoreId(idCompany)
+    const resp = await this.addressService.getByStoreId(idCompany)
+    if(resp.data){
+      return resp.data
+    }
   }
 
   static async get(id: string) {
@@ -13,7 +16,7 @@ export abstract class AddressController {
   }
 
   static async put(id: string, data: IAddress) {
-    await this.addressService.putData(id, data)
+    return await this.addressService.putData(id, data)
   }
 
   static async post(data: IAddress) {

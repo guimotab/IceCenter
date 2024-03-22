@@ -64,9 +64,8 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       name: `${company.name} ${nameStore.trim()}`,
       revenue: { cash: 1000 } as IRevenueStore,
       stock: {} as IStockStore,
-      address: newAddress,
     } as IStore
-    const resultStore = await StoreController.post(newStore)
+    const resultStore = await StoreController.post(newStore, newAddress)
 
     if (resultStore.resp !== "Sucess") {
       return
@@ -85,6 +84,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       router.push("./home")
     }
   }
+  
   const inputsForm = [
     {
       id: "cep",
@@ -132,6 +132,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       value: password,
     },
   ]
+  
   return (
     <form onSubmit={onSubmit} className="space-y-7 w-full">
       <div className="flex flex-col gap-2">

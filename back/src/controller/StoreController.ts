@@ -5,6 +5,7 @@ import RevenueController from './RevenueController.js';
 import StockController from './StockController.js';
 import createUuid from '../util/createUuidUtil.js';
 import prisma from '../app.js';
+import { IStore } from '../interface/IStore.js';
 
 interface RequestBodyManager {
 	name: string;
@@ -40,6 +41,20 @@ abstract class StoreController {
 		} catch (error) {
 			console.log(error);
 			res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" })
+		}
+	}
+
+	static async put(req: Request, res: Response) {
+		try {
+			const { storeId } = req.params
+			const { data } = req.body as { data: IStore }
+
+			const store = await prisma.store.update({ where: { id: storeId }, data })
+
+			res.status(200).json({ resp: "Sucess", data: store })
+		} catch (error) {
+			console.log(error);
+			res.json({ resp: "Ocorreu um erro no servidor" })
 		}
 	}
 

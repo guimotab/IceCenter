@@ -62,7 +62,7 @@ model FlavorsIceCream {
   name     String
   quantity Int
   stock    StockStore @relation(fields: [stockId], references: [id])
-  stockId  String     
+  stockId  String     @unique
 }
 
 model Address {

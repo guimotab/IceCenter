@@ -16,6 +16,18 @@ class ManagerController {
             res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
+    static async put(req, res) {
+        try {
+            const { managerId } = req.params;
+            const { data } = req.body;
+            const manager = await prisma.manager.update({ where: { id: managerId }, data });
+            res.status(200).json({ resp: "Sucess", data: manager });
+        }
+        catch (error) {
+            console.log(error);
+            res.json({ resp: "Ocorreu um erro no servidor" });
+        }
+    }
     static async createManager(req, res) {
         const { email, password, storeId } = req.body;
         const userExist = await prisma.manager.findUnique({ where: { email } });

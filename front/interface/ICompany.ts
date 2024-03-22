@@ -1,6 +1,6 @@
 export interface ICompany {
   id: string
-  ownerId: string
-  storeId?: string
   name: string
+  storeId?: string
+  ownerId: string
 }

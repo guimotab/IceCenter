@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as bcrypt from 'bcrypt'
 import createUuid from '../util/createUuidUtil.js';
 import prisma from '../app.js';
+import { IManager } from '../interface/IManager.js';
 interface RequestBodyPassword {
     myId: string;
     key: string
@@ -26,6 +27,20 @@ abstract class ManagerController {
             res.json({ resp: "Ocorreu um erro no servidor" })
         }
     }
+
+    static async put(req: Request, res: Response) {
+		try {
+			const { managerId } = req.params
+			const { data } = req.body as { data: IManager }
+
+			const manager = await prisma.manager.update({ where: { id: managerId }, data })
+
+			res.status(200).json({ resp: "Sucess", data: manager })
+		} catch (error) {
+			console.log(error);
+			res.json({ resp: "Ocorreu um erro no servidor" })
+		}
+	}
     public static async createManager(req: Request<{}, {}, RequestBodyManager>, res: Response) {
         const { email, password, storeId } = req.body
 

@@ -1,13 +1,14 @@
 import createUuid from '../util/createUuidUtil.js';
 import prisma from '../app.js';
 class FlavorsController {
-    static async create({ name, quantity }) {
+    static async create({ name, quantity, stockId }) {
         try {
             const flavor = await prisma.flavorsIceCream.create({
                 data: {
                     id: createUuid(),
                     name,
                     quantity,
+                    stockId
                 }
             });
             return flavor.id;
@@ -18,29 +19,29 @@ class FlavorsController {
     }
     static async getAll(req, res) {
         try {
-            const managers = await prisma.manager.findMany({});
+            const managers = await prisma.flavorsIceCream.findMany({});
             if (!managers) {
-                return res.json({ msg: "Gerentes não encontrados" });
+                return res.json({ resp: "Gerentes não encontrados" });
             }
-            res.status(200).json({ msg: "Sucess", managers: managers });
+            res.status(200).json({ resp: "Sucess", data: managers });
         }
         catch (error) {
             console.log(error);
-            res.json({ msg: "Ocorreu um erro no servidor" });
+            res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
-    static async getByStoreId(req, res) {
+    static async getAllByStockId(req, res) {
         try {
-            const { storeId } = req.params;
-            const manager = await prisma.manager.findUnique({ where: { storeId } });
-            if (!manager) {
-                return res.json({ msg: "Gerente não encontrado" });
+            const { stockId } = req.params;
+            const flavorsIceCream = await prisma.flavorsIceCream.findMany({ where: { stockId } });
+            if (!flavorsIceCream) {
+                return res.json({ resp: "Sabores não encontrados" });
             }
-            res.status(200).json({ msg: "Sucess", manager: manager });
+            res.status(200).json({ resp: "Sucess", data: flavorsIceCream });
         }
         catch (error) {
             console.log(error);
-            res.json({ msg: "Ocorreu um erro no servidor" });
+            res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
 }

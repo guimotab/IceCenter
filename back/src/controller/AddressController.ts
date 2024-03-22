@@ -19,6 +19,20 @@ abstract class AddressController {
             res.json({ resp: "Ocorreu um erro no servidor" })
         }
     }
+
+    static async put(req: Request, res: Response) {
+        try {
+            const { addressId } = req.params
+            const { data } = req.body as { data: IAddress }
+
+            const address = await prisma.address.update({ where: { id: addressId }, data })
+
+            res.status(200).json({ resp: "Sucess", data: address })
+        } catch (error) {
+            console.log(error);
+            res.json({ resp: "Ocorreu um erro no servidor" })
+        }
+    }
     static async getByStoreId(req: Request, res: Response) {
         try {
             const { storeId } = req.params

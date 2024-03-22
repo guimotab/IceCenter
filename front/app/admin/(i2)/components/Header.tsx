@@ -32,6 +32,7 @@ const Header = () => {
           }
         }
       }
+      router.push("/admin")
     }
     verify()
   }, [])

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { ICompany } from "@/interface/ICompany"
 import { IStore } from "@/interface/IStore"
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import GoogleMaps from "./GoogleMaps"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -12,18 +12,24 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { MdContentCopy } from "react-icons/md";
 import { FaMapLocationDot } from "react-icons/fa6";
 import { IAddress } from "@/interface/IAddress"
+import { MdModeEdit } from "react-icons/md";
 
 interface StoreInformationsProps {
   company: ICompany
   store: IStore
   address: IAddress
+  setEditInformations: Dispatch<SetStateAction<boolean>>
 }
 
-const StoreInformations = ({ company, store, address }: StoreInformationsProps) => {
+const StoreInformations = ({ company, store, address, setEditInformations }: StoreInformationsProps) => {
 
   const addressString = `${address.street}, ${address.number} - ${address.neighborhood}, ${address.city} - ${address.uf}, Brasil`
   const [openMap, setOpenMap] = useState(false)
   const [position, setPosition] = useState({ lat: 0, lng: 0 })
+
+  function editInformations(){
+    setEditInformations(true)
+  }
 
   async function handleMap() {
     const geocoder = new google.maps.Geocoder()
@@ -35,15 +41,15 @@ const StoreInformations = ({ company, store, address }: StoreInformationsProps) 
 
     setOpenMap(!openMap)
   }
-  async function handleCopy() {
-    toast("Endereço Copiado!", {
-      description: "Endereço salvo na sua área de transferência.",
+  async function handleCopy(title: string, desc: string, textToCopy: string) {
+    toast(`${title}`, {
+      description: `${desc}`,
       action: {
         label: "Entendi",
         onClick: () => ""
       }
     })
-    await navigator.clipboard.writeText(addressString)
+    await navigator.clipboard.writeText(textToCopy)
   }
 
   const importantInformations = [
@@ -79,20 +85,35 @@ const StoreInformations = ({ company, store, address }: StoreInformationsProps) 
       value: address.number
     },
   ]
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-6">
         <div className="space-y-3">
-          <h2 className="text-xl font-semibold">Informações</h2>
+          <div className="flex w-full justify-between">
+            <h2 className="text-xl font-semibold">Informações</h2>
+            <Button
+              size={"sm"}
+              onClick={editInformations}
+              className="space-x-2">
+              <MdModeEdit className="text-lg" />
+              <p>Editar Informações</p>
+            </Button>
+          </div>
 
-          <div className="grid grid-cols-3 gap-x-7 gap-y-3">
+          <div className="grid grid-cols-[auto_auto_auto] gap-x-7 gap-y-3">
             {importantInformations.map(info =>
               <div key={info.label} className="flex flex-col gap-1">
                 <Label>{info.label}</Label>
-                <Badge variant={"outline"} className="self-start text-sm">{info.value}</Badge>
+                <Badge
+                  variant={"outline"}
+                  onClick={event => handleCopy(`${info.label} Copiado!`, `${info.label} salvo na sua área de transferência.`, info.value)}
+                  className="flex items-center gap-2 self-start text-sm cursor-pointer hover:shadow-sm">
+                  <p>{info.value}</p>
+                  <MdContentCopy className="text-lg" />
+                </Badge>
               </div>
             )}
-
           </div>
         </div>
 
@@ -100,7 +121,10 @@ const StoreInformations = ({ company, store, address }: StoreInformationsProps) 
 
           <div className="flex items-center gap-3">
             <h2 className="text-xl font-semibold">Localização</h2>
-            <Button size={"sm"} onClick={handleCopy} className="self-start space-x-2">
+            <Button
+              size={"sm"}
+              onClick={event => handleCopy("Endereço Copiado!", "Endereço salvo na sua área de transferência.", addressString)}
+              className="self-start space-x-2">
               <MdContentCopy className="text-lg" />
               <p>Copiar endereço</p>
             </Button>
@@ -111,11 +135,18 @@ const StoreInformations = ({ company, store, address }: StoreInformationsProps) 
             </Button>
           </div>
 
-          <div className="grid grid-cols-3 gap-x-7 gap-y-4">
+          <div className="grid grid-cols-[auto_auto_auto] gap-x-7 gap-y-4">
             {inputsForm.map(input =>
               <div key={input.label} className="flex flex-col gap-1">
                 <Label>{input.label}</Label>
-                <Badge variant={"outline"} className="self-start text-sm">{input.value}</Badge>
+                <Badge
+                  variant={"outline"}
+                  onClick={event => handleCopy(`${input.label} Copiado!`, `${input.label} salvo na sua área de transferência.`, input.value)}
+                  className="flex items-center gap-2 self-start text-sm cursor-pointer hover:shadow-sm">
+                  <p>{input.value}</p>
+                  <MdContentCopy className="text-lg" />
+
+                </Badge>
               </div>
             )}
           </div>

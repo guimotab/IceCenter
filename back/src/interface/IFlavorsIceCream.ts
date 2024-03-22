@@ -4,4 +4,5 @@ export interface IFlavorsIceCream{
   id: string
   name: flavorsIceCream
   quantity: number
+  stockId: string
 }

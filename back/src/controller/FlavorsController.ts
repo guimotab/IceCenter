@@ -5,13 +5,14 @@ import prisma from '../app.js';
 
 
 abstract class FlavorsController {
-    public static async create({ name, quantity }: IFlavorsIceCream) {
+    public static async create({ name, quantity, stockId }: IFlavorsIceCream) {
         try {
             const flavor = await prisma.flavorsIceCream.create({
                 data: {
                     id: createUuid(),
                     name,
                     quantity,
+                    stockId
                 }
             })
             return flavor.id
@@ -21,27 +22,27 @@ abstract class FlavorsController {
     }
     static async getAll(req: Request, res: Response) {
         try {
-            const managers = await prisma.manager.findMany({})
+            const managers = await prisma.flavorsIceCream.findMany({})
             if (!managers) {
-                return res.json({ msg: "Gerentes não encontrados" })
+                return res.json({ resp: "Gerentes não encontrados" })
             }
-            res.status(200).json({ msg: "Sucess", managers: managers })
+            res.status(200).json({ resp: "Sucess", data: managers })
         } catch (error) {
             console.log(error);
-            res.json({ msg: "Ocorreu um erro no servidor" })
+            res.json({ resp: "Ocorreu um erro no servidor" })
         }
     }
-    static async getByStoreId(req: Request, res: Response) {
+    static async getAllByStockId(req: Request, res: Response) {
         try {
-            const { storeId } = req.params
-            const manager = await prisma.manager.findUnique({ where: { storeId } })
-            if (!manager) {
-                return res.json({ msg: "Gerente não encontrado" })
+            const { stockId } = req.params
+            const flavorsIceCream = await prisma.flavorsIceCream.findMany({ where: { stockId } })
+            if (!flavorsIceCream) {
+                return res.json({ resp: "Sabores não encontrados" })
             }
-            res.status(200).json({ msg: "Sucess", manager: manager })
+            res.status(200).json({ resp: "Sucess", data: flavorsIceCream })
         } catch (error) {
             console.log(error);
-            res.json({ msg: "Ocorreu um erro no servidor" })
+            res.json({ resp: "Ocorreu um erro no servidor" })
         }
     }
     // static async deleteManager(req: Request<{}, {}, RequestBodyPassword>, res: Response) {

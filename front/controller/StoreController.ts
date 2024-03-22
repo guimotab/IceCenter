@@ -1,3 +1,4 @@
+import { IAddress } from "@/interface/IAddress"
 import { IStore } from "@/interface/IStore"
 import { StoreService } from "@/service/StoreService"
 
@@ -22,10 +23,11 @@ export abstract class StoreController {
   }
 
   static async put(id: string, data: IStore) {
-    await this.storeService.putData(id, data)
+    return await this.storeService.putData(id, data)
   }
 
-  static async post(data: IStore) {
+  static async post(storeData: IStore, address: IAddress) {
+    const data = {...storeData, address} as IStore
     return await this.storeService.postData("create", data)
   }
 

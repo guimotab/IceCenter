@@ -1,8 +1,11 @@
+import { IRevenueStore } from "@/interface/IRevenueStore";
+import axios from "axios";
 import { HttpService } from "./HttpService";
 import { IManager } from "@/interface/IManager";
 
 export class ManagerService extends HttpService<IManager> {
   private static managerService: ManagerService | undefined
+  private static _url = "http://localhost:4000/manager"
   private constructor(url = "manager") {
     super(url);
   }
@@ -11,6 +14,11 @@ export class ManagerService extends HttpService<IManager> {
       this.managerService = new ManagerService()
     }
     return this.managerService
+  }
+
+  async getByStoreId(storeId: string){
+    const resp = await axios.get(`${ManagerService._url}/store/${storeId}`)
+    return resp.data as { resp: string, data?: IManager }
   }
 
 }

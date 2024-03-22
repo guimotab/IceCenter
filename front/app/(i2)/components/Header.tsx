@@ -31,7 +31,7 @@ const Header = () => {
           }
         }
       }
-      // router.push("/")
+      router.push("/")
     }
     verify()
   }, [])

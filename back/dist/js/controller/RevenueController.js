@@ -4,31 +4,34 @@ class RevenueController {
     static create() {
         return { id: createUuid(), cash: 1000, expenses: 0, profit: 0 };
     }
-    static async getAll(req, res) {
+    static async get(req, res) {
         try {
-            const managers = await prisma.manager.findMany({});
-            if (!managers) {
-                return res.json({ msg: "Gerentes não encontrados" });
+            const { revenueId } = req.params;
+            const revenue = await prisma.revenue.findUnique({ where: { id: revenueId } });
+            if (!revenue) {
+                return res.json({ resp: "Montante não encontrado" });
             }
-            res.status(200).json({ msg: "Sucess", managers: managers });
+            res.status(200).json({ resp: "Sucess", data: revenue });
         }
         catch (error) {
             console.log(error);
-            res.json({ msg: "Ocorreu um erro no servidor" });
+            res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
     static async getByStoreId(req, res) {
         try {
             const { storeId } = req.params;
-            const manager = await prisma.manager.findUnique({ where: { storeId } });
-            if (!manager) {
-                return res.json({ msg: "Gerente não encontrado" });
+            console.log("🚀 ~ RevenueController ~ getByStoreId ~ storeId:", storeId);
+            const revenue = await prisma.revenue.findUnique({ where: { storeId } });
+            console.log("🚀 ~ RevenueController ~ getByStoreId ~ revenue:", revenue);
+            if (!revenue) {
+                return res.json({ resp: "Montante não encontrado" });
             }
-            res.status(200).json({ msg: "Sucess", manager: manager });
+            res.status(200).json({ resp: "Sucess", data: revenue });
         }
         catch (error) {
             console.log(error);
-            res.json({ msg: "Ocorreu um erro no servidor" });
+            res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
 }

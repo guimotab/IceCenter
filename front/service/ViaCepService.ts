@@ -1,7 +1,7 @@
 import { IViaCep } from "@/interface/IViaCep"
 import axios from "axios"
 
-export abstract class ViaCepService{
+export abstract class ViaCepService {
   private static url = "https://viacep.com.br/ws"
 
   static async get(cep: string) {

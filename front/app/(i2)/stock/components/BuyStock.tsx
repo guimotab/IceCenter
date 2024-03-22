@@ -3,14 +3,22 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { IFlavorsIceCream } from "@/interface/IFlavorsIceCream"
+import { IRevenueStore } from "@/interface/IRevenueStore"
+import { IStockStore } from "@/interface/IStockStore"
 import { IStore } from "@/interface/IStore"
 import { useUpdateCurrentStore } from "@/state/hooks/useUpdateCurrentStore"
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react"
 
 interface BuyStockProps {
   currentStore: IStore
+  revenue: IRevenueStore | undefined
+  flavors: IFlavorsIceCream[] | undefined
+  setStock: Dispatch<SetStateAction<IStockStore | undefined>>
+  setFlavors: Dispatch<SetStateAction<IFlavorsIceCream[] | undefined>>
+  setRevenue: Dispatch<SetStateAction<IRevenueStore | undefined>>
 }
-const BuyStock = ({ currentStore }: BuyStockProps) => {
+const BuyStock = ({ currentStore, flavors, revenue, setStock, setRevenue, setFlavors }: BuyStockProps) => {
+
   const store = new Store(currentStore)
   const [strawBerry, setstrawBerry] = useState(0)
   const [choco, setChoco] = useState(0)
@@ -43,7 +51,7 @@ const BuyStock = ({ currentStore }: BuyStockProps) => {
   function handleInput(event: ChangeEvent<HTMLInputElement>) {
     function changeValue(value: number) {
       arrayItemShop.forEach(item => {
-        if (item.price * value < store.revenue.cash) {
+        if (item.price * value < revenue!.cash) {
           if (item.name === typeInput) {
             item.setQuantity(value)
           }
@@ -64,18 +72,18 @@ const BuyStock = ({ currentStore }: BuyStockProps) => {
   }
 
   function handleFinishShop() {
-    store.stock.flavors.forEach((flavor, index) => {
+    flavors!.forEach((flavor, index) => {
       const findTypeFlavor = arrayItemShop.find(item => item.name === flavor.name)
       if (findTypeFlavor) {
         const newStock = {
           name: findTypeFlavor.name,
           quantity: findTypeFlavor.quantity + flavor.quantity
         } as IFlavorsIceCream
-        store.changeFlavor(index, newStock)
+        setFlavors(prev => prev?.splice(index, 1, newStock))
       }
     })
-    store.changeCone(store.stock.cone + cone)
-    store.changeCash(amount)
+    setStock(prev => ({ ...prev!, cone: prev!.cone + cone }))
+    setRevenue(prev => ({ ...prev!, cash: prev!.cash - amount }))
     setStore(store.informations())
     resetShop()
   }
@@ -106,29 +114,33 @@ const BuyStock = ({ currentStore }: BuyStockProps) => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-5">
-        <div className="flex gap-8">
-          {arrayItemShop.map(item =>
-            <div key={item.name} className="flex flex-col gap-2">
-              <Label>{`${item.name} (R$${item.price.toFixed(2).replace(".", ",")})`}</Label>
-              <Input id={item.name} onChange={handleInput} type="number" value={item.quantity} className="w-32" />
+      {revenue &&
+        <>
+          <div className="flex flex-col gap-5">
+            <div className="flex gap-8">
+              {arrayItemShop.map(item =>
+                <div key={item.name} className="flex flex-col gap-2">
+                  <Label>{`${item.name} (R$${item.price.toFixed(2).replace(".", ",")})`}</Label>
+                  <Input id={item.name} onChange={handleInput} type="number" value={item.quantity} className="w-32" />
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div className="w-full max-w-52 px-4 py-2 border-2 rounded-sm border-dashed">
-          <div className="flex items-center justify-between ">
-            <div className="flex flex-col  h-full justify-between gap-2">
-              <p className="font-medium">Caixa </p>
-              <p className="font-medium">Preço </p>
-            </div>
-            <div className="flex flex-col h-full justify-between  gap-2">
-              <p className="font-medium text-end">{store.revenue.cash.toFixed(2).replace(".", ",")}</p>
-              <p className={`font-medium text-end ${amount !== 0 && "text-destructive"}`}>- {amount.toFixed(2).replace(".", ",")}</p>
+            <div className="w-full max-w-52 px-4 py-2 border-2 rounded-sm border-dashed">
+              <div className="flex items-center justify-between ">
+                <div className="flex flex-col  h-full justify-between gap-2">
+                  <p className="font-medium">Caixa </p>
+                  <p className="font-medium">Preço </p>
+                </div>
+                <div className="flex flex-col h-full justify-between  gap-2">
+                  <p className="font-medium text-end">{revenue.cash.toFixed(2).replace(".", ",")}</p>
+                  <p className={`font-medium text-end ${amount !== 0 && "text-destructive"}`}>- {amount.toFixed(2).replace(".", ",")}</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <Button onClick={handleFinishShop} variant={`${canBuy ? "default" : "outline"}`} className="self-start" disabled={!canBuy}>Finalizar compra</Button>
+          <Button onClick={handleFinishShop} variant={`${canBuy ? "default" : "outline"}`} className="self-start" disabled={!canBuy}>Finalizar compra</Button>
+        </>
+      }
     </div>
   )
 }

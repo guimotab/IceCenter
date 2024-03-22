@@ -34,6 +34,18 @@ class StoreController {
             res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
         }
     }
+    static async put(req, res) {
+        try {
+            const { storeId } = req.params;
+            const { data } = req.body;
+            const store = await prisma.store.update({ where: { id: storeId }, data });
+            res.status(200).json({ resp: "Sucess", data: store });
+        }
+        catch (error) {
+            console.log(error);
+            res.json({ resp: "Ocorreu um erro no servidor" });
+        }
+    }
     static async getAllByIdCompany(req, res) {
         const { companyId } = req.params;
         try {
