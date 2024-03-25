@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useToast } from "@/components/ui/use-toast"
 import { AddressController } from "@/controller/AddressController"
 import { ManagerController } from "@/controller/ManagerController"
 import { StoreController } from "@/controller/StoreController"
@@ -10,14 +8,9 @@ import { ViaCepController } from "@/controller/ViaCepController"
 import { IAddress } from "@/interface/IAddress"
 import { ICompany } from "@/interface/ICompany"
 import { IManager } from "@/interface/IManager"
-import { IRevenueStore } from "@/interface/IRevenueStore"
-import { IStockStore } from "@/interface/IStockStore"
 import { IStore } from "@/interface/IStore"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
-import { FormEvent, useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { v4 as uuid } from "uuid"
 import { z } from "zod"
 
 interface FormEditStoreProps {
@@ -33,152 +26,118 @@ type inputAccess = "email" | "newPassword" | "repeatNewPassword"
 
 const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEditStoreProps) => {
 
-  const router = useRouter()
-  const { toast } = useToast()
-
-  const [nameStore, setNameStore] = useState(store.name.replace(company.name, "").trim())
-  const [cep, setCep] = useState(address.cep)
-  const [uf, setUf] = useState(address.uf)
-  const [city, setCity] = useState(address.city)
-  const [street, setStreet] = useState(address.street)
-  const [neighborhood, setNeighborhood] = useState(address.neighborhood)
-  const [number, setNumber] = useState(address.number)
-  const [email, setEmail] = useState(manager.email)
-  const [newPassword, setNewPassword] = useState("")
-  const [repeatNewPassword, setRepeatNewPassword] = useState("")
-
-  const formAccessSchema = z.object({
-    email: z.string().min(1, "O email não pode ser nulo!"),
-    newPassword: z.string().optional(),
-    repeatNewPassword: z.string().optional(),
-  }).refine((data) => {
-    if (data.newPassword !== "") {
-      if (data.newPassword !== data.repeatNewPassword) {
-        return {
-          message: "As senhas não conferem",
-          path: ["repeatNewPassword"]
-        }
-      }
-    }
-  });
-
-  const formAccess = useForm<z.infer<typeof formAccessSchema>>({
-    resolver: zodResolver(formAccessSchema),
-    defaultValues: {
-      email: manager.email,
-    },
-  })
 
   const formInformationSchema = z.object({
-    nameStore: z.string().min(1, "O nome não pode ser nulo!"),
+    nameStore: z.string().startsWith(company.name, "O nome da empresa não pode ser retirado do início!")
+      .refine(val => val.trim() !== company.name, "O nome da loja tem que ser diferente do nome da empresa!"),
     cep: z.string().length(8, "O cep deve conter 8 dígitos"),
-    uf: z.string().min(1, "O uf não pode ser nulo!"),
-    city: z.string().min(1, "A cidade não pode ser nulo!"),
-    street: z.string().min(1, "A rua não pode ser nulo!"),
-    neighborhood: z.string().min(1, "O bairro não pode ser nulo!"),
-    number: z.string().min(1, "O número não pode ser nulo!"),
+    uf: z.string(),
+    city: z.string(),
+    street: z.string(),
+    neighborhood: z.string(),
+    number: z.string().min(1, "O número é obrigatório!"),
+    email: z.string().min(1, "O email é obrigatório!").email("Email inválido!"),
+    newPassword: z.string(),
+    repeatNewPassword: z.string(),
   })
   const formInformation = useForm<z.infer<typeof formInformationSchema>>({
     resolver: zodResolver(formInformationSchema),
     defaultValues: {
-      nameStore: store.name.replace(company.name, "").trim(),
+      nameStore: store.name,
       cep: address.cep,
       uf: address.uf,
       city: address.city,
       street: address.street,
       neighborhood: address.neighborhood,
       number: address.number,
+      email: manager.email,
+      newPassword: "",
+      repeatNewPassword: "",
     },
   })
 
-  // function handleInputs(type: string, value: string) {
-  //   if (type === "nameStore") {
-  //     setNameStore(value)
-  //   } else if (type === "cep") {
-  //     setCep(value)
-  //   } else if (type === "number") {
-  //     setNumber(value)
-  //   } else if (type === "email") {
-  //     setEmail(value)
-  //   } else if (type === "newPassord") {
-  //     setNewPassword(value)
-  //   } else if (type === "repeatNewPassord") {
-  //     setRepeatNewPassword(value)
-  //   }
-  // }
-
-  async function onBlurCep(value: string) {
+  async function handleCep(value: string) {
+    function checkCep() {
+      const regex = /^\d{8}$/
+      if (regex.test(value)) {
+        formInformation.clearErrors("cep")
+        return true
+      }
+      formInformation.setError("cep", { message: "O CEP está inválido!" })
+      return false
+    }
+    const result = checkCep()
+    if (!result) {
+      return
+    }
     const information = await ViaCepController.getInformations(value)
     if (information) {
-      setUf(information.uf)
-      setCity(information.localidade)
-      setStreet(information.logradouro)
-      setNeighborhood(information.bairro)
+      formInformation.setValue("uf", information.uf)
+      formInformation.setValue("city", information.localidade)
+      formInformation.setValue("street", information.logradouro)
+      formInformation.setValue("neighborhood", information.bairro)
     }
   }
 
   async function onSubmit(values: z.infer<typeof formInformationSchema>) {
-
-    const canSubmit = verifyForm(values)
-
-    // if (canSubmit) {
-    //   showError(canSubmit.error.description, canSubmit.error.title)
-    //   return
-    // }
+    function verifyPasswords() {
+      formInformation.clearErrors(["newPassword", "repeatNewPassword"])
+      if (values.newPassword === "" && values.repeatNewPassword === values.newPassword) {
+        return true
+      }
+      if (values.repeatNewPassword === "") {
+        formInformation.setError("repeatNewPassword", { message: "Repita a senha novamente" })
+        return false
+      }
+      formInformation.setError("newPassword", { message: "As senhas não conferem" })
+      formInformation.setError("repeatNewPassword", { message: "" })
+      return false
+    }
+    const result = verifyPasswords()
+    if (!result) {
+      return
+    }
 
     const newAddress = {
-      cep, city, neighborhood, number, street, uf
+      cep: values.cep, city: values.city, neighborhood: values.neighborhood, number: values.number, street: values.street, uf: values.uf
     } as IAddress
 
     const newStore = {
       ...store,
-      name: `${company.name} ${nameStore.trim()}`,
+      name: values.nameStore.trim(),
     } as IStore
 
     const newManager = {
       ...manager,
-      email: email,
-      password: newPassword,
+      email: values.email,
+      password: values.newPassword !== "" ? values.newPassword : manager.password,
     } as IManager
 
-    // const [resultStore, resultAddress, resultManager] = await Promise.all([
-    //   StoreController.put(store.id, newStore),
-    //   AddressController.put(store.id, newAddress),
-    //   ManagerController.put(manager.id, newManager)
-    // ])
+    const [resultStore, resultAddress, resultManager] = await Promise.all([
+      StoreController.put(store.id, newStore),
+      AddressController.put(address.id, newAddress),
+      ManagerController.put(manager.id, newManager)
+    ])
 
-    // if (resultStore.resp !== "Sucess" && resultAddress.resp !== "Sucess" && resultManager.resp !== "Sucess") {
-    //   return
-    // }
-
-    // closeEdit()
+    closeEdit()
   }
-
-  function verifyForm(values: z.infer<typeof formInformationSchema>) {
-    let title: string | undefined
-    let description = ""
-    let status = false
-
-    return { status, error: { title, description } }
-  }
-
-  function showError(description: string, title?: string) {
-    toast({
-      title,
-      description,
-      variant: "destructive"
-    })
+  function onBlurRepeatNewPassord() {
+    formInformation.clearErrors(["newPassword", "repeatNewPassword"])
+    if (formInformation.getValues("repeatNewPassword") !== formInformation.getValues("newPassword")) {
+      formInformation.setError("newPassword", { message: "As senhas não conferem" })
+      formInformation.setError("repeatNewPassword", { message: "" })
+    }
   }
 
   const inputsForm = [
     {
       id: "nameStore",
-      style: " mt-6",
+      label: "Nome da Loja",
+      style: "col-span-2"
     }, {
       id: "cep",
       label: "CEP",
-      regex: "/(\d+)| /g",
-      onBlur: onBlurCep
+      onBlur: handleCep
     }, {
       id: "uf",
       label: "UF",
@@ -202,21 +161,24 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
       label: "Número",
       style: "w-40"
     }
-  ] as { id: inputInformation, regex?: string, label?: string, style?: string, onBlur?: (value: string) => Promise<void>, readOnly?: boolean }[]
+  ] as { id: inputInformation, erro?: string, regex?: string, label?: string, style?: string, onBlur?: (value: string) => Promise<void>, readOnly?: boolean }[]
 
   const inputAccess = [
     {
       id: "email",
       label: "Email",
-      style: "w-96"
+      style: "w-96",
+      showInput: true
     }, {
-      id: "newPassord",
+      id: "newPassword",
       label: "Nova Senha",
+      showInput: true
     }, {
       id: "repeatNewPassword",
       label: "Repetir Nova Senha",
+      onBlur: onBlurRepeatNewPassord
     },
-  ] as { id: inputAccess, label: string, style?: string }[]
+  ] as { id: inputAccess, label: string, style?: string, onBlur?: () => void }[]
 
   return (
     <>
@@ -225,26 +187,24 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
           <div className="flex flex-col gap-2">
             <h3 className="text-xl font-semibold">Informações</h3>
             <div className="grid grid-cols-[auto_1fr_1fr] gap-x-7 gap-y-3">
-              <div className="mt-2 self-start">
-                <Label>{"Nome da Loja"}</Label>
-                <div className="relative flex gap-4 items-center ">
-                  <Input value={company.name} readOnly className="w-fit opacity-60" />
-                  <p className="absolute -right-5 text-lg font-medium">+</p>
-                </div>
-              </div>
 
               {inputsForm.map(input =>
                 <div key={input.id} className={`${input.style} self-start`}>
                   <FormField
                     control={formInformation.control}
                     name={input.id}
-                    render={({ field }) => (
+                    render={({ field: { onBlur, ...field } }) => (
                       <FormItem>
                         <FormLabel>{input.label}</FormLabel>
                         <FormControl>
-                          <Input pattern={input.regex} readOnly={input.readOnly} placeholder="" {...field} />
+                          <Input
+                            onBlur={event => input.onBlur && input.onBlur(event.target.value)}
+                            pattern={input.regex}
+                            readOnly={input.readOnly}
+                            className={`${input.readOnly && "opacity-60"}`}
+                            {...field} />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage>{input.erro}</FormMessage>
                       </FormItem>
                     )}
                   />
@@ -254,19 +214,19 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <h3 className="text-xl font-semibold">Acesso</h3>
+            <h3 className="text-xl font-semibold">Acesso à loja</h3>
             <div className="flex gap-5">
 
               {inputAccess.map(input =>
-                <div key={input.id} className={`${input.style} self-end`}>
+                <div key={input.id} className={`${input.style} self-starts`}>
                   <FormField
-                    control={formAccess.control}
+                    control={formInformation.control}
                     name={input.id}
-                    render={({ field }) => (
+                    render={({ field: { onBlur, ...field } }) => (
                       <FormItem>
                         <FormLabel>{input.label}</FormLabel>
                         <FormControl>
-                          <Input placeholder="" {...field} />
+                          <Input onBlur={input.onBlur}  {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -277,10 +237,10 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
 
             </div>
           </div>
-      <div className="flex justify-between items-center">
-        <Button type="submit">Concluir Alterações</Button>
-        <Button onClick={closeEdit} variant={"outline"}>Cancelar</Button>
-      </div>
+          <div className="flex justify-between items-center">
+            <Button type="submit">Concluir Alterações</Button>
+            <Button onClick={closeEdit} variant={"outline"}>Cancelar</Button>
+          </div>
         </form>
       </FormProvider>
     </>

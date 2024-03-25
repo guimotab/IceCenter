@@ -18,11 +18,11 @@ export abstract class HttpService<T> implements IHttpService<T> {
     return resp.data
   }
   async putData(id: string, data: T) {
-    const resp = await axios.put(`${this._url}/${id}`, data)
+    const resp = await axios.put(`${this._url}/${id}`, { data: data })
     return resp.data as { resp: string, data?: T }
   }
   async postData(url: string, data: T) {
-    const resp = await axios.post(`${this._url}/${url}`, data)
+    const resp = await axios.post(`${this._url}/${url}`, { data: data })
     return resp.data as { resp: string, data?: T }
   }
   async deleteData(id: string) {

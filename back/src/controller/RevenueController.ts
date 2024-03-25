@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import createUuid from '../util/createUuidUtil.js';
 import prisma from '../app.js';
+import { IRevenueStore } from '../interface/IRevenueStore.js';
 
 
 abstract class RevenueController {
@@ -14,43 +15,37 @@ abstract class RevenueController {
             if (!revenue) {
                 return res.json({ resp: "Montante não encontrado" })
             }
-            res.status(200).json({ resp: "Sucess", data: revenue })
+            return res.status(200).json({ resp: "Sucess", data: revenue })
         } catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" })
+            return res.json({ resp: "Ocorreu um erro no servidor" })
         }
     }
     static async getByStoreId(req: Request, res: Response) {
         try {
             const { storeId } = req.params
-            console.log("🚀 ~ RevenueController ~ getByStoreId ~ storeId:", storeId)
             const revenue = await prisma.revenue.findUnique({ where: { storeId } })
-            console.log("🚀 ~ RevenueController ~ getByStoreId ~ revenue:", revenue)
             if (!revenue) {
                 return res.json({ resp: "Montante não encontrado" })
             }
-            res.status(200).json({ resp: "Sucess", data: revenue })
+            return res.status(200).json({ resp: "Sucess", data: revenue })
         } catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" })
+            return res.json({ resp: "Ocorreu um erro no servidor" })
         }
     }
-    // static async deleteManager(req: Request<{}, {}, RequestBodyPassword>, res: Response) {
-    //     const { myId, key, myPassword } = req.params as RequestBodyPassword
-    //     const saltToken = process.env.SALT!
-    //     const passwordSalt = jwt.verify(myPassword, saltToken) as string
-    //     try {
-    //         const user = await User.findOne({ _id: myId })
-    //         const checkPassword = await bcrypt.compare(passwordSalt, user!.password)
-    //         if (!checkPassword) {
-    //             return res.json({ resp: "Senha incorreta!" })
-    //         }
-    //         const teste = await Key.deleteOne({ key: key })
-    //         return res.json({ resp: "Sucess" })
-    //     } catch (error) {
-    //         console.log(error);
-    //         return res.json({ resp: "Ocorreu um erro ao deleter a chave!" })
-    //     }
-    // }
+    static async put(req: Request, res: Response) {
+		try {
+			const { revenueId } = req.params
+			const { data } = req.body as { data: IRevenueStore } 
+
+			const revenue = await prisma.revenue.update({ where: { id: revenueId }, data })
+
+			return res.status(200).json({ resp: "Sucess", data: revenue })
+		} catch (error) {
+			console.log(error);
+			return res.json({ resp: "Ocorreu um erro no servidor" })
+		}
+	}
 }
 export default RevenueController

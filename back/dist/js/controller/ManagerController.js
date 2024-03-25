@@ -42,7 +42,7 @@ class ManagerController {
         }
         catch (error) {
             console.log(error);
-            res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
+            res.json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
         }
     }
     static async getAll(req, res) {

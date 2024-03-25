@@ -1,9 +1,9 @@
 
 export interface IStore {
   id: string
-  idCompany: string
-  idAddress: string
-  idRevenue: string
-  idStock: string
+  companyId: string
+  addressId: string
+  revenueId: string
+  stockId: string
   name: string
 }

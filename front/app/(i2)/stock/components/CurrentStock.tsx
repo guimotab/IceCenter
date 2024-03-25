@@ -29,6 +29,7 @@ const CurrentStock = ({ currentStore, stock, flavors, setStock, setFlavors }: Cu
       load()
     }
   }, [currentStore])
+
   return (
     <div className="flex flex-col gap-6">
       {stock && flavors &&
@@ -43,6 +44,7 @@ const CurrentStock = ({ currentStore, stock, flavors, setStock, setFlavors }: Cu
               )}
             </div>
           </div>
+
           <div className="flex flex-col gap-3">
             <Label>Cones (10 unidades por pacote)</Label>
             <Badge variant={"outline"} className="self-start">

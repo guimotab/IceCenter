@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ManagerController } from "@/controller/ManagerController"
@@ -10,58 +11,83 @@ import { IManager } from "@/interface/IManager"
 import { IRevenueStore } from "@/interface/IRevenueStore"
 import { IStockStore } from "@/interface/IStockStore"
 import { IStore } from "@/interface/IStore"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import { FormEvent, useState } from "react"
+import { FormProvider, useForm } from "react-hook-form"
 import { v4 as uuid } from 'uuid';
+import { z } from "zod"
 interface FormCreateStoreProps {
   company: ICompany
 }
+
+type inputInformation = "nameStore" | "cep" | "uf" | "city" | "street" | "neighborhood" | "number"
+type inputAccess = "email" | "password"
+
 const FormCreateStore = ({ company }: FormCreateStoreProps) => {
 
   const router = useRouter()
 
-  const [nameStore, setNameStore] = useState("Central")
-  const [cep, setCep] = useState("78550130")
-  const [uf, setUf] = useState("")
-  const [city, setCity] = useState("")
-  const [street, setStreet] = useState("")
-  const [neighborhood, setNeighborhood] = useState("")
-  const [number, setNumber] = useState("5500")
-  const [email, setEmail] = useState("centralSorvetes@gmail.com")
-  const [password, setPassword] = useState("1234")
-
-  function handleInputs(type: string, value: string) {
-    if (type === "nameStore") {
-      setNameStore(value)
-    } else if (type === "cep") {
-      setCep(value)
-    } else if (type === "number") {
-      setNumber(value)
-    }
-  }
+  const formInformationSchema = z.object({
+    nameStore: z.string().startsWith(company.name, "O nome da empresa não pode ser retirado do início!")
+      .refine(val => val.trim() !== company.name, "O nome da loja tem que ser diferente do nome da empresa!"),
+    cep: z.string().length(8, "O cep deve conter 8 dígitos"),
+    uf: z.string(),
+    city: z.string(),
+    street: z.string(),
+    neighborhood: z.string(),
+    number: z.string().min(1, "O número é obrigatório!"),
+    email: z.string().min(1, "O email é obrigatório!").email("Email inválido!"),
+    password: z.string().min(1, "A senha é obrigatória!"),
+  })
+  const formInformation = useForm<z.infer<typeof formInformationSchema>>({
+    resolver: zodResolver(formInformationSchema),
+    defaultValues: {
+      nameStore: company.name + "",
+      cep: "",
+      uf: "",
+      city: "",
+      street: "",
+      neighborhood: "",
+      number: "",
+      email: "",
+      password: "",
+    },
+  })
 
   async function onBlurCep(value: string) {
+    function checkCep() {
+      const regex = /^\d{8}$/
+      if (regex.test(value)) {
+        formInformation.clearErrors("cep")
+        return true
+      }
+      formInformation.setError("cep", { message: "O CEP está inválido!" })
+      return false
+    }
+    const result = checkCep()
+    if (!result) {
+      return
+    }
     const information = await ViaCepController.getInformations(value)
     if (information) {
-      setUf(information.uf)
-      setCity(information.localidade)
-      setStreet(information.logradouro)
-      setNeighborhood(information.bairro)
+      formInformation.setValue("uf", information.uf)
+      formInformation.setValue("city", information.localidade)
+      formInformation.setValue("street", information.logradouro)
+      formInformation.setValue("neighborhood", information.bairro)
     }
   }
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  async function onSubmit(values: z.infer<typeof formInformationSchema>) {
 
-    const idStore = `${company.name} ${nameStore.trim()}`.toLocaleLowerCase().replaceAll(" ", "-")
+    const idStore = uuid()
 
     const newAddress = {
-      cep, city, neighborhood, number, street, uf
+      cep: values.cep, city: values.city, neighborhood: values.neighborhood, number: values.number, street: values.street, uf: values.uf
     } as IAddress
     const newStore = {
       id: idStore,
       companyId: company.id,
-      name: `${company.name} ${nameStore.trim()}`,
+      name: values.nameStore.trim(),
       revenue: { cash: 1000 } as IRevenueStore,
       stock: {} as IStockStore,
     } as IStore
@@ -70,110 +96,148 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
     if (resultStore.resp !== "Sucess") {
       return
     }
+    
     const newManager = {
       storeId: resultStore.data!.id,
-      email: email,
-      password: password,
+      email: values.email,
+      password: values.password,
     } as IManager
-    const resultManager = await ManagerController.post(newManager)
-    console.log("🚀 ~ onSubmit ~ resultManager:", resultManager.data)
+    // const resultManager = await ManagerController.post(newManager)
+    const resultManager = {resp: "false"}
     if (resultManager.resp !== "Sucess") {
+      await StoreController.delete(idStore) 
       return
     }
     if (resultManager.data) {
       router.push("./home")
     }
   }
-  
+
   const inputsForm = [
     {
+      id: "nameStore",
+      label: "Nome da Loja",
+      style: "col-span-2"
+    }, {
       id: "cep",
       label: "CEP",
-      value: cep,
       onBlur: onBlurCep
     }, {
-      id: "UF",
+      id: "uf",
       label: "UF",
-      value: uf,
       readOnly: true,
       style: "w-32"
     }, {
       id: "city",
       label: "Cidade",
-      value: city,
       readOnly: true,
     }, {
       id: "street",
       label: "Rua",
-      value: street,
       readOnly: true,
     }, {
       id: "neighborhood",
       label: "Bairro",
-      value: neighborhood,
       readOnly: true,
       style: "col-span-2"
     }, {
       id: "number",
       label: "Número",
-      value: number,
       style: "w-40"
     }
-  ]
+  ] as { id: inputInformation, erro?: string, regex?: string, label?: string, style?: string, onBlur?: (value: string) => Promise<void>, readOnly?: boolean }[]
   const inputAccess = [
     {
       id: "email",
       label: "Email",
-      value: email,
       style: "w-96"
     }, {
       id: "password",
       label: "Senha",
-      value: password,
     },
-  ]
-  
+  ] as { id: inputAccess, label: string, style?: string, onBlur?: () => void }[]
+
+
+
   return (
-    <form onSubmit={onSubmit} className="space-y-7 w-full">
-      <div className="flex flex-col gap-2">
-        <h3 className="text-xl font-semibold">Informações</h3>
-        <div className="grid grid-cols-[auto_1fr_1fr] gap-x-7 gap-y-3">
-          <div className="col-span-2">
-            <Label>{"Nome da Loja"}</Label>
-            <div className="flex gap-2 items-center">
-              <Input value={company.name} readOnly className="w-fit opacity-60" />
-              <p className="text-lg font-medium">+</p>
-              <Input onChange={event => handleInputs("nameStore", event.target.value)} value={nameStore} />
-            </div>
-            <p></p>
+    <FormProvider {...formInformation}>
+      <form onSubmit={formInformation.handleSubmit(onSubmit)} className="space-y-7 w-full">
+        <div className="flex flex-col gap-2">
+          <h3 className="text-xl font-semibold">Informações</h3>
+          <div className="grid grid-cols-[auto_1fr_1fr] gap-x-7 gap-y-3">
+
+            {inputsForm.map(input =>
+              <div key={input.id} className={`${input.style} self-start`}>
+                <FormField
+                  control={formInformation.control}
+                  name={input.id}
+                  render={({ field: { onBlur, ...field } }) => (
+                    <FormItem>
+                      <FormLabel>{input.label}</FormLabel>
+                      <FormControl>
+                        <Input
+                          onBlur={event => input.onBlur && input.onBlur(event.target.value)}
+                          pattern={input.regex}
+                          readOnly={input.readOnly}
+                          className={`${input.readOnly && "opacity-60"}`}
+                          {...field} />
+                      </FormControl>
+                      <FormMessage>{input.erro}</FormMessage>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+
+            {/* {inputsForm.map(input =>
+              <div key={input.id} className={`${input.readOnly ? " opacity-60" : ""} ${input.style}`}>
+                <Label>{input.label}</Label>
+                <Input
+                  onBlur={event => input.onBlur ? input.onBlur(event.target.value) : ""}
+                  onChange={event => handleInputs(input.id, event.target.value)}
+                  readOnly={input.readOnly}
+                  value={input.value} />
+                <p></p>
+              </div>
+            )} */}
+
           </div>
-          {inputsForm.map(input =>
-            <div key={input.id} className={`${input.readOnly ? " opacity-60" : ""} ${input.style}`}>
-              <Label>{input.label}</Label>
-              <Input
-                onBlur={event => input.onBlur ? input.onBlur(event.target.value) : ""}
-                onChange={event => handleInputs(input.id, event.target.value)}
-                readOnly={input.readOnly}
-                value={input.value} />
-              <p></p>
-            </div>
-          )}
         </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <h3 className="text-xl font-semibold">Acesso</h3>
-        <div className="flex gap-5">
-          {inputAccess.map(input =>
-            <div key={input.id} className={input.style}>
-              <Label>{input.label}</Label>
-              <Input value={input.value} type={`${input.id === "password" ? "password" : ""}`} />
-              <p></p>
-            </div>
-          )}
+        <div className="flex flex-col gap-2">
+          <h3 className="text-xl font-semibold">Acesso à Loja</h3>
+          <div className="flex gap-5">
+
+            {inputAccess.map(input =>
+              <div key={input.id} className={`${input.style} self-starts`}>
+                <FormField
+                  control={formInformation.control}
+                  name={input.id}
+                  render={({ field: { onBlur, ...field } }) => (
+                    <FormItem>
+                      <FormLabel>{input.label}</FormLabel>
+                      <FormControl>
+                        <Input onBlur={input.onBlur}  {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+
+            {/* {inputAccess.map(input =>
+              <div key={input.id} className={input.style}>
+                <Label>{input.label}</Label>
+                <Input value={input.value} type={`${input.id === "password" ? "password" : ""}`} />
+                <p></p>
+              </div>
+            )} */}
+
+          </div>
         </div>
-      </div>
-      <Button className="w-28" type="submit">Criar Loja</Button>
-    </form>
+        <Button className="w-28" type="submit">Criar Loja</Button>
+      </form>
+    </FormProvider>
   )
 }
 

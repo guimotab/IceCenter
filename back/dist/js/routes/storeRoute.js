@@ -4,7 +4,8 @@ const storeRoute = express.Router();
 storeRoute
     .get("/store/:storeId", StoreController.get)
     .put("/store/:storeId", StoreController.put)
-    .get("/store/all/company/:idCompany", StoreController.getAllByIdCompany)
-    .post("/store/create", StoreController.createStore);
+    .get("/store/all/company/:companyId", StoreController.getAllByIdCompany)
+    .post("/store/create", StoreController.createStore)
+    .delete(`/store/:storeId`, StoreController.delete);
 export default storeRoute;
 //# sourceMappingURL=storeRoute.js.map

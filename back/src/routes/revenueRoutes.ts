@@ -6,5 +6,6 @@ revenueRoute
     //coloca do caminho mais específico pro menos específico
     .get("/revenue/:revenueId", RevenueController.get)
     .get("/revenue/stock/:storeId", RevenueController.getByStoreId)
+    .put("/revenue/:revenueId", RevenueController.put)
 
 export default revenueRoute

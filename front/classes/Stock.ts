@@ -4,13 +4,13 @@ export class Stock implements IStockStore {
   private _id: string
   private _cone: number
   private _storeId: string
-
+  
   constructor(objectStore: IStockStore) {
     this._id = objectStore.id
     this._cone = objectStore.cone
     this._storeId = objectStore.storeId
   }
-
+  
   informations() {
     return {
       id: this._id,
@@ -18,7 +18,10 @@ export class Stock implements IStockStore {
       storeId: this._storeId,
     } as IStockStore
   }
-
+  putCones(newCone: number) {
+    this.cone += newCone
+  }
+  
   public get id(): string {
     return this._id;
   }

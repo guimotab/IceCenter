@@ -7,11 +7,11 @@ class StockController {
             if (!managers) {
                 return res.json({ resp: "Estoques não encontrados" });
             }
-            res.status(200).json({ resp: "Sucess", data: managers });
+            return res.status(200).json({ resp: "Sucess", data: managers });
         }
         catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" });
+            return res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
     static async getByStoreId(req, res) {
@@ -21,11 +21,23 @@ class StockController {
             if (!stock) {
                 return res.json({ resp: "Estoque não encontrado" });
             }
-            res.status(200).json({ resp: "Sucess", data: stock });
+            return res.status(200).json({ resp: "Sucess", data: stock });
         }
         catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" });
+            return res.json({ resp: "Ocorreu um erro no servidor" });
+        }
+    }
+    static async put(req, res) {
+        try {
+            const { stockId } = req.params;
+            const { data } = req.body;
+            const stock = await prisma.stockStore.update({ where: { id: stockId }, data });
+            return res.status(200).json({ resp: "Sucess", data: stock });
+        }
+        catch (error) {
+            console.log(error);
+            return res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
     static create() {

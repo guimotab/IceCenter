@@ -58,8 +58,8 @@ abstract class ManagerController {
 
             res.status(201).json({ resp: "Sucess", data: manager })
         } catch (error) {
-            console.log(error);
-            res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" })
+            console.log(error); 
+            res.json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" })
         }
     }
     static async getAll(req: Request, res: Response) {

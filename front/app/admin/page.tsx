@@ -32,7 +32,7 @@ export default function Login() {
     const auth = await AuthController.loginAdmin(values.email, values.password)
     if (auth.resp === "Sucess") {
       setCurrentOwner(auth.owner)
-      router.push("admin/home")
+      router.push("admin/stores")
     }
   }
 

@@ -50,8 +50,7 @@ const Header = () => {
                 IceCenter
               </h1>
               <div className="flex items-center gap-6">
-                <Link href={"/admin/home"}>Home</Link>
-                <Link href={"/admin/create-store"}>Lojas</Link>
+                <Link href={"/admin/stores"}>Lojas</Link>
                 <Link href={"/admin/create-store"}>Nova Loja</Link>
               </div>
             </div>

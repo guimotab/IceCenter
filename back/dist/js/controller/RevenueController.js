@@ -11,27 +11,37 @@ class RevenueController {
             if (!revenue) {
                 return res.json({ resp: "Montante não encontrado" });
             }
-            res.status(200).json({ resp: "Sucess", data: revenue });
+            return res.status(200).json({ resp: "Sucess", data: revenue });
         }
         catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" });
+            return res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
     static async getByStoreId(req, res) {
         try {
             const { storeId } = req.params;
-            console.log("🚀 ~ RevenueController ~ getByStoreId ~ storeId:", storeId);
             const revenue = await prisma.revenue.findUnique({ where: { storeId } });
-            console.log("🚀 ~ RevenueController ~ getByStoreId ~ revenue:", revenue);
             if (!revenue) {
                 return res.json({ resp: "Montante não encontrado" });
             }
-            res.status(200).json({ resp: "Sucess", data: revenue });
+            return res.status(200).json({ resp: "Sucess", data: revenue });
         }
         catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" });
+            return res.json({ resp: "Ocorreu um erro no servidor" });
+        }
+    }
+    static async put(req, res) {
+        try {
+            const { revenueId } = req.params;
+            const { data } = req.body;
+            const revenue = await prisma.revenue.update({ where: { id: revenueId }, data });
+            return res.status(200).json({ resp: "Sucess", data: revenue });
+        }
+        catch (error) {
+            console.log(error);
+            return res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
 }

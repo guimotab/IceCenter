@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import createUuid from '../util/createUuidUtil.js';
 import prisma from '../app.js';
+import { IStockStore } from '../interface/IStockStore.js';
 
 abstract class StockController {
     static async getAll(req: Request, res: Response) {
@@ -9,12 +10,13 @@ abstract class StockController {
             if (!managers) {
                 return res.json({ resp: "Estoques não encontrados" })
             }
-            res.status(200).json({ resp: "Sucess", data: managers })
+            return res.status(200).json({ resp: "Sucess", data: managers })
         } catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" })
+            return res.json({ resp: "Ocorreu um erro no servidor" })
         }
     }
+
     static async getByStoreId(req: Request, res: Response) {
         try {
             const { storeId } = req.params
@@ -22,11 +24,24 @@ abstract class StockController {
             if (!stock) {
                 return res.json({ resp: "Estoque não encontrado" })
             }
-            res.status(200).json({ resp: "Sucess", data: stock })
+            return res.status(200).json({ resp: "Sucess", data: stock })
         } catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" })
-        } 
+            return res.json({ resp: "Ocorreu um erro no servidor" })
+        }
+    }
+    static async put(req: Request, res: Response) {
+        try {
+            const { stockId } = req.params
+            const { data } = req.body as { data: IStockStore }
+
+            const stock = await prisma.stockStore.update({ where: { id: stockId }, data })
+
+            return res.status(200).json({ resp: "Sucess", data: stock })
+        } catch (error) {
+            console.log(error);
+            return res.json({ resp: "Ocorreu um erro no servidor" })
+        }
     }
     public static create() {
         return {

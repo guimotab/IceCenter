@@ -6,8 +6,8 @@ storeRoute
     //coloca do caminho mais específico pro menos específico
     .get("/store/:storeId", StoreController.get)
     .put("/store/:storeId", StoreController.put)
-    .get("/store/all/company/:idCompany", StoreController.getAllByIdCompany)
+    .get("/store/all/company/:companyId", StoreController.getAllByIdCompany)
     .post("/store/create", StoreController.createStore)
-    // .delete(`/admin/deleteUser/:id/:userId/:password`, ManagerController.deleteUser)
+    .delete(`/store/:storeId`, StoreController.delete)
 
 export default storeRoute

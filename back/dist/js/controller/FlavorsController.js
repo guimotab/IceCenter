@@ -19,29 +19,47 @@ class FlavorsController {
     }
     static async getAll(req, res) {
         try {
-            const managers = await prisma.flavorsIceCream.findMany({});
-            if (!managers) {
-                return res.json({ resp: "Gerentes não encontrados" });
+            const flavors = await prisma.flavorsIceCream.findMany({ orderBy: { name: "desc" } });
+            if (!flavors) {
+                return res.json({ resp: "Sabores não encontrados" });
             }
-            res.status(200).json({ resp: "Sucess", data: managers });
+            return res.status(200).json({ resp: "Sucess", data: flavors });
         }
         catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" });
+            return res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
     static async getAllByStockId(req, res) {
         try {
             const { stockId } = req.params;
-            const flavorsIceCream = await prisma.flavorsIceCream.findMany({ where: { stockId } });
+            const flavorsIceCream = await prisma.flavorsIceCream.findMany({ where: { stockId }, orderBy: { name: "desc" } });
             if (!flavorsIceCream) {
                 return res.json({ resp: "Sabores não encontrados" });
             }
-            res.status(200).json({ resp: "Sucess", data: flavorsIceCream });
+            return res.status(200).json({ resp: "Sucess", data: flavorsIceCream });
         }
         catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" });
+            return res.json({ resp: "Ocorreu um erro no servidor" });
+        }
+    }
+    static async putAllByStockId(req, res) {
+        try {
+            const { stockId } = req.params;
+            const { data } = req.body;
+            const flavors = await prisma.flavorsIceCream.findMany({ where: { stockId }, orderBy: { name: "desc" } });
+            flavors.forEach(async (flavor) => {
+                const findThisFlavor = data.find(dataFlavor => dataFlavor.id === flavor.id);
+                if (findThisFlavor) {
+                    await prisma.flavorsIceCream.update({ where: { id: flavor.id }, data: { ...findThisFlavor } });
+                }
+            });
+            return res.status(200).json({ resp: "Sucess", data: flavors });
+        }
+        catch (error) {
+            console.log(error);
+            return res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
 }

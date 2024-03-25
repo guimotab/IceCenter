@@ -1,7 +1,14 @@
+import { Flavors } from "@/classes/Flavors"
+import { Revenue } from "@/classes/Revenue"
+import { Stock } from "@/classes/Stock"
 import { Store } from "@/classes/Store"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { FlavorsController } from "@/controller/FlavorsController"
+import { RevenueController } from "@/controller/RevenueController"
+import { StockController } from "@/controller/StockController"
+import { StoreController } from "@/controller/StoreController"
 import { IFlavorsIceCream } from "@/interface/IFlavorsIceCream"
 import { IRevenueStore } from "@/interface/IRevenueStore"
 import { IStockStore } from "@/interface/IStockStore"
@@ -11,15 +18,19 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "reac
 
 interface BuyStockProps {
   currentStore: IStore
-  revenue: IRevenueStore | undefined
-  flavors: IFlavorsIceCream[] | undefined
+  currentRevenue: IRevenueStore
+  currentFlavors: IFlavorsIceCream[]
+  currentStock: IStockStore
   setStock: Dispatch<SetStateAction<IStockStore | undefined>>
   setFlavors: Dispatch<SetStateAction<IFlavorsIceCream[] | undefined>>
   setRevenue: Dispatch<SetStateAction<IRevenueStore | undefined>>
 }
-const BuyStock = ({ currentStore, flavors, revenue, setStock, setRevenue, setFlavors }: BuyStockProps) => {
+const BuyStock = ({ currentStore, currentFlavors, currentRevenue, currentStock, setStock, setRevenue, setFlavors }: BuyStockProps) => {
 
   const store = new Store(currentStore)
+  const stock = new Stock(currentStock)
+  const flavors = new Flavors(currentFlavors)
+  const revenue = new Revenue(currentRevenue)
   const [strawBerry, setstrawBerry] = useState(0)
   const [choco, setChoco] = useState(0)
   const [vanilla, setVanilla] = useState(0)
@@ -33,6 +44,7 @@ const BuyStock = ({ currentStore, flavors, revenue, setStock, setRevenue, setFla
     ifCanBuy()
     changeAmount()
   }, [strawBerry, choco, vanilla, cone])
+
   function resetShop() {
     setstrawBerry(0), setChoco(0), setVanilla(0), setCone(0)
   }
@@ -49,16 +61,27 @@ const BuyStock = ({ currentStore, flavors, revenue, setStock, setRevenue, setFla
   }
 
   function handleInput(event: ChangeEvent<HTMLInputElement>) {
-    function changeValue(value: number) {
-      arrayItemShop.forEach(item => {
-        if (item.price * value < revenue!.cash) {
-          if (item.name === typeInput) {
-            item.setQuantity(value)
-          }
+
+    function verifyIfCanSet(value: number) {
+      const [valueStrawberry, valueChoco, valueVanilla, valueCone] = arrayItemShop.map(item => {
+        if (item.name === typeInput) {
+          return item.price * value
         }
+        return item.price * item.quantity
       })
+      if (valueStrawberry + valueChoco + valueVanilla + valueCone <= revenue!.cash) {
+        return true
+      }
     }
 
+    function changeValue(value: number) {
+      const canSet = verifyIfCanSet(value)
+      if (canSet) {
+        const itemFound = arrayItemShop.find(item => item.name === typeInput)!
+        itemFound.setQuantity(value)
+      }
+    }
+    
     const value = event.target.value
     const valueNumber = Number(value)
     const typeInput = event.target.id
@@ -71,20 +94,37 @@ const BuyStock = ({ currentStore, flavors, revenue, setStock, setRevenue, setFla
     }
   }
 
-  function handleFinishShop() {
-    flavors!.forEach((flavor, index) => {
+  async function handleFinishShop() {
+    flavors.flavors.forEach((flavor, index) => {
+
       const findTypeFlavor = arrayItemShop.find(item => item.name === flavor.name)
       if (findTypeFlavor) {
+
         const newStock = {
+          ...flavor,
           name: findTypeFlavor.name,
           quantity: findTypeFlavor.quantity + flavor.quantity
         } as IFlavorsIceCream
-        setFlavors(prev => prev?.splice(index, 1, newStock))
+
+        flavors.put(index, newStock)
+        setFlavors(flavors.flavors)
       }
     })
-    setStock(prev => ({ ...prev!, cone: prev!.cone + cone }))
-    setRevenue(prev => ({ ...prev!, cash: prev!.cash - amount }))
+
+    stock.putCones(cone)
+    revenue.putAmount(-amount)
+
+    const [respStock, respRevenue, respStore, respFlavor] = await Promise.all([
+      StockController.put(stock.id, stock.informations()),
+      RevenueController.put(revenue.id, revenue.informations()),
+      StoreController.put(store.id, store.informations()),
+      FlavorsController.putByStockId(flavors.stockId, flavors.flavors)
+    ])
+
+    setStock(stock.informations())
+    setRevenue(revenue.informations())
     setStore(store.informations())
+
     resetShop()
   }
 
@@ -128,8 +168,8 @@ const BuyStock = ({ currentStore, flavors, revenue, setStock, setRevenue, setFla
             <div className="w-full max-w-52 px-4 py-2 border-2 rounded-sm border-dashed">
               <div className="flex items-center justify-between ">
                 <div className="flex flex-col  h-full justify-between gap-2">
-                  <p className="font-medium">Caixa </p>
-                  <p className="font-medium">Preço </p>
+                  <p className="font-medium">Caixa</p>
+                  <p className="font-medium">Preço</p>
                 </div>
                 <div className="flex flex-col h-full justify-between  gap-2">
                   <p className="font-medium text-end">{revenue.cash.toFixed(2).replace(".", ",")}</p>

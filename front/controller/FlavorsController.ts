@@ -14,11 +14,11 @@ export abstract class FlavorsController {
     return await this.flavorsService.get(id)
   }
 
-  static async put(id: string, data: IFlavorsIceCream) {
-    await this.flavorsService.putData(id, data)
+  static async putByStockId(stockId: string, data: IFlavorsIceCream[]) {
+    return await this.flavorsService.putData(stockId, data)
   }
 
-  static async post(data: IFlavorsIceCream) {
+  static async post(data: IFlavorsIceCream[]) {
     return await this.flavorsService.postData("create", data)
   }
 
