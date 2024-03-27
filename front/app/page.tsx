@@ -10,6 +10,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { useState } from "react";
 
 export default function Login() {
   const router = useRouter()
@@ -21,6 +23,7 @@ export default function Login() {
     email: z.string(),
     password: z.string()
   })
+  const [error, setError] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -32,7 +35,9 @@ export default function Login() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+
     const result = await AuthController.loginManager(values.idStore, values.email, values.password)
+    console.log(result);
     if (result && result.resp === "Sucess") {
       setManager(result.manager)
       router.push("store")
@@ -42,7 +47,13 @@ export default function Login() {
   return (
     <main className="flex w-screen min-h-screen flex-col items-center justify-between p-24">
       <div className="max-w-[30rem] w-full">
-        <div className="mb-3">
+        <Alert className="absolute top-10 w-fit">
+          <AlertTitle>Heads up!</AlertTitle>
+          <AlertDescription>
+            You can add components and dependencies to your app using the cli.
+          </AlertDescription>
+        </Alert>
+        <div className="mb-3 mt-6">
           <h1 className="text-xl font-semibold">IceCenter</h1>
         </div>
         <Card className="w-full">
