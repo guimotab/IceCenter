@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Projeto IceCenter
+## Visualização Rápida para o FrontEnd
+Não disponível ainda!
+<!-- Para visualizar o projeto de maneira fácil, basta acessar o link <https://guibank.vercel.app/> -->
 
-First, run the development server:
+## Requisitos para rodar o projeto
+* NodeJs instalado ( [baixar](https://nodejs.org/en/download) )
+* Postgresql instalado ( [baixar](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) )
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Iniciando o FrontEnd
+Crie um arquivo `.env` na pasta `back` e copie o padrão do arquivo `.env.example`
+
+Digite qualquer coisa nos campos `SECRET`, `REFRESH`, `SALT` e salve.
+
+Abra o terminal na pasta `front` ou, no diretório raiz, use o comando:
+```
+cd front
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Para baixar as dependências e rodar o projeto, use os comandos:
+```
+npm i
+npm run start
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Configurando Postgresql
+Após [instalar o Postgresql](https://nodejs.org/en/download), siga o [tutorial de instalação](https://youtu.be/UbX-2Xud1JA?si=3yfqEYU-ol6L6Xg_&t=56).
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Após instalado, abra o programa. Crie um novo database clicando com o botão direito em `Servers` e em `Register`:
 
-## Learn More
+![alt text](../imagesReadMe/createrServer.png)
 
-To learn more about Next.js, take a look at the following resources:
+Em `General`, coloque um nome para seu database. Ex.:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![alt text](../imagesReadMe/namedb.png)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Em `Connection` coloque no campo Password uma senha para acessar o db. Ex: `123456`.
 
-## Deploy on Vercel
+**Anote o Host, Port, Username e o Password, pois será necessário para próxima etapa!**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Então clique no botão `Save`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Iniciando o BackEnd
+Abra o terminal na pasta `back` ou, no diretório raiz, use os comandos:
+```
+cd back
+npm i
+```
+
+Crie um arquivo `.env` na pasta `back` e copie o padrão do arquivo `.env.example`.
+
+No campo `SECRET`, `REFRESH` e `SALT`, coloque os mesmos valores colocados em [#Iniciando o FrontEnd](#Iniciando-o-FrontEnd).
+
+No campo `DATABASE_URL`, substitua as letras maiúsculas pelos seus dados.
+
+```
+postgresql://USERNAME:PASSWORD@HOST:PORT/postgres
+```
+
+Após salvar o arquivo, use o comando :
+```
+npx prisma migrate dev
+```
+
+Por fim, use o comando para rodar o servidor:
+```
+npm run start
+```
