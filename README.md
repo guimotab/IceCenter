@@ -27,13 +27,9 @@ Após [instalar o Postgresql](https://nodejs.org/en/download), siga o [tutorial 
 
 Após instalado, abra o programa. Crie um novo database clicando com o botão direito em `Servers` e em `Register`:
 
-![alt text](../imagesReadMe/createrServer.png)
+Em `General`, coloque um nome para seu database.
 
-Em `General`, coloque um nome para seu database. Ex.:
-
-![alt text](../imagesReadMe/namedb.png)
-
-Em `Connection` coloque no campo Password uma senha para acessar o db. Ex: `123456`.
+Em `Connection` coloque no campo Password uma senha para acessar o db.
 
 **Anote o Host, Port, Username e o Password, pois será necessário para próxima etapa!** 
 
