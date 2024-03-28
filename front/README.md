@@ -37,7 +37,7 @@ Em `General`, coloque um nome para seu database. Ex.:
 
 Em `Connection` coloque no campo Password uma senha para acessar o db. Ex: `123456`.
 
-**Anote o Host, Port, Username e o Password, pois será necessário para próxima etapa!**
+**Anote o Host, Port, Username e o Password, pois será necessário para próxima etapa!** 
 
 Então clique no botão `Save`.
 
