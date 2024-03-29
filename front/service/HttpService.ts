@@ -25,8 +25,8 @@ export abstract class HttpService<T> implements IHttpService<T> {
     const resp = await axios.post(`${this._url}/${url}`, { data: data })
     return resp.data as { resp: string, data?: T }
   }
-  async deleteData(id: string) {
-    const resp = await axios.delete(`${this._url}/${id}`)
+  async deleteData(name: string) {
+    const resp = await axios.delete(`${this._url}/${name}`)
     return resp.data
   }
 

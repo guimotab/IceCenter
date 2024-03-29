@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { IAddress } from '../interface/IAddress.js';
-import createUuid from '../util/createUuidUtil.js';
+import { v4 as uuid } from 'uuid'
 import prisma from '../app.js';
 
 abstract class AddressController {
     public static create({ cep, city, neighborhood, number, street, uf }: IAddress) {
-        return { id: createUuid(), cep, city, neighborhood, number, street, uf }
+        return { id: uuid(), cep, city, neighborhood, number, street, uf }
     }
     static async getAll(req: Request, res: Response) {
         try {
@@ -13,7 +13,7 @@ abstract class AddressController {
             if (!addresses) {
                 return res.json({ resp: "Endereços não encontrados" })
             }
-            res.status(200).json({ resp: "Sucess", data: addresses })
+            res.status(200).json({ resp: "Success", data: addresses })
         } catch (error) {
             console.log(error);
             res.json({ resp: "Ocorreu um erro no servidor" })
@@ -27,7 +27,7 @@ abstract class AddressController {
 
             const address = await prisma.address.update({ where: { id: addressId }, data })
 
-            res.status(200).json({ resp: "Sucess", data: address })
+            res.status(200).json({ resp: "Success", data: address })
         } catch (error) {
             console.log(error);
             res.json({ resp: "Ocorreu um erro no servidor" })
@@ -40,7 +40,7 @@ abstract class AddressController {
             if (!address) {
                 return res.json({ resp: "Endereço não encontrado" })
             }
-            res.status(200).json({ resp: "Sucess", data: address })
+            res.status(200).json({ resp: "Success", data: address })
         } catch (error) {
             console.log(error);
             res.json({ resp: "Ocorreu um erro no servidor" })
@@ -57,7 +57,7 @@ abstract class AddressController {
     //             return res.json({ resp: "Senha incorreta!" })
     //         }
     //         const teste = await Key.deleteOne({ key: key })
-    //         return res.json({ resp: "Sucess" })
+    //         return res.json({ resp: "Success" })
     //     } catch (error) {
     //         console.log(error);
     //         return res.json({ resp: "Ocorreu um erro ao deleter a chave!" })

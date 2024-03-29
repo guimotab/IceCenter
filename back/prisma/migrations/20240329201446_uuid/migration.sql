@@ -50,16 +50,9 @@ CREATE TABLE "FlavorsIceCream" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
+    "stockId" TEXT NOT NULL,
 
     CONSTRAINT "FlavorsIceCream_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "StockOnFlavors" (
-    "stockId" TEXT NOT NULL,
-    "flavorsId" TEXT NOT NULL,
-
-    CONSTRAINT "StockOnFlavors_pkey" PRIMARY KEY ("stockId","flavorsId")
 );
 
 -- CreateTable
@@ -87,12 +80,6 @@ CREATE TABLE "Revenue" (
     CONSTRAINT "Revenue_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "_FlavorsIceCreamToStockStore" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "Owner_email_key" ON "Owner"("email");
 
@@ -115,16 +102,13 @@ CREATE UNIQUE INDEX "Manager_email_key" ON "Manager"("email");
 CREATE UNIQUE INDEX "StockStore_storeId_key" ON "StockStore"("storeId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "FlavorsIceCream_stockId_key" ON "FlavorsIceCream"("stockId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Address_storeId_key" ON "Address"("storeId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Revenue_storeId_key" ON "Revenue"("storeId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_FlavorsIceCreamToStockStore_AB_unique" ON "_FlavorsIceCreamToStockStore"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_FlavorsIceCreamToStockStore_B_index" ON "_FlavorsIceCreamToStockStore"("B");
 
 -- AddForeignKey
 ALTER TABLE "Company" ADD CONSTRAINT "Company_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Owner"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -139,19 +123,10 @@ ALTER TABLE "Manager" ADD CONSTRAINT "Manager_storeId_fkey" FOREIGN KEY ("storeI
 ALTER TABLE "StockStore" ADD CONSTRAINT "StockStore_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "StockOnFlavors" ADD CONSTRAINT "StockOnFlavors_stockId_fkey" FOREIGN KEY ("stockId") REFERENCES "StockStore"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "StockOnFlavors" ADD CONSTRAINT "StockOnFlavors_flavorsId_fkey" FOREIGN KEY ("flavorsId") REFERENCES "FlavorsIceCream"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "FlavorsIceCream" ADD CONSTRAINT "FlavorsIceCream_stockId_fkey" FOREIGN KEY ("stockId") REFERENCES "StockStore"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Address" ADD CONSTRAINT "Address_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Revenue" ADD CONSTRAINT "Revenue_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_FlavorsIceCreamToStockStore" ADD CONSTRAINT "_FlavorsIceCreamToStockStore_A_fkey" FOREIGN KEY ("A") REFERENCES "FlavorsIceCream"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_FlavorsIceCreamToStockStore" ADD CONSTRAINT "_FlavorsIceCreamToStockStore_B_fkey" FOREIGN KEY ("B") REFERENCES "StockStore"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import createUuid from '../util/createUuidUtil.js';
+import { v4 as uuid } from 'uuid'
 import { IFlavorsIceCream } from '../interface/IFlavorsIceCream.js';
 import prisma from '../app.js';
 
@@ -9,7 +9,7 @@ abstract class FlavorsController {
         try {
             const flavor = await prisma.flavorsIceCream.create({
                 data: {
-                    id: createUuid(),
+                    id: uuid(), 
                     name,
                     quantity,
                     stockId
@@ -26,7 +26,7 @@ abstract class FlavorsController {
             if (!flavors) {
                 return res.json({ resp: "Sabores não encontrados" })
             }
-            return res.status(200).json({ resp: "Sucess", data: flavors })
+            return res.status(200).json({ resp: "Success", data: flavors })
         } catch (error) {
             console.log(error);
             return res.json({ resp: "Ocorreu um erro no servidor" })
@@ -39,7 +39,7 @@ abstract class FlavorsController {
             if (!flavorsIceCream) {
                 return res.json({ resp: "Sabores não encontrados" })
             }
-            return res.status(200).json({ resp: "Sucess", data: flavorsIceCream })
+            return res.status(200).json({ resp: "Success", data: flavorsIceCream })
         } catch (error) {
             console.log(error);
             return res.json({ resp: "Ocorreu um erro no servidor" })
@@ -58,7 +58,7 @@ abstract class FlavorsController {
                 }
             })
 
-            return res.status(200).json({ resp: "Sucess", data: flavors })
+            return res.status(200).json({ resp: "Success", data: flavors })
         } catch (error) {
             console.log(error);
             return res.json({ resp: "Ocorreu um erro no servidor" })
@@ -76,7 +76,7 @@ abstract class FlavorsController {
     //             return res.json({ resp: "Senha incorreta!" })
     //         }
     //         const teste = await Key.deleteOne({ key: key })
-    //         return res.json({ resp: "Sucess" })
+    //         return res.json({ resp: "Success" })
     //     } catch (error) {
     //         console.log(error);
     //         return res.json({ resp: "Ocorreu um erro ao deleter a chave!" })

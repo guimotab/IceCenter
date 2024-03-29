@@ -25,7 +25,7 @@ class StoreController {
                     }
                 });
                 const store = await prisma.store.findUnique({ where: { id: idStore } });
-                return res.status(201).json({ resp: "Sucess", data: store });
+                return res.status(201).json({ resp: "Success", data: store });
             }
             res.status(500).json({ resp: "Esta loja já existe!" });
         }
@@ -41,7 +41,7 @@ class StoreController {
             if (!store) {
                 return res.json({ msg: "Lojas não encontradas" });
             }
-            res.status(200).json({ msg: "Sucess", data: store });
+            res.status(200).json({ msg: "Success", data: store });
         }
         catch (error) {
             console.log(error);
@@ -55,7 +55,7 @@ class StoreController {
             if (!store) {
                 return res.json({ msg: "Gerente não encontrado" });
             }
-            res.status(200).json({ msg: "Sucess", data: store });
+            res.status(200).json({ msg: "Success", data: store });
         }
         catch (error) {
             console.log(error);

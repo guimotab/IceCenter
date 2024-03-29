@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import createUuid from '../util/createUuidUtil.js';
 import prisma from '../app.js';
 import { IStockStore } from '../interface/IStockStore.js';
+import { v4 as uuid } from 'uuid'
 
 abstract class StockController {
     static async getAll(req: Request, res: Response) {
@@ -10,7 +10,7 @@ abstract class StockController {
             if (!managers) {
                 return res.json({ resp: "Estoques não encontrados" })
             }
-            return res.status(200).json({ resp: "Sucess", data: managers })
+            return res.status(200).json({ resp: "Success", data: managers })
         } catch (error) {
             console.log(error);
             return res.json({ resp: "Ocorreu um erro no servidor" })
@@ -24,7 +24,7 @@ abstract class StockController {
             if (!stock) {
                 return res.json({ resp: "Estoque não encontrado" })
             }
-            return res.status(200).json({ resp: "Sucess", data: stock })
+            return res.status(200).json({ resp: "Success", data: stock })
         } catch (error) {
             console.log(error);
             return res.json({ resp: "Ocorreu um erro no servidor" })
@@ -37,7 +37,7 @@ abstract class StockController {
 
             const stock = await prisma.stockStore.update({ where: { id: stockId }, data })
 
-            return res.status(200).json({ resp: "Sucess", data: stock })
+            return res.status(200).json({ resp: "Success", data: stock })
         } catch (error) {
             console.log(error);
             return res.json({ resp: "Ocorreu um erro no servidor" })
@@ -45,22 +45,18 @@ abstract class StockController {
     }
     public static create() {
         return {
-            id: createUuid(),
             cone: 50,
             flavors: {
                 create: [
                     {
-                        id: createUuid(),
                         name: "Chocolate",
                         quantity: 10,
                     },
                     {
-                        id: createUuid(),
                         name: "Baunilha",
                         quantity: 10,
                     },
                     {
-                        id: createUuid(),
                         name: "Morango",
                         quantity: 10,
                     },

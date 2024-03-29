@@ -82,7 +82,7 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
   async function onSubmit(values: z.infer<typeof formInformationSchema>) {
     function verifyPasswords() {
       formInformation.clearErrors(["newPassword", "repeatNewPassword"])
-      if (values.newPassword === "" && values.repeatNewPassword === values.newPassword) {
+      if (values.newPassword !== "" && values.repeatNewPassword === values.newPassword) {
         return true
       }
       if (values.repeatNewPassword === "") {

@@ -12,28 +12,31 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
+type formFields = "email" | "password" | "nameCompany" | "repeatPassword"
 
-type formFields = "email" | "password"
-
-export default function Login() {
+export default function SignIn() {
   const router = useRouter()
   const setCurrentOwner = useUpdateCurrentOwner()
   const [errorLogin, setErrorLogin] = useState<string>()
 
   const formSchema = z.object({
-    email: z.string().min(1, "Email é obrigatório.").email("Email inválido."),
+    nameCompany: z.string().min(1, "Nome da empresa é obrigatório."),
+    email: z.string().min(1, "Email é obrigatório.").email("Email inválido."), 
     password: z.string().min(1, "Senha é obrigatória."),
+    repeatPassword: z.string(),
   })
-  // 1. Define your form.
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "guimota22@gmail.com",
-      password: "1234"
+      nameCompany: "",
+      email: "",
+      password: "",
+      repeatPassword: "",
     },
   })
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const auth = await AuthController.loginAdmin(values.email, values.password)
+    const auth = await AuthController.createCompany(values.nameCompany, values.email, values.password)
     if (auth.resp === "Success") {
       setCurrentOwner(auth.owner)
       router.push("./stores")
@@ -51,6 +54,10 @@ export default function Login() {
 
   const formInputs = [
     {
+      name: "nameCompany",
+      label: "Nome da Empresa",
+      placeholder: "Digite o nome",
+    }, {
       name: "email",
       label: "Email",
       placeholder: "Digite seu email",
@@ -58,9 +65,12 @@ export default function Login() {
       name: "password",
       label: "Senha",
       placeholder: "Digite sua senha",
-      isPassword: true
+    }, {
+      name: "repeatPassword",
+      label: "Repita a senha",
+      placeholder: "Repita sua senha",
     },
-  ] as { name: formFields, label: string, placeholder: string, isPassword: boolean }[]
+  ] as { name: formFields, label: string, placeholder: string }[]
 
   return (
     <main className="flex w-screen min-h-screen flex-col items-center justify-between pt-10">
@@ -70,7 +80,7 @@ export default function Login() {
         </div>
         <Card className="w-full">
           <CardHeader className="flex flex-col items-center">
-            <CardTitle className="text-xl">Login - Admin</CardTitle>
+            <CardTitle className="text-xl">Criar Empresa</CardTitle>
           </CardHeader>
           <CardContent className="pb-5">
             <div className="flex flex-col items-center gap-2">
@@ -86,7 +96,7 @@ export default function Login() {
                         <FormItem>
                           <FormLabel>{input.label}</FormLabel>
                           <FormControl>
-                            <Input placeholder={input.placeholder} type={input.isPassword ? "password" : "text"} onChange={event => handleChanges(event, input.name)} {...field} />
+                            <Input placeholder={input.placeholder} onChange={event => handleChanges(event, input.name)} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -95,11 +105,11 @@ export default function Login() {
                   )}
 
                   {errorLogin && <Label className="text-sm font-medium text-red-600 ">{errorLogin}</Label>}
-                  <Button className="w-full" type="submit">Entrar</Button>
+                  <Button className="w-full" type="submit">Criar nova empresa</Button>
                 </form>
               </FormProvider >
               <Label className="">ou</Label>
-              <Link href={"./admin/createCompany"} className="text-sm w-full"><Button variant={"outline"} className="w-full">Criar nova empresa</Button></Link>
+              <Link href={"/admin"} className="text-sm w-full"><Button variant={"outline"} className="w-full">Logar</Button></Link>
             </div>
 
           </CardContent>

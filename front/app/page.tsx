@@ -38,7 +38,7 @@ export default function Login() {
 
     const result = await AuthController.loginManager(values.idStore, values.email, values.password)
     console.log(result);
-    if (result && result.resp === "Sucess") {
+    if (result && result.resp === "Success") {
       setManager(result.manager)
       router.push("store")
     }
@@ -47,12 +47,6 @@ export default function Login() {
   return (
     <main className="flex w-screen min-h-screen flex-col items-center justify-between p-24">
       <div className="max-w-[30rem] w-full">
-        <Alert className="absolute top-10 w-fit">
-          <AlertTitle>Heads up!</AlertTitle>
-          <AlertDescription>
-            You can add components and dependencies to your app using the cli.
-          </AlertDescription>
-        </Alert>
         <div className="mb-3 mt-6">
           <h1 className="text-xl font-semibold">IceCenter</h1>
         </div>

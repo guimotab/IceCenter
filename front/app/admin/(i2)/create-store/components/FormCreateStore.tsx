@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useToast } from "@/components/ui/use-toast"
 import { ManagerController } from "@/controller/ManagerController"
 import { StoreController } from "@/controller/StoreController"
 import { ViaCepController } from "@/controller/ViaCepController"
@@ -11,10 +12,10 @@ import { IManager } from "@/interface/IManager"
 import { IRevenueStore } from "@/interface/IRevenueStore"
 import { IStockStore } from "@/interface/IStockStore"
 import { IStore } from "@/interface/IStore"
+import { useUpdateCurrentCompany } from "@/state/hooks/useUpdateCurrentCompany"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { FormProvider, useForm } from "react-hook-form"
-import { v4 as uuid } from 'uuid';
 import { z } from "zod"
 interface FormCreateStoreProps {
   company: ICompany
@@ -24,8 +25,10 @@ type inputInformation = "nameStore" | "cep" | "uf" | "city" | "street" | "neighb
 type inputAccess = "email" | "password"
 
 const FormCreateStore = ({ company }: FormCreateStoreProps) => {
+  const setCompany = useUpdateCurrentCompany()
 
   const router = useRouter()
+  const { toast } = useToast()
 
   const formInformationSchema = z.object({
     nameStore: z.string().startsWith(company.name, "O nome da empresa não pode ser retirado do início!")
@@ -42,17 +45,25 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
   const formInformation = useForm<z.infer<typeof formInformationSchema>>({
     resolver: zodResolver(formInformationSchema),
     defaultValues: {
-      nameStore: company.name + "",
-      cep: "",
+      nameStore: company.name + "teste",
+      cep: "76820622",
       uf: "",
       city: "",
       street: "",
       neighborhood: "",
-      number: "",
-      email: "",
-      password: "",
+      number: "1234",
+      email: "guimota@gmail.com",
+      password: "1234",
     },
   })
+
+  async function showToastError(description: string, title?: string) {
+    toast({
+      variant: "destructive",
+      title: title,
+      description: description,
+    })
+  }
 
   async function onBlurCep(value: string) {
     function checkCep() {
@@ -79,37 +90,40 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
 
   async function onSubmit(values: z.infer<typeof formInformationSchema>) {
 
-    const idStore = uuid()
-
     const newAddress = {
       cep: values.cep, city: values.city, neighborhood: values.neighborhood, number: values.number, street: values.street, uf: values.uf
     } as IAddress
     const newStore = {
-      id: idStore,
       companyId: company.id,
       name: values.nameStore.trim(),
       revenue: { cash: 1000 } as IRevenueStore,
       stock: {} as IStockStore,
     } as IStore
     const resultStore = await StoreController.post(newStore, newAddress)
-
-    if (resultStore.resp !== "Sucess") {
+    if (resultStore.resp !== "Success") {
+      showToastError(resultStore.resp)
       return
     }
-    
+
     const newManager = {
       storeId: resultStore.data!.id,
       email: values.email,
       password: values.password,
     } as IManager
-    // const resultManager = await ManagerController.post(newManager)
-    const resultManager = {resp: "false"}
-    if (resultManager.resp !== "Sucess") {
-      await StoreController.delete(idStore) 
+    console.log("🚀 ~ onSubmit ~ newManager.resultStore.data!.id:", resultStore.data!.id)
+    const resultManager = await ManagerController.post(newManager)
+
+    if (resultManager.resp !== "Success") {
+      showToastError(resultManager.resp)
+      await StoreController.delete(resultStore.data!.name)
       return
     }
-    if (resultManager.data) {
-      router.push("./home")
+    if (resultManager.resp) {
+      if (!company.storeId) {
+        //adiciona primeiro storeId para a empresa
+        setCompany({ ...company, storeId: resultStore.data!.id })
+      }
+      router.push("./stores")
     }
   }
 

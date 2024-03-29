@@ -31,8 +31,8 @@ export abstract class StoreController {
     return await this.storeService.postData("create", data)
   }
 
-  static async delete(id: string) {
-    await this.storeService.deleteData(id)
+  static async delete(name: string) {
+    await this.storeService.deleteData(name)
   }
 
 

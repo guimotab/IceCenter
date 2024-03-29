@@ -5,7 +5,7 @@ class OwnerController {
         try {
             const owner = await prisma.owner.findUnique({ where: { id: ownerId } });
             if (owner) {
-                res.status(201).json({ resp: "Sucess", data: owner });
+                res.status(201).json({ resp: "Success", data: owner });
                 return;
             }
             res.status(500).json({ resp: "Não foi possível carregar o proprietário" });

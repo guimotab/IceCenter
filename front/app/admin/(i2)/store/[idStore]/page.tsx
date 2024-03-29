@@ -36,7 +36,7 @@ const Store = () => {
       if (storeResp && addressResp) {
         setStore(storeResp)
         setAddress(addressResp)
-        const manager = await ManagerController.getByStoreId(storeResp.id)
+        const manager = await ManagerController.getByStoreId(storeResp.id!)
         if (manager) {
           setManager(manager)
         }
@@ -55,7 +55,7 @@ const Store = () => {
                 editInformations ?
                 <EditInformations manager={manager} address={address} company={company} store={store} setEditInformations={setEditInformations} />
                 :
-                <StoreInformations address={address} company={company} store={store} setEditInformations={setEditInformations} />
+                <StoreInformations manager={manager} address={address} company={company} store={store} setEditInformations={setEditInformations} />
               }
             </Card>
           </div>

@@ -7,7 +7,7 @@ abstract class OwnerController {
         try {
             const owner = await prisma.owner.findUnique({ where: { id: ownerId } })
             if (owner) {
-                res.status(201).json({ resp: "Sucess", data: owner })
+                res.status(201).json({ resp: "Success", data: owner })
                 return
             }
             res.status(500).json({ resp: "Não foi possível carregar o proprietário" })
@@ -27,7 +27,7 @@ abstract class OwnerController {
     //             return res.json({ resp: "Senha incorreta!" })
     //         }
     //         const teste = await Key.deleteOne({ key: key })
-    //         return res.json({ resp: "Sucess" })
+    //         return res.json({ resp: "Success" })
     //     } catch (error) {
     //         console.log(error);
     //         return res.json({ resp: "Ocorreu um erro ao deleter a chave!" })

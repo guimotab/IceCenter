@@ -8,6 +8,6 @@ storeRoute
     .put("/store/:storeId", StoreController.put)
     .get("/store/all/company/:companyId", StoreController.getAllByIdCompany)
     .post("/store/create", StoreController.createStore)
-    .delete(`/store/:storeId`, StoreController.delete)
+    .delete(`/store/:name`, StoreController.delete)
 
 export default storeRoute

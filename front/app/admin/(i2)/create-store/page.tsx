@@ -5,6 +5,7 @@ import { IStore } from "@/interface/IStore"
 import useCurrentCompany from "@/state/hooks/useCurrentCompany"
 import { useEffect, useState } from "react"
 import FormCreateStore from "./components/FormCreateStore"
+import { Toaster } from "@/components/ui/toaster"
 
 const CreateStores = () => {
   const company = useCurrentCompany()
@@ -27,6 +28,7 @@ const CreateStores = () => {
 
   return (
     <main className="flex flex-col items-center w-full ">
+      <Toaster />
       {company ?
         <div className="w-full flex flex-col items-center mt-10 max-w-[70rem]">
           <div className="flex flex-col w-full gap-5">

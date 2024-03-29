@@ -32,7 +32,7 @@ const Header = () => {
           }
         }
       }
-      router.push("/admin")
+      router.push(`/admin?erro=${resp.message}`)
     }
     verify()
   }, [])

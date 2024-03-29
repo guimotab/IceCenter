@@ -1,15 +1,15 @@
 import { Request, Response } from "express"
 import { ICompany } from '../interface/ICompany.js';
-import createUuid from "../util/createUuidUtil.js";
 import prisma from "../app.js";
+import { v4 as uuid } from 'uuid'
 
 
 abstract class CompanyController {
     public static async create(req: Request<{}, {}, ICompany>, res: Response) {
         const { ownerId, name } = req.body as ICompany
         try {
-            const company = await prisma.company.create({ data: { id: createUuid(), name, ownerId } })
-            res.status(201).json({ resp: "Sucess" })
+            const company = await prisma.company.create({ data: { id: uuid(), name, ownerId } })
+            res.status(201).json({ resp: "Success" })
             
             return company.id
         } catch (error) {
@@ -22,7 +22,7 @@ abstract class CompanyController {
         try {
             const company = await prisma.company.findUnique({ where: { ownerId } })
             if (company) {
-                res.status(201).json({ resp: "Sucess", data: company })
+                res.status(201).json({ resp: "Success", data: company })
                 return
             }
             res.status(500).json({ resp: "Não foi possível carregar a empresa" })
@@ -42,7 +42,7 @@ abstract class CompanyController {
     //             return res.json({ resp: "Senha incorreta!" })
     //         }
     //         const teste = await Key.deleteOne({ key: key })
-    //         return res.json({ resp: "Sucess" })
+    //         return res.json({ resp: "Success" })
     //     } catch (error) {
     //         console.log(error);
     //         return res.json({ resp: "Ocorreu um erro ao deleter a chave!" })

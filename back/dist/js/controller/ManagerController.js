@@ -1,5 +1,4 @@
 import * as bcrypt from 'bcrypt';
-import createUuid from '../util/createUuidUtil.js';
 import prisma from '../app.js';
 class ManagerController {
     static async get(req, res) {
@@ -9,11 +8,11 @@ class ManagerController {
             if (!manager) {
                 return res.json({ resp: "Gerente não encontrado" });
             }
-            res.status(200).json({ resp: "Sucess", data: manager });
+            return res.status(200).json({ resp: "Success", data: manager });
         }
         catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" });
+            return res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
     static async put(req, res) {
@@ -21,15 +20,15 @@ class ManagerController {
             const { managerId } = req.params;
             const { data } = req.body;
             const manager = await prisma.manager.update({ where: { id: managerId }, data });
-            res.status(200).json({ resp: "Sucess", data: manager });
+            return res.status(200).json({ resp: "Success", data: manager });
         }
         catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" });
+            return res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
     static async createManager(req, res) {
-        const { email, password, storeId } = req.body;
+        const { email, password, storeId } = req.body.data;
         const userExist = await prisma.manager.findUnique({ where: { email } });
         if (userExist) {
             return res.json({ resp: "Este email já existe!" });
@@ -37,12 +36,12 @@ class ManagerController {
         try {
             const salt = await bcrypt.genSalt(12);
             const passwordHash = await bcrypt.hash(password, salt);
-            const manager = await prisma.manager.create({ data: { id: createUuid(), email, password: passwordHash, storeId } });
-            res.status(201).json({ resp: "Sucess", data: manager });
+            const manager = await prisma.manager.create({ data: { email, password: passwordHash, storeId } });
+            return res.status(201).json({ resp: "Success", data: manager });
         }
         catch (error) {
             console.log(error);
-            res.json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
+            return res.json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
         }
     }
     static async getAll(req, res) {
@@ -51,11 +50,11 @@ class ManagerController {
             if (!managers) {
                 return res.json({ resp: "Gerentes não encontrados" });
             }
-            res.status(200).json({ resp: "Sucess", data: managers });
+            return res.status(200).json({ resp: "Success", data: managers });
         }
         catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" });
+            return res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
     static async getByStoreId(req, res) {
@@ -65,11 +64,11 @@ class ManagerController {
             if (!manager) {
                 return res.json({ resp: "Gerente não encontrado" });
             }
-            res.status(200).json({ resp: "Sucess", data: manager });
+            return res.status(200).json({ resp: "Success", data: manager });
         }
         catch (error) {
             console.log(error);
-            res.json({ resp: "Ocorreu um erro no servidor" });
+            return res.json({ resp: "Ocorreu um erro no servidor" });
         }
     }
 }

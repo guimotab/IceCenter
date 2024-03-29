@@ -8,16 +8,6 @@ export abstract class TokenService {
 
   private static _token: Token | undefined
 
-  // static createToken(idManager: string) {
-  //   const secret = process.env.SECRET!
-  //   const refresh = process.env.SECRET!
-  //   const token = jwt.sign({ idManager }, secret, { expiresIn: "3m" })
-  //   const refreshToken = jwt.sign({ idManager }, refresh, { expiresIn: "3m" })
-  //   this._token = new Token(token, refreshToken)
-  //   return { status: true, data: [this._token.token, this._token.refresh] }
-  // }
-
-
   static get() {
     if (!this._token) {
       const resp = LocalStorageUtils.getTokens()

@@ -1,4 +1,3 @@
-import createUuid from '../util/createUuidUtil.js';
 import prisma from '../app.js';
 class StockController {
     static async getAll(req, res) {
@@ -7,7 +6,7 @@ class StockController {
             if (!managers) {
                 return res.json({ resp: "Estoques não encontrados" });
             }
-            return res.status(200).json({ resp: "Sucess", data: managers });
+            return res.status(200).json({ resp: "Success", data: managers });
         }
         catch (error) {
             console.log(error);
@@ -21,7 +20,7 @@ class StockController {
             if (!stock) {
                 return res.json({ resp: "Estoque não encontrado" });
             }
-            return res.status(200).json({ resp: "Sucess", data: stock });
+            return res.status(200).json({ resp: "Success", data: stock });
         }
         catch (error) {
             console.log(error);
@@ -33,7 +32,7 @@ class StockController {
             const { stockId } = req.params;
             const { data } = req.body;
             const stock = await prisma.stockStore.update({ where: { id: stockId }, data });
-            return res.status(200).json({ resp: "Sucess", data: stock });
+            return res.status(200).json({ resp: "Success", data: stock });
         }
         catch (error) {
             console.log(error);
@@ -42,22 +41,18 @@ class StockController {
     }
     static create() {
         return {
-            id: createUuid(),
             cone: 50,
             flavors: {
                 create: [
                     {
-                        id: createUuid(),
                         name: "Chocolate",
                         quantity: 10,
                     },
                     {
-                        id: createUuid(),
                         name: "Baunilha",
                         quantity: 10,
                     },
                     {
-                        id: createUuid(),
                         name: "Morango",
                         quantity: 10,
                     },

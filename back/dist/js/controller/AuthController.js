@@ -4,20 +4,35 @@ import { v4 as uuid } from 'uuid';
 import prisma from '../app.js';
 class AuthController {
     static async register(req, res) {
-        const { email, password } = req.body;
+        const { name, email, password } = req.body;
         try {
             const salt = await bcrypt.genSalt(12);
             const passwordHash = await bcrypt.hash(password, salt);
-            const owner = await prisma.owner.create({ data: { id: uuid(), email, password: passwordHash } });
+            const ownerId = uuid();
+            const company = await prisma.company.create({
+                data: {
+                    id: uuid(),
+                    name,
+                    owner: {
+                        create: {
+                            id: ownerId,
+                            email,
+                            password: passwordHash
+                        }
+                    }
+                }, include: {
+                    owner: true
+                }
+            });
             const secret = process.env.SECRET;
             const secretRefresh = process.env.REFRESH;
-            const token = jwt.sign({ id: owner.id, }, secret, { expiresIn: "5m" });
-            const refresh = jwt.sign({ id: owner.id, }, secretRefresh, { expiresIn: "30m" });
-            res.status(201).json({ resp: "Sucess", token: token, refresh: refresh, user: owner });
+            const token = jwt.sign({ id: ownerId, }, secret, { expiresIn: "5m" });
+            const refresh = jwt.sign({ id: ownerId, }, secretRefresh, { expiresIn: "30m" });
+            res.status(201).json({ resp: "Success", token: token, refresh: refresh, owner: company.owner });
         }
         catch (error) {
             console.log(error);
-            res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
+            res.json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
         }
     }
     static async login(req, res) {
@@ -35,11 +50,11 @@ class AuthController {
             const secretRefresh = process.env.REFRESH;
             const token = jwt.sign({ id: owner.id, }, secret, { expiresIn: "5m" });
             const refresh = jwt.sign({ id: owner.id, }, secretRefresh, { expiresIn: "30m" });
-            res.status(200).json({ resp: "Sucess", token: token, refresh: refresh, owner: owner });
+            res.status(200).json({ resp: "Success", token: token, refresh: refresh, owner: owner });
         }
         catch (error) {
             console.log(error);
-            res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
+            res.json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
         }
     }
     static async loginManager(req, res) {
@@ -60,11 +75,11 @@ class AuthController {
             const secretRefresh = process.env.REFRESH;
             const token = jwt.sign({ id: manager.id, }, secret, { expiresIn: "5m" });
             const refresh = jwt.sign({ id: manager.id, }, secretRefresh, { expiresIn: "30m" });
-            res.status(200).json({ resp: "Sucess", token: token, refresh: refresh, manager: manager });
+            res.status(200).json({ resp: "Success", token: token, refresh: refresh, manager: manager });
         }
         catch (error) {
             console.log(error);
-            res.status(500).json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
+            res.json({ resp: "Aconteceu um erro no servidor. Tente novamente mais tarde!" });
         }
     }
 }

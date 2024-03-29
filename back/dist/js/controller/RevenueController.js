@@ -1,8 +1,8 @@
-import createUuid from '../util/createUuidUtil.js';
 import prisma from '../app.js';
+import { v4 as uuid } from 'uuid';
 class RevenueController {
     static create() {
-        return { id: createUuid(), cash: 1000, expenses: 0, profit: 0 };
+        return { id: uuid(), cash: 1000, expenses: 0, profit: 0 };
     }
     static async get(req, res) {
         try {
@@ -11,7 +11,7 @@ class RevenueController {
             if (!revenue) {
                 return res.json({ resp: "Montante não encontrado" });
             }
-            return res.status(200).json({ resp: "Sucess", data: revenue });
+            return res.status(200).json({ resp: "Success", data: revenue });
         }
         catch (error) {
             console.log(error);
@@ -25,7 +25,7 @@ class RevenueController {
             if (!revenue) {
                 return res.json({ resp: "Montante não encontrado" });
             }
-            return res.status(200).json({ resp: "Sucess", data: revenue });
+            return res.status(200).json({ resp: "Success", data: revenue });
         }
         catch (error) {
             console.log(error);
@@ -37,7 +37,7 @@ class RevenueController {
             const { revenueId } = req.params;
             const { data } = req.body;
             const revenue = await prisma.revenue.update({ where: { id: revenueId }, data });
-            return res.status(200).json({ resp: "Sucess", data: revenue });
+            return res.status(200).json({ resp: "Success", data: revenue });
         }
         catch (error) {
             console.log(error);

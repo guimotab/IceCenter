@@ -1,11 +1,11 @@
-import createUuid from '../util/createUuidUtil.js';
+import { v4 as uuid } from 'uuid';
 import prisma from '../app.js';
 class FlavorsController {
     static async create({ name, quantity, stockId }) {
         try {
             const flavor = await prisma.flavorsIceCream.create({
                 data: {
-                    id: createUuid(),
+                    id: uuid(),
                     name,
                     quantity,
                     stockId
@@ -23,7 +23,7 @@ class FlavorsController {
             if (!flavors) {
                 return res.json({ resp: "Sabores não encontrados" });
             }
-            return res.status(200).json({ resp: "Sucess", data: flavors });
+            return res.status(200).json({ resp: "Success", data: flavors });
         }
         catch (error) {
             console.log(error);
@@ -37,7 +37,7 @@ class FlavorsController {
             if (!flavorsIceCream) {
                 return res.json({ resp: "Sabores não encontrados" });
             }
-            return res.status(200).json({ resp: "Sucess", data: flavorsIceCream });
+            return res.status(200).json({ resp: "Success", data: flavorsIceCream });
         }
         catch (error) {
             console.log(error);
@@ -55,7 +55,7 @@ class FlavorsController {
                     await prisma.flavorsIceCream.update({ where: { id: flavor.id }, data: { ...findThisFlavor } });
                 }
             });
-            return res.status(200).json({ resp: "Sucess", data: flavors });
+            return res.status(200).json({ resp: "Success", data: flavors });
         }
         catch (error) {
             console.log(error);

@@ -5,8 +5,8 @@ import axios from "axios"
 export class AuthService {
   static baseUrl = "http://localhost:4000/auth"
 
-  static async registerAdmin(email: string, password: string) {
-    const resp = (await axios.post(`${this.baseUrl}/register`, { email, password })).data
+  static async registerCompany(name: string, email: string, password: string) {
+    const resp = (await axios.post(`${this.baseUrl}/register`, { name, email, password })).data
     return resp as { resp: string, token: string, refresh: string, owner: IOwner }
   }
   static async loginAdmin(email: string, password: string) {

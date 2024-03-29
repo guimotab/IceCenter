@@ -1,8 +1,8 @@
-import createUuid from '../util/createUuidUtil.js';
+import { v4 as uuid } from 'uuid';
 import prisma from '../app.js';
 class AddressController {
     static create({ cep, city, neighborhood, number, street, uf }) {
-        return { id: createUuid(), cep, city, neighborhood, number, street, uf };
+        return { id: uuid(), cep, city, neighborhood, number, street, uf };
     }
     static async getAll(req, res) {
         try {
@@ -10,7 +10,7 @@ class AddressController {
             if (!addresses) {
                 return res.json({ resp: "Endereços não encontrados" });
             }
-            res.status(200).json({ resp: "Sucess", data: addresses });
+            res.status(200).json({ resp: "Success", data: addresses });
         }
         catch (error) {
             console.log(error);
@@ -22,7 +22,7 @@ class AddressController {
             const { addressId } = req.params;
             const { data } = req.body;
             const address = await prisma.address.update({ where: { id: addressId }, data });
-            res.status(200).json({ resp: "Sucess", data: address });
+            res.status(200).json({ resp: "Success", data: address });
         }
         catch (error) {
             console.log(error);
@@ -36,7 +36,7 @@ class AddressController {
             if (!address) {
                 return res.json({ resp: "Endereço não encontrado" });
             }
-            res.status(200).json({ resp: "Sucess", data: address });
+            res.status(200).json({ resp: "Success", data: address });
         }
         catch (error) {
             console.log(error);

@@ -10,7 +10,7 @@ class AddressController {
             if (!addresses) {
                 return res.json({ resp: "Endereços não encontrados" });
             }
-            res.status(200).json({ resp: "Sucess", data: addresses });
+            res.status(200).json({ resp: "Success", data: addresses });
         }
         catch (error) {
             console.log(error);
@@ -24,7 +24,7 @@ class AddressController {
             if (!address) {
                 return res.json({ resp: "Endereço não encontrado" });
             }
-            res.status(200).json({ resp: "Sucess", data: address });
+            res.status(200).json({ resp: "Success", data: address });
         }
         catch (error) {
             console.log(error);

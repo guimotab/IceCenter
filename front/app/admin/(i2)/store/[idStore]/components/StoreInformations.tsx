@@ -13,21 +13,23 @@ import { MdContentCopy } from "react-icons/md";
 import { FaMapLocationDot } from "react-icons/fa6";
 import { IAddress } from "@/interface/IAddress"
 import { MdModeEdit } from "react-icons/md";
+import { IManager } from "@/interface/IManager"
 
 interface StoreInformationsProps {
   company: ICompany
   store: IStore
+  manager: IManager
   address: IAddress
   setEditInformations: Dispatch<SetStateAction<boolean>>
 }
 
-const StoreInformations = ({ company, store, address, setEditInformations }: StoreInformationsProps) => {
+const StoreInformations = ({ company, manager, store, address, setEditInformations }: StoreInformationsProps) => {
 
   const addressString = `${address.street}, ${address.number} - ${address.neighborhood}, ${address.city} - ${address.uf}, Brasil`
   const [openMap, setOpenMap] = useState(false)
   const [position, setPosition] = useState({ lat: 0, lng: 0 })
 
-  function editInformations(){
+  function editInformations() {
     setEditInformations(true)
   }
 
@@ -62,8 +64,11 @@ const StoreInformations = ({ company, store, address, setEditInformations }: Sto
     }, {
       label: "Id da Loja",
       value: store.id
-    },
-  ]
+    },{
+      label: "Email de Acesso",
+      value: manager.email
+    }
+  ] as { label: string, value: string }[]
   const inputsForm = [
     {
       label: "CEP",
@@ -101,7 +106,7 @@ const StoreInformations = ({ company, store, address, setEditInformations }: Sto
             </Button>
           </div>
 
-          <div className="grid grid-cols-[auto_auto_auto] gap-x-7 gap-y-3">
+          <div className="grid grid-cols-[auto_auto_auto_auto] gap-x-7 gap-y-3">
             {importantInformations.map(info =>
               <div key={info.label} className="flex flex-col gap-1">
                 <Label>{info.label}</Label>
