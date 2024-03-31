@@ -58,10 +58,10 @@ class AuthController {
         }
     }
     static async loginManager(req, res) {
-        const { storeId, email, password } = req.params;
-        const manager = await prisma.manager.findUnique({ where: { storeId } });
+        const { email, password } = req.params;
+        const manager = await prisma.manager.findUnique({ where: { email } });
         if (!manager) {
-            return res.json({ resp: "Id não existe!" });
+            return res.json({ resp: "Esse email não existe!" });
         }
         if (manager.email !== email) {
             return res.json({ resp: "Email ou senha incorretos!" });

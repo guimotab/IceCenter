@@ -2,19 +2,24 @@ import jwt from "jsonwebtoken"
 import { Token } from "./Token"
 import { LocalStorageUtils } from "@/utils/LocalStorageUtils"
 import dot from "dotenv"
+import { IResponseTokenService } from "@/interface/IResponseTokenService"
 
 dot.config()
-export abstract class TokenService {
+
+export class TokenService {
 
   private static _token: Token | undefined
 
-  static get() {
-    if (!this._token) {
-      const resp = LocalStorageUtils.getTokens()
-      if (!resp) {
-        return { status: false, message: "Usuário não logado!", data: this._token }
-      }
-      this._token = new Token(resp.token, resp.refresh)
+  constructor() {
+    const resp = LocalStorageUtils.getTokens()
+    if (resp) {
+      TokenService._token = new Token(resp.token, resp.refresh)
+    }
+  }
+
+  get() {
+    if (!TokenService._token) {
+      return { status: false, message: "Não logado" } as IResponseTokenService
     }
 
     const secret = process.env.NEXT_PUBLIC_SECRET!
@@ -22,38 +27,38 @@ export abstract class TokenService {
 
     try {
 
-      tokenId = jwt.verify(this._token.token, secret) as { id: string }
+      tokenId = jwt.verify(TokenService._token.token, secret) as { id: string }
 
     } catch {
 
       const isValid = this.refreshTokenVerify()
       if (!isValid) {
-        return { status: false, message: "Sessão expirada!" }
+        return { status: false, message: "Sessão expirada" } as IResponseTokenService
       }
-      tokenId = jwt.verify(this._token.token, secret) as { id: string }
+      tokenId = jwt.verify(TokenService._token.token, secret) as { id: string }
 
     }
-    return { status: true, data: tokenId }
+    return { status: true, data: tokenId } as IResponseTokenService
   }
 
   static deleteTokens() {
     LocalStorageUtils.deleteTokens()
-    this._token = undefined
+    TokenService._token = undefined
   }
 
-  private static refreshTokenVerify() {
+  private refreshTokenVerify() {
 
     const secret = process.env.NEXT_PUBLIC_SECRET!
     const refresh = process.env.NEXT_PUBLIC_REFRESH!
 
     try {
 
-      const data = jwt.verify(this._token!.refresh, refresh) as { id: string }
+      const data = jwt.verify(TokenService._token!.refresh, refresh) as { id: string }
       const idOwner = data?.id!
-      this._token!.token = jwt.sign({ id: idOwner, }, secret, { expiresIn: "5m" })
+      TokenService._token!.token = jwt.sign({ id: idOwner, }, secret, { expiresIn: "5m" })
       return true
 
-    } catch {
+    } catch (err) {
 
       LocalStorageUtils.deleteTokens()
       return false

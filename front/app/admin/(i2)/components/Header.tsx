@@ -6,7 +6,6 @@ import useCurrentCompany from "@/state/hooks/useCurrentCompany"
 import useCurrentOwner from "@/state/hooks/useCurrentOwner"
 import { useUpdateCurrentCompany } from "@/state/hooks/useUpdateCurrentCompany"
 import { useUpdateCurrentOwner } from "@/state/hooks/useUpdateCurrentOwner"
-import { LocalStorageUtils } from "@/utils/LocalStorageUtils"
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -20,7 +19,8 @@ const Header = () => {
   const router = useRouter()
   useEffect(() => {
     async function verify() {
-      const resp = TokenService.get()
+      const tokenService = new TokenService()
+      const resp = tokenService.get()
       if (resp.status) {
         const owner = await OwnerController.get(resp.data!.id)
         if (owner) {

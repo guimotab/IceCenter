@@ -10,7 +10,6 @@ interface RequestBody {
     password: string;
 }
 interface RequestBodyManager {
-    storeId: string;
     email: string;
     password: string;
 }
@@ -79,11 +78,11 @@ abstract class AuthController {
     }
 
     public static async loginManager(req: Request<{}, {}, RequestBodyManager>, res: Response) {
-        const { storeId, email, password } = req.params as RequestBodyManager
+        const { email, password } = req.params as RequestBodyManager
         //check if user exist
-        const manager = await prisma.manager.findUnique({ where: { storeId } })
+            const manager = await prisma.manager.findUnique({ where: { email } })
         if (!manager) {
-            return res.json({ resp: "Id não existe!" })
+            return res.json({ resp: "Esse email não existe!" })
         }
         if (manager.email !== email) {
             return res.json({ resp: "Email ou senha incorretos!" })

@@ -1,7 +1,8 @@
+import flavorsIceCream from "@/types/flavorsIceCream"
 
 export interface IFlavorsIceCream {
   id: string
-  name: string
+  name: flavorsIceCream
   quantity: number
   stockId: string
 }

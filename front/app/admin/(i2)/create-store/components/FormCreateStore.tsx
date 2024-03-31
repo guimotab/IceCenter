@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
+import { v4 as uuid } from "uuid"
 interface FormCreateStoreProps {
   company: ICompany
 }
@@ -94,6 +95,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       cep: values.cep, city: values.city, neighborhood: values.neighborhood, number: values.number, street: values.street, uf: values.uf
     } as IAddress
     const newStore = {
+      id: uuid(),
       companyId: company.id,
       name: values.nameStore.trim(),
       revenue: { cash: 1000 } as IRevenueStore,
@@ -110,7 +112,6 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       email: values.email,
       password: values.password,
     } as IManager
-    console.log("🚀 ~ onSubmit ~ newManager.resultStore.data!.id:", resultStore.data!.id)
     const resultManager = await ManagerController.post(newManager)
 
     if (resultManager.resp !== "Success") {

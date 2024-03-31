@@ -3,5 +3,5 @@ export interface IHttpService<T> {
   get(id: string): Promise<{ resp: string, data?: T }>
   putData(id: string, data: T): Promise<{ resp: string, data?: T }>
   postData(url: string, data: T): Promise<{ resp: string, data?: T }>
-  deleteData(id: string): void
+  deleteData(id: string): Promise<{ resp: string }>
 }

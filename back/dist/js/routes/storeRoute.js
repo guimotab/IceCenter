@@ -6,6 +6,6 @@ storeRoute
     .put("/store/:storeId", StoreController.put)
     .get("/store/all/company/:companyId", StoreController.getAllByIdCompany)
     .post("/store/create", StoreController.createStore)
-    .delete(`/store/:name`, StoreController.delete);
+    .delete(`/store/:id`, StoreController.delete);
 export default storeRoute;
 //# sourceMappingURL=storeRoute.js.map

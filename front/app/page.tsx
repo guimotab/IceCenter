@@ -12,68 +12,54 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useState } from "react";
+import { Label } from "@/components/ui/label";
+import Image from "next/image";
 
 export default function Login() {
   const router = useRouter()
   const setManager = useUpdateCurrentManager()
   const formSchema = z.object({
-    // email: z.string().min(2).max(50),
-    // password: z.string().min(4).max(30)
-    idStore: z.string(),
-    email: z.string(),
-    password: z.string()
+    email: z.string().min(1, "Email é obrigatório.").email("Email inválido."),
+    password: z.string().min(1, "Senha é obrigatória."),
   })
+  const [erroSubmit, setErrorSubmit] = useState<string>()
   const [error, setError] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      idStore: "1c4d651f-02df-4812-ab05-afdce94445f5",
       email: "centralSorvetes@gmail.com",
       password: "1234"
     },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-
-    const result = await AuthController.loginManager(values.idStore, values.email, values.password)
-    console.log(result);
+    setErrorSubmit(undefined)
+    const result = await AuthController.loginManager(values.email, values.password)
     if (result && result.resp === "Success") {
       setManager(result.manager)
-      router.push("store")
+      return router.push("store")
     }
+    setErrorSubmit(result.resp)
   }
 
   return (
-    <main className="flex w-screen min-h-screen flex-col items-center justify-between p-24">
-      <div className="max-w-[30rem] w-full">
-        <div className="mb-3 mt-6">
-          <h1 className="text-xl font-semibold">IceCenter</h1>
-        </div>
-        <Card className="w-full">
+    <main className="flex  justify-between h-screen">
+      <div className="flex items-center justify-center flex-1">
+        <div className="h-full w-full bg-[#e0475e] absolute opacity-90"></div>
+        <img src="/assets/IceCenterLogo1.png" alt="" className="max-h-screen z-10 max-w-[50rem] p-10" />
+      </div>
+      <div className="flex flex-col items-center  w-full h-full max-w-[32rem] py-10 z-10 bg-white shadow-lg">
+        <div className="flex items-center  w-full h-full px-10">
+          <div className="w-full flex flex-col justify-center h-fit">
 
-          <CardHeader className="flex flex-col items-center">
-            <CardTitle className="text-xl">Login</CardTitle>
-          </CardHeader>
+            <div className="flex flex-col items-center">
+              <h1 className="text-xl font-semibold">Login</h1>
+            </div>
 
-          <CardContent>
             <div>
               <FormProvider  {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-
-                  <FormField
-                    control={form.control}
-                    name="idStore"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Id loja</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Digite o id da loja" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
 
                   <FormField
                     control={form.control}
@@ -96,21 +82,21 @@ export default function Login() {
                       <FormItem>
                         <FormLabel>Senha</FormLabel>
                         <FormControl>
-                          <Input placeholder="Digite sua senha" {...field} />
+                          <Input type="password" placeholder="Digite sua senha" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-
                   <Button className="w-full" type="submit">Entrar</Button>
+                  {erroSubmit && <Label className="text-red-500">{erroSubmit}</Label>}
 
                 </form>
               </FormProvider >
             </div>
-          </CardContent>
 
-        </Card>
+          </div>
+        </div>
       </div>
     </main>
   );

@@ -35,7 +35,7 @@ const CurrentStock = ({ currentStore, stock, flavors, setStock, setFlavors }: Cu
       {stock && flavors &&
         <>
           <div className="flex flex-col gap-3">
-            <Label>Sabores de Sorvete (10 litros por pacote)</Label>
+            <Label>Sabores de Sorvete</Label>
             <div className="flex gap-3">
               {flavors.map(flavor =>
                 <Badge key={flavor.name} variant={"outline"}>
@@ -46,9 +46,9 @@ const CurrentStock = ({ currentStore, stock, flavors, setStock, setFlavors }: Cu
           </div>
 
           <div className="flex flex-col gap-3">
-            <Label>Cones (10 unidades por pacote)</Label>
+            <Label>Cones</Label>
             <Badge variant={"outline"} className="self-start">
-              {`${stock.cone} pacotes`}
+              {`${stock.cone} unidades`}
             </Badge>
           </div>
         </>

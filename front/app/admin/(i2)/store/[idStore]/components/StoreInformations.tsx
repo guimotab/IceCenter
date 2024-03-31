@@ -7,13 +7,19 @@ import { IStore } from "@/interface/IStore"
 import { Dispatch, SetStateAction, useState } from "react"
 import GoogleMaps from "./GoogleMaps"
 import Link from "next/link"
-import { toast } from "sonner"
+import { toast as toastCopy } from "sonner"
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { MdContentCopy } from "react-icons/md";
 import { FaMapLocationDot } from "react-icons/fa6";
 import { IAddress } from "@/interface/IAddress"
 import { MdModeEdit } from "react-icons/md";
 import { IManager } from "@/interface/IManager"
+import { MdDelete } from "react-icons/md";
+import { AlertDialogHeader, AlertDialogFooter } from "@/components/ui/alert-dialog"
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog"
+import { StoreController } from "@/controller/StoreController"
+import { useRouter } from "next/navigation"
+import { useToast } from "@/components/ui/use-toast"
 
 interface StoreInformationsProps {
   company: ICompany
@@ -24,7 +30,8 @@ interface StoreInformationsProps {
 }
 
 const StoreInformations = ({ company, manager, store, address, setEditInformations }: StoreInformationsProps) => {
-
+  const { toast } = useToast()
+  const router = useRouter()
   const addressString = `${address.street}, ${address.number} - ${address.neighborhood}, ${address.city} - ${address.uf}, Brasil`
   const [openMap, setOpenMap] = useState(false)
   const [position, setPosition] = useState({ lat: 0, lng: 0 })
@@ -32,7 +39,21 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
   function editInformations() {
     setEditInformations(true)
   }
+  function showAlert(description: string, title?: string) {
+    toast({
+      variant: "destructive",
+      title: title,
+      description: description,
+    })
+  }
 
+  async function deleteStore() {
+    const resp = await StoreController.delete(store.id)
+    if (resp.resp === "Success") {
+      return router.push("/admin/stores")
+    }
+    showAlert(resp.resp)
+  }
   async function handleMap() {
     const geocoder = new google.maps.Geocoder()
     const result = (await geocoder.geocode({ address: addressString })).results[0]
@@ -44,7 +65,7 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
     setOpenMap(!openMap)
   }
   async function handleCopy(title: string, desc: string, textToCopy: string) {
-    toast(`${title}`, {
+    toastCopy(`${title}`, {
       description: `${desc}`,
       action: {
         label: "Entendi",
@@ -64,7 +85,7 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
     }, {
       label: "Id da Loja",
       value: store.id
-    },{
+    }, {
       label: "Email de Acesso",
       value: manager.email
     }
@@ -95,15 +116,44 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-6">
         <div className="space-y-3">
-          <div className="flex w-full justify-between">
+
+          <div className="flex w-full gap-4">
             <h2 className="text-xl font-semibold">Informações</h2>
-            <Button
-              size={"sm"}
-              onClick={editInformations}
-              className="space-x-2">
-              <MdModeEdit className="text-lg" />
-              <p>Editar Informações</p>
-            </Button>
+            <div className="flex justify-between items-center w-full">
+
+              <Button
+                size={"sm"}
+                onClick={editInformations}
+                className="space-x-2">
+                <MdModeEdit className="text-lg" />
+                <p>Editar Informações</p>
+              </Button>
+
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <Button
+                    variant={"destructive"}
+                    size={"sm"}
+                    className="space-x-2">
+                    <MdDelete className="text-lg" />
+                    <p>Excluir loja</p>
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Ao clicar em excluir, não será possível reverter a ação!
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction onClick={deleteStore} className="bg-red-600 hover:bg-red-500">Excluir</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+            </div>
           </div>
 
           <div className="grid grid-cols-[auto_auto_auto_auto] gap-x-7 gap-y-3">
@@ -150,7 +200,6 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
                   className="flex items-center gap-2 self-start text-sm cursor-pointer hover:shadow-sm">
                   <p>{input.value}</p>
                   <MdContentCopy className="text-lg" />
-
                 </Badge>
               </div>
             )}

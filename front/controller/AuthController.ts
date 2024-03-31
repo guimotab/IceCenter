@@ -18,8 +18,8 @@ export abstract class AuthController {
     return respAuth
   }
 
-  static async loginManager(storeId: string, email: string, password: string) {
-    const respAuth = await AuthService.loginManager(storeId, email, password)
+  static async loginManager(email: string, password: string) {
+    const respAuth = await AuthService.loginManager(email, password)
     if (respAuth.resp === "Success") {
       LocalStorageUtils.saveTokens(respAuth.token, respAuth.refresh)
     }

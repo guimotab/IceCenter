@@ -14,8 +14,8 @@ export class AuthService {
     return resp as { resp: string, token: string, refresh: string, owner: IOwner }
   }
 
-  static async loginManager(storeId: string, email: string, password: string) {
-    const resp = (await axios.get(`${this.baseUrl}/login/manager/${storeId}/${email}/${password}`)).data
+  static async loginManager(email: string, password: string) {
+    const resp = (await axios.get(`${this.baseUrl}/login/manager/${email}/${password}`)).data
     return resp as { resp: string, token: string, refresh: string, manager: IManager }
   }
 }

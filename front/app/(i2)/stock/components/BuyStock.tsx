@@ -133,22 +133,22 @@ const BuyStock = ({ currentStore, currentFlavors, currentRevenue, currentStock, 
       name: "Morango",
       quantity: strawBerry,
       setQuantity: setstrawBerry,
-      price: 20.21
+      price: 12.21
     }, {
       name: "Chocolate",
       quantity: choco,
       setQuantity: setChoco,
-      price: 30.43
+      price: 16.43
     }, {
       name: "Baunilha",
       quantity: vanilla,
       setQuantity: setVanilla,
-      price: 10.21
+      price: 14.21
     }, {
       name: "Cone",
       quantity: cone,
       setQuantity: setCone,
-      price: 8.00
+      price: 0.40
     },
   ]
 

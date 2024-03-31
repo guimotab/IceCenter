@@ -19,7 +19,8 @@ const Header = () => {
   const router = useRouter()
   useEffect(() => {
     async function verify() {
-      const resp = TokenService.get()
+      const tokenService = new TokenService()
+      const resp = tokenService.get()
       if (resp.status) {
         const manager = await ManagerController.get(resp.data!.id)
         if (manager) {
