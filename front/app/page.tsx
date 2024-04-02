@@ -28,7 +28,7 @@ export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "centralSorvetes@gmail.com",
+      email: "",
       password: "1234"
     },
   })
@@ -45,10 +45,10 @@ export default function Login() {
 
   return (
     <main className="flex  justify-between h-screen">
-      <div className="flex items-center justify-center flex-1">
+      {/* <div className="flex items-center justify-center flex-1">
         <div className="h-full w-full bg-[#e0475e] absolute opacity-90"></div>
         <img src="/assets/IceCenterLogo1.png" alt="" className="max-h-screen z-10 max-w-[50rem] p-10" />
-      </div>
+      </div> */}
       <div className="flex flex-col items-center  w-full h-full max-w-[32rem] py-10 z-10 bg-white shadow-lg">
         <div className="flex items-center  w-full h-full px-10">
           <div className="w-full flex flex-col justify-center h-fit">

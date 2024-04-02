@@ -172,13 +172,15 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
     }, {
       id: "newPassword",
       label: "Nova Senha",
-      showInput: true
+      showInput: true,
+      isPassword: true,
     }, {
       id: "repeatNewPassword",
       label: "Repetir Nova Senha",
-      onBlur: onBlurRepeatNewPassord
+      onBlur: onBlurRepeatNewPassord,
+      isPassword: true,
     },
-  ] as { id: inputAccess, label: string, style?: string, onBlur?: () => void }[]
+  ] as { id: inputAccess, label: string, style?: string, onBlur?: () => void, isPassword?: boolean }[]
 
   return (
     <>
@@ -226,7 +228,7 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
                       <FormItem>
                         <FormLabel>{input.label}</FormLabel>
                         <FormControl>
-                          <Input onBlur={input.onBlur}  {...field} />
+                          <Input type={input.isPassword? "password" : "text"} onBlur={input.onBlur}  {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

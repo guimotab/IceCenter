@@ -33,6 +33,7 @@ model Company {
 model Store {
   id        String      @id @default(uuid())
   name      String      @unique
+  isOpen    Boolean     @default(false)
   revenue   Revenue?
   manager   Manager?
   address   Address?
