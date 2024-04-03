@@ -19,5 +19,10 @@ export class StoreService extends HttpService<IStore> {
     const resp = await axios.get(`${StoreService._urlCompany}/all/company/${idCompany}`)
     return resp.data as { resp: string, data?: IStore[] }
   }
+
+  async getByName(name: string) {
+    const resp = await axios.get(`http://localhost:4000/${name}`)
+    return resp.data as { resp: string, data?: IStore[] }
+  }
 }
 

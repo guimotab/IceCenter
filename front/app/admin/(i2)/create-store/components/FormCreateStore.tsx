@@ -98,8 +98,10 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       id: uuid(),
       companyId: company.id,
       name: values.nameStore.trim(),
+      slug: values.nameStore.trim().replaceAll(" " , "-").toLowerCase(),
       revenue: { cash: 1000 } as IRevenueStore,
       stock: {} as IStockStore,
+      isOpen: false,
     } as IStore
     const resultStore = await StoreController.post(newStore, newAddress)
     if (resultStore.resp !== "Success") {
@@ -116,7 +118,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
 
     if (resultManager.resp !== "Success") {
       showToastError(resultManager.resp)
-      await StoreController.delete(resultStore.data!.name)
+      await StoreController.delete(resultStore.data!.id)
       return
     }
     if (resultManager.resp) {
@@ -169,8 +171,9 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
     }, {
       id: "password",
       label: "Senha",
+      isPassword: true
     },
-  ] as { id: inputAccess, label: string, style?: string, onBlur?: () => void }[]
+  ] as { id: inputAccess, label: string, style?: string, onBlur?: () => void, isPassword?: boolean }[]
 
 
 
@@ -204,18 +207,6 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
               </div>
             )}
 
-            {/* {inputsForm.map(input =>
-              <div key={input.id} className={`${input.readOnly ? " opacity-60" : ""} ${input.style}`}>
-                <Label>{input.label}</Label>
-                <Input
-                  onBlur={event => input.onBlur ? input.onBlur(event.target.value) : ""}
-                  onChange={event => handleInputs(input.id, event.target.value)}
-                  readOnly={input.readOnly}
-                  value={input.value} />
-                <p></p>
-              </div>
-            )} */}
-
           </div>
         </div>
         <div className="flex flex-col gap-2">
@@ -231,7 +222,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
                     <FormItem>
                       <FormLabel>{input.label}</FormLabel>
                       <FormControl>
-                        <Input onBlur={input.onBlur}  {...field} />
+                        <Input type={input.isPassword? "password": "text" } onBlur={input.onBlur}  {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -239,14 +230,6 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
                 />
               </div>
             )}
-
-            {/* {inputAccess.map(input =>
-              <div key={input.id} className={input.style}>
-                <Label>{input.label}</Label>
-                <Input value={input.value} type={`${input.id === "password" ? "password" : ""}`} />
-                <p></p>
-              </div>
-            )} */}
 
           </div>
         </div>

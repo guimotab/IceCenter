@@ -24,6 +24,7 @@ const Home = () => {
       load()
     }
   }, [company])
+  
   return (
     <main className="flex flex-col items-center w-full h-screen">
       <div className="w-full flex flex-col items-center mt-10 max-w-[70rem]">
@@ -41,7 +42,10 @@ const Home = () => {
               <Card key={store.id}>
                 <CardHeader className="py-4">
                   <CardTitle className="text-lg">
-                    {store.name}
+                    <div className="flex justify-between w-full">
+                      <p>{store.name}</p>
+                      <p className="font-medium text-sm">{store.isOpen? "Aberto": "Fechado"}</p>
+                    </div>
                   </CardTitle>
                   <CardDescription>
                     {store.name}

@@ -22,6 +22,13 @@ export abstract class StoreController {
     }
   }
 
+  static async getStoreByWeb(name: string) {
+    const resp = await this.storeService.getByName(name)
+    if(resp.data){
+      return resp.data
+    }
+  }
+
   static async put(id: string, data: IStore) {
     return await this.storeService.putData(id, data)
   }

@@ -14,18 +14,28 @@ interface RequestBodyManager {
 abstract class StoreController {
 	public static async createStore(req: Request<{}, {}, RequestBodyManager>, res: Response) {
 		const { data } = req.body
+
 		// create password
 		try {
 			const checkStoreExist = await prisma.store.findUnique({ where: { name: data.name } })
 			if (checkStoreExist) {
-				return res.json({ resp: "Esta loja já existe!" })
+				return res.json({ resp: "O nome da loja já está sendo usada!" })
 			}
+
+			let slug = data.slug
+			const checkSlugExist = await prisma.store.findUnique({ where: { slug: data.slug } })
+			if (checkSlugExist) {
+				const lastChar = checkSlugExist.slug[checkSlugExist.slug.length]
+				slug = verifySlug(lastChar, lastChar)
+			}
+
 			const company = await prisma.company.update({
 				where: { id: data.companyId }, data: {
 					storeId: data.id,
 					store: {
 						create: {
 							id: data.id,
+							slug,
 							name: data.name,
 							address: { create: { ...AddressController.create(data.address) } },
 							revenue: { create: { ...RevenueController.create() } },
@@ -42,10 +52,21 @@ abstract class StoreController {
 		}
 	}
 
+
 	static async put(req: Request, res: Response) {
 		try {
 			const { storeId } = req.params
 			const { data } = req.body as { data: IStore }
+
+			const checkStoreExist = await prisma.store.findUnique({ where: { name: data.name } })
+			if (checkStoreExist) {
+				return res.json({ resp: "O nome da loja já está sendo usada!" })
+			}
+
+			const checkSlugExist = await prisma.store.findUnique({ where: { slug: data.slug } })
+			if (checkSlugExist) {
+				return res.json({ resp: "O slug já está em uso!" })
+			}
 
 			const store = await prisma.store.update({ where: { id: storeId }, data })
 
@@ -55,6 +76,7 @@ abstract class StoreController {
 			return res.json({ resp: "Ocorreu um erro no servidor" })
 		}
 	}
+
 
 	static async getAllByIdCompany(req: Request, res: Response) {
 		const { companyId } = req.params
@@ -70,6 +92,7 @@ abstract class StoreController {
 		}
 	}
 
+
 	static async get(req: Request, res: Response) {
 		try {
 			const { storeId } = req.params
@@ -83,6 +106,23 @@ abstract class StoreController {
 			return res.json({ msg: "Ocorreu um erro no servidor" })
 		}
 	}
+
+	static async getByWebName(req: Request, res: Response) {
+		try {
+			const { name } = req.params
+			const store = await prisma.store.findMany({ where: { name: { equals: name, mode: "insensitive" } } })
+
+			if (!store) {
+				return res.json({ resp: "Loja não encontrada" })
+			}
+			return res.status(200).json({ resp: "Success", data: store })
+		} catch (error) {
+			console.log(error);
+			return res.json({ msg: "Ocorreu um erro no servidor" })
+		}
+	}
+
+
 	static async delete(req: Request, res: Response) {
 		try {
 			const { id } = req.params
@@ -97,5 +137,14 @@ abstract class StoreController {
 		}
 	}
 
+}
+
+function verifySlug(slug: string, lastChar: string){
+	if (isNaN(Number(lastChar))) {
+		slug += "1"
+	} else {
+		slug += (Number(lastChar) + 1)
+	}
+	return slug
 }
 export default StoreController

@@ -33,6 +33,7 @@ model Company {
 model Store {
   id        String      @id @default(uuid())
   name      String      @unique
+  slug      String      @unique
   isOpen    Boolean     @default(false)
   revenue   Revenue?
   manager   Manager?
@@ -79,10 +80,18 @@ model Address {
 }
 
 model Revenue {
-  id       String @id @default(uuid())
-  store    Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId  String @unique
-  cash     Int
-  profit   Int
-  expenses Int
+  id      String  @id @default(uuid())
+  store   Store   @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  storeId String  @unique
+  cash    Int
+  sales   Sales[]
+}
+
+model Sales {
+  id        String   @id @default(uuid())
+  date      DateTime @default(now())
+  name      String
+  quantity  Int
+  revenue   Revenue  @relation(fields: [revenueId], references: [id], onDelete: Cascade)
+  revenueId String   @unique
 }

@@ -21,7 +21,7 @@ export default function SignIn() {
 
   const formSchema = z.object({
     nameCompany: z.string().min(1, "Nome da empresa é obrigatório."),
-    email: z.string().min(1, "Email é obrigatório.").email("Email inválido."), 
+    email: z.string().min(1, "Email é obrigatório.").email("Email inválido."),
     password: z.string().min(1, "Senha é obrigatória."),
     repeatPassword: z.string(),
   })
@@ -65,12 +65,14 @@ export default function SignIn() {
       name: "password",
       label: "Senha",
       placeholder: "Digite sua senha",
+      isPassword: true
     }, {
       name: "repeatPassword",
       label: "Repita a senha",
       placeholder: "Repita sua senha",
+      isPassword: true
     },
-  ] as { name: formFields, label: string, placeholder: string }[]
+  ] as { name: formFields, label: string, placeholder: string, isPassword?: boolean }[]
 
   return (
     <main className="flex w-screen min-h-screen flex-col items-center justify-between pt-10">
@@ -96,7 +98,7 @@ export default function SignIn() {
                         <FormItem>
                           <FormLabel>{input.label}</FormLabel>
                           <FormControl>
-                            <Input placeholder={input.placeholder} onChange={event => handleChanges(event, input.name)} {...field} />
+                            <Input type={input.isPassword ? "password" : "text"} placeholder={input.placeholder} onChange={event => handleChanges(event, input.name)} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

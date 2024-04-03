@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid'
 
 abstract class RevenueController {
     public static create() {
-        return { id: uuid(), cash: 1000, expenses: 0, profit: 0 }
+        return { id: uuid(), cash: 1000}
     }
     static async get(req: Request, res: Response) {
         try {
