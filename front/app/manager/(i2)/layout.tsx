@@ -1,6 +1,6 @@
 "use client"
 import { Inter } from "next/font/google";
-import "../globals.css";
+import "../../globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Header from "./components/Header";
 

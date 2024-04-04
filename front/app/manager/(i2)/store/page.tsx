@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { FlavorsController } from "@/controller/FlavorsController";
@@ -107,10 +108,14 @@ const Store = () => {
             <div className="flex items-center gap-3">
               <h2 className="text-xl font-medium">Informações da Loja</h2>
 
+              <div>
+                <Switch id="airplane-mode" />
+              </div>
+
               <AlertDialog>
                 {canOpenStore ?
                   <AlertDialogTrigger>
-                    <Button className="self-start" onClick={openStore}>Abrir Loja</Button>
+                    <Button variant={"outline"} className="self-start" onClick={openStore}>Simular Dia de Venda</Button>
                   </AlertDialogTrigger>
                   :
                   <Button className="self-start" onClick={event => showError("Você não tem estoques para vender.", "A loja não foi aberta!")}>Abrir Loja</Button>

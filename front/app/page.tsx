@@ -38,7 +38,7 @@ export default function Login() {
     const result = await AuthController.loginManager(values.email, values.password)
     if (result && result.resp === "Success") {
       setManager(result.manager)
-      return router.push("store")
+      return router.push("manager/store")
     }
     setErrorSubmit(result.resp)
   }
