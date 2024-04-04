@@ -109,7 +109,7 @@ const Store = () => {
               <h2 className="text-xl font-medium">Informações da Loja</h2>
 
               <div>
-                <Switch id="airplane-mode" />
+                <Switch  id="airplane-mode" />
               </div>
 
               <AlertDialog>
