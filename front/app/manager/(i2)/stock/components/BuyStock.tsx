@@ -5,6 +5,7 @@ import { Store } from "@/classes/Store"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useToast } from "@/components/ui/use-toast"
 import { FlavorsController } from "@/controller/FlavorsController"
 import { RevenueController } from "@/controller/RevenueController"
 import { StockController } from "@/controller/StockController"
@@ -37,6 +38,7 @@ const BuyStock = ({ currentStore, currentFlavors, currentRevenue, currentStock, 
   const [cone, setCone] = useState(0)
   const [amount, setAmount] = useState(0)
   const [canBuy, setCanBuy] = useState(false)
+  const { toast } = useToast()
 
   const setStore = useUpdateCurrentStore()
 
@@ -44,6 +46,14 @@ const BuyStock = ({ currentStore, currentFlavors, currentRevenue, currentStock, 
     ifCanBuy()
     changeAmount()
   }, [strawBerry, choco, vanilla, cone])
+
+  function showError(description: string, title?: string) {
+    toast({
+      variant: "destructive",
+      title: title,
+      description: description,
+    })
+  }
 
   function resetShop() {
     setstrawBerry(0), setChoco(0), setVanilla(0), setCone(0)
@@ -81,7 +91,7 @@ const BuyStock = ({ currentStore, currentFlavors, currentRevenue, currentStock, 
         itemFound.setQuantity(value)
       }
     }
-    
+
     const value = event.target.value
     const valueNumber = Number(value)
     const typeInput = event.target.id
@@ -120,6 +130,15 @@ const BuyStock = ({ currentStore, currentFlavors, currentRevenue, currentStock, 
       StoreController.put(store.id, store.informations()),
       FlavorsController.putByStockId(flavors.stockId, flavors.flavors)
     ])
+    if (respStock.resp !== "Success") {
+      showError(respStock.resp)
+    } else if (respRevenue.resp !== "Success") {
+      showError(respRevenue.resp)
+    } else if (respStore.resp !== "Success") {
+      showError(respStore.resp)
+    } else if (respFlavor.resp !== "Success") {
+      showError(respFlavor.resp)
+    }
 
     setStock(stock.informations())
     setRevenue(revenue.informations())

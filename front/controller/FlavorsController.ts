@@ -5,7 +5,7 @@ export abstract class FlavorsController {
   private static flavorsService = FlavorsService.getInstance()
   static async getAllByStockId(stockId: string) {
     const resp = await this.flavorsService.getAllByStockId(stockId)
-    if(resp.data){
+    if (resp.data) {
       return resp.data
     }
   }

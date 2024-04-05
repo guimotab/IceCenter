@@ -5,7 +5,7 @@ export abstract class RevenueController {
   private static flavorsService = RevenueService.getInstance()
   static async getByStoreId(stockId: string) {
     const resp = await this.flavorsService.getByStoreId(stockId)
-    if(resp.data){
+    if (resp.data) {
       return resp.data
     }
   }
@@ -15,7 +15,7 @@ export abstract class RevenueController {
   }
 
   static async put(id: string, data: IRevenueStore) {
-    await this.flavorsService.putData(id, data)
+    return await this.flavorsService.putData(id, data)
   }
 
   static async post(data: IRevenueStore) {

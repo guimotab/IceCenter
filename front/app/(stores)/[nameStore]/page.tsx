@@ -14,15 +14,6 @@ const Store = () => {
  
 
   useEffect(() => {
-    async function load() {
-      if(searchParams){
-        const nameStore = searchParams.nameStore.replaceAll("-", " ")
-        const result = await StoreController.getStoreByWeb(nameStore)
-        console.log("🚀 ~ load ~ result:", result)
-      }
-    }
-    load()
-    // router.push("not-found")
   }, [])
 
   return (

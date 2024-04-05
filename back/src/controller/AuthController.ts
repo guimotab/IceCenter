@@ -88,7 +88,7 @@ abstract class AuthController {
             return res.json({ resp: "Email ou senha incorretos!" })
         }
         //check if password match
-        const checkPassword = await bcrypt.compare(password, manager.password)
+        const checkPassword = await bcrypt.compare(password, manager.password) 
         if (!checkPassword) {
             return res.json({ resp: "Email ou senha incorretos!" })
         }

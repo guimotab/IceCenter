@@ -26,13 +26,13 @@ const Header = () => {
         if (manager) {
           setManager(manager)
           const store = await StoreController.get(manager.storeId)
-          if (store) {
-            setStore(store)
+          if (store.data) {
+            setStore(store.data)
             return
           }
         }
       }
-      router.push("/")
+      router.push(`/manager?erro=${resp.message}`)
     }
     verify()
   }, [])

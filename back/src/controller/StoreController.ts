@@ -59,12 +59,12 @@ abstract class StoreController {
 			const { data } = req.body as { data: IStore }
 
 			const checkStoreExist = await prisma.store.findUnique({ where: { name: data.name } })
-			if (checkStoreExist) {
+			if (checkStoreExist?.name !== data.name) {
 				return res.json({ resp: "O nome da loja já está sendo usada!" })
 			}
 
 			const checkSlugExist = await prisma.store.findUnique({ where: { slug: data.slug } })
-			if (checkSlugExist) {
+			if (checkSlugExist?.slug !== data.slug) {
 				return res.json({ resp: "O slug já está em uso!" })
 			}
 
@@ -107,10 +107,10 @@ abstract class StoreController {
 		}
 	}
 
-	static async getByWebName(req: Request, res: Response) {
+	static async getBySlug(req: Request, res: Response) {
 		try {
-			const { name } = req.params
-			const store = await prisma.store.findMany({ where: { name: { equals: name, mode: "insensitive" } } })
+			const { slug } = req.params
+			const store = await prisma.store.findUnique({ where: { slug } })
 
 			if (!store) {
 				return res.json({ resp: "Loja não encontrada" })

@@ -5,7 +5,7 @@ const storeRoute = express.Router()
 storeRoute
     //coloca do caminho mais específico pro menos específico
     .get("/store/:storeId", StoreController.get)
-    .get("/:name", StoreController.getByWebName)
+    .get("/:slug", StoreController.getBySlug)
     .put("/store/:storeId", StoreController.put)
     .get("/store/all/company/:companyId", StoreController.getAllByIdCompany)
     .post("/store/create", StoreController.createStore)

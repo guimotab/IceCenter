@@ -4,33 +4,24 @@ export class Store implements IStore {
   private _id: string
   private _companyId: string
   private _name: string
+  private _slug: string;
+  private _isOpen: boolean;
 
   constructor(objectStore: IStore) {
     this._id = objectStore.id
     this._companyId = objectStore.companyId
     this._name = objectStore.name
+    this._isOpen = objectStore.isOpen
+    this._slug = objectStore.slug
   }
-
-  // changeFlavor(position: number, newFlavors: IFlavorsIceCream) {
-  //   const flavors = [...this._stock.flavors]
-  //   flavors.splice(position, 1, newFlavors)
-  //   this._stock = { ...this._stock, flavors }
-  // }
-
-  // changeCone(cone: number) {
-  //   this._stock = { ...this._stock, cone }
-  // }
-
-  // changeCash(discounted: number) {
-  //   const cash = this._revenue.cash - discounted
-  //   this._revenue = { ...this._revenue, cash }
-  // }
 
   informations() {
     return {
       id: this._id,
       companyId: this._companyId,
       name: this._name,
+      isOpen: this._isOpen,
+      slug: this._slug
     } as IStore
   }
 
@@ -43,8 +34,19 @@ export class Store implements IStore {
   public get name(): string {
     return this._name;
   }
+  public get isOpen(): boolean {
+    return this._isOpen;
+  }
+  public get slug(): string {
+    return this._slug;
+  }
 
-
+  public set slug(value: string) {
+    this._slug = value;
+  }
+  public set isOpen(value: boolean) {
+    this._isOpen = value;
+  }
   public set id(value: string) {
     this._id = value;
   }

@@ -6,7 +6,7 @@ export abstract class StoreController {
   private static storeService = StoreService.getInstance()
   static async findAllByCompanyId(idCompany: string) {
     const resp = await this.storeService.getAllByCompanyId(idCompany)
-    if(resp.data){
+    if (resp.data) {
       return resp.data
     }
   }
@@ -16,15 +16,12 @@ export abstract class StoreController {
   }
 
   static async get(id: string) {
-    const resp = await this.storeService.get(id)
-    if(resp.data){
-      return resp.data
-    }
+    return await this.storeService.get(id)
   }
 
-  static async getStoreByWeb(name: string) {
-    const resp = await this.storeService.getByName(name)
-    if(resp.data){
+  static async getStoreBySlug(slug: string) {
+    const resp = await this.storeService.getBySlug(slug)
+    if (resp.data) {
       return resp.data
     }
   }
@@ -34,7 +31,7 @@ export abstract class StoreController {
   }
 
   static async post(storeData: IStore, address: IAddress) {
-    const data = {...storeData, address} as IStore
+    const data = { ...storeData, address } as IStore
     return await this.storeService.postData("create", data)
   }
 
