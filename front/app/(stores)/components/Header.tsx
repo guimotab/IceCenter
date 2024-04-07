@@ -36,7 +36,7 @@ const Header = () => {
                 {store.name}
               </h1>
               <div className="flex items-center gap-6">
-                <Link href={``}>Button</Link>
+                <Link href={``}>Home</Link>
                 <Link href={`${store.slug}/contacts`}>Contatos</Link>
               </div>
 

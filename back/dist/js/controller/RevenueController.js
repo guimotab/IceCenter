@@ -1,9 +1,5 @@
 import prisma from '../app.js';
-import { v4 as uuid } from 'uuid';
 class RevenueController {
-    static create() {
-        return { id: uuid(), cash: 1000 };
-    }
     static async get(req, res) {
         try {
             const { revenueId } = req.params;

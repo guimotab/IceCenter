@@ -125,4 +125,4 @@ function verifySlug(slug, lastChar) {
     return slug;
 }
 export default StoreController;
-//# sourceMappingURL=StoreController.js.map
+//# sourceMappingURL=SalesControlelr.js.map

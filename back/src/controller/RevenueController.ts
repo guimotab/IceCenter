@@ -1,13 +1,9 @@
 import { Request, Response } from 'express';
 import prisma from '../app.js';
 import { IRevenueStore } from '../interface/IRevenueStore.js';
-import { v4 as uuid } from 'uuid'
 
 
 abstract class RevenueController {
-    public static create() {
-        return { id: uuid(), cash: 1000}
-    }
     static async get(req: Request, res: Response) {
         try {
             const { revenueId } = req.params

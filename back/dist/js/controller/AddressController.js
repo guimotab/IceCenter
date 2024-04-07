@@ -1,8 +1,7 @@
-import { v4 as uuid } from 'uuid';
 import prisma from '../app.js';
 class AddressController {
     static create({ cep, city, neighborhood, number, street, uf }) {
-        return { id: uuid(), cep, city, neighborhood, number, street, uf };
+        return { cep, city, neighborhood, number, street, uf };
     }
     static async getAll(req, res) {
         try {

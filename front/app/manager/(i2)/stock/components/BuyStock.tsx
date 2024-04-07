@@ -122,7 +122,7 @@ const BuyStock = ({ currentStore, currentFlavors, currentRevenue, currentStock, 
     })
 
     stock.putCones(cone)
-    revenue.putAmount(-amount)
+    revenue.putCash(-amount)
 
     const [respStock, respRevenue, respStore, respFlavor] = await Promise.all([
       StockController.put(stock.id, stock.informations()),

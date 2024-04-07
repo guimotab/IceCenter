@@ -18,7 +18,7 @@ export class Revenue implements IRevenueStore {
       cash: this._cash,
     } as IRevenueStore
   }
-  putAmount(newCash: number) {
+  putCash(newCash: number) {
     this.cash += newCash
   }
 

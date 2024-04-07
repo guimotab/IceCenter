@@ -38,7 +38,7 @@ abstract class StoreController {
 							slug,
 							name: data.name,
 							address: { create: { ...AddressController.create(data.address) } },
-							revenue: { create: { ...RevenueController.create() } },
+							revenue: { create: { cash: 1000 } },
 							stock: { create: { ...StockController.create() } },
 						}
 					},
@@ -139,7 +139,7 @@ abstract class StoreController {
 
 }
 
-function verifySlug(slug: string, lastChar: string){
+function verifySlug(slug: string, lastChar: string) {
 	if (isNaN(Number(lastChar))) {
 		slug += "1"
 	} else {

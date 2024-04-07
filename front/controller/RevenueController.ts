@@ -3,6 +3,7 @@ import { RevenueService } from "@/service/RevenueService"
 
 export abstract class RevenueController {
   private static flavorsService = RevenueService.getInstance()
+
   static async getByStoreId(stockId: string) {
     const resp = await this.flavorsService.getByStoreId(stockId)
     if (resp.data) {

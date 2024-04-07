@@ -15,10 +15,11 @@ export interface CardsItemShopProps {
   name: flavorsIceCream | "Casquinha",
   remainingQuantity: number,
   price: pricesOfIceCream
+  className: string
   image: string
 }
 
-const CardsItemShop = ({ name, image, remainingQuantity, price }: CardsItemShopProps) => {
+const CardsItemShop = ({ name, image, className, remainingQuantity, price }: CardsItemShopProps) => {
   const [quantity, setQuantity] = useState(0)
   const [disableAddButton, setDisableAddButtom] = useState(false)
   const [disableRemoveButton, setDisableRemoveButtom] = useState(true)
@@ -70,30 +71,34 @@ const CardsItemShop = ({ name, image, remainingQuantity, price }: CardsItemShopP
   }
 
   function handleManualChangeQuantity(event: ChangeEvent<HTMLInputElement>) {
-    /*
-
-
-    
-    Lidar com desativação de botão ao modificar manualmetne
-
-
-
-    */
     const value = Number(event.target.value)
     if (!isNaN(value) && value <= remainingQuantity) {
       setQuantity(Math.floor(value))
       handlePutQuantity(value)
+      if (value === 0) {
+        setDisableRemoveButtom(true)
+        setDisableAddButtom(false)
+      } else if (value === remainingQuantity) {
+        setDisableRemoveButtom(false)
+        setDisableAddButtom(true)
+      } else {
+        setDisableRemoveButtom(false)
+        setDisableAddButtom(false)
+
+      }
     }
   }
 
   return (
-    <Card className="w-full max-w-[16rem]">
+    <Card className="flex flex-col justify-between w-full max-w-[16rem]">
       <CardHeader>
         <CardTitle>{name === "Casquinha" ? name : `Pote de ${name}`}</CardTitle>
         <CardDescription>R${price.toFixed(2).replace(".", ",")} ({remainingQuantity} restantes)</CardDescription>
       </CardHeader>
-      <CardContent>
-        <p>{image}</p>
+      <CardContent >
+        <div className="flex items-center justify-center">
+          <img src={image} alt={`Imagem sorvete ${name.toLowerCase()}`} className={`${className}`} />
+        </div>
       </CardContent>
       <CardFooter>
         <div className="flex w-full justify-center items-center gap-5">

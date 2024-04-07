@@ -9,4 +9,4 @@ storeRoute
     .post("/store/create", StoreController.createStore)
     .delete(`/store/:id`, StoreController.delete);
 export default storeRoute;
-//# sourceMappingURL=storeRoute.js.map
+//# sourceMappingURL=salesRoute.js.map

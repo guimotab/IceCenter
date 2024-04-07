@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
 import { IAddress } from '../interface/IAddress.js';
-import { v4 as uuid } from 'uuid'
 import prisma from '../app.js';
 
 abstract class AddressController {
     public static create({ cep, city, neighborhood, number, street, uf }: IAddress) {
-        return { id: uuid(), cep, city, neighborhood, number, street, uf }
+        return { cep, city, neighborhood, number, street, uf }
     }
     static async getAll(req: Request, res: Response) {
         try {
