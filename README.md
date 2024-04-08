@@ -1,5 +1,7 @@
 ## Visualização Rápida para o FrontEnd
 Não disponível ainda!
+
+Para utilizar a visualização rápida, basta acessar o site ... e rodar o backend seguindo o passo a passo [#Iniciando o BackEnd](#Iniciando-o-BackEnd)
 <!-- Para visualizar o projeto de maneira fácil, basta acessar o link <https://guibank.vercel.app/> -->
 
 ## Requisitos para rodar o projeto
@@ -9,7 +11,7 @@ Não disponível ainda!
 ## Iniciando o FrontEnd
 Crie um arquivo `.env` na pasta `back` e copie o padrão do arquivo `.env.example`
 
-Digite qualquer coisa nos campos `SECRET`, `REFRESH`, `SALT` e salve.
+Digite qualquer coisa nos campos `NEXT_PUBLIC_SECRET`, `NEXT_PUBLIC_REFRESH` e salve.
 
 Abra o terminal na pasta `front` ou, no diretório raiz, use o comando:
 ```
@@ -29,7 +31,7 @@ Após instalado, abra o programa. Crie um novo database clicando com o botão di
 
 Em `General`, coloque um nome para seu database.
 
-Em `Connection` coloque no campo Password uma senha para acessar o db.
+Em `Connection` coloque no campo Password uma senha para acessar o banco de dados.
 
 **Anote o Host, Port, Username e o Password, pois será necessário para próxima etapa!** 
 

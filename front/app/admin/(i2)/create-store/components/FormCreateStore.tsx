@@ -46,15 +46,15 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
   const formInformation = useForm<z.infer<typeof formInformationSchema>>({
     resolver: zodResolver(formInformationSchema),
     defaultValues: {
-      nameStore: company.name + "teste",
-      cep: "76820622",
+      nameStore: company.name,
+      cep: "",
       uf: "",
       city: "",
       street: "",
       neighborhood: "",
-      number: "1234",
-      email: "guimota@gmail.com",
-      password: "1234",
+      number: "",
+      email: "",
+      password: "",
     },
   })
 

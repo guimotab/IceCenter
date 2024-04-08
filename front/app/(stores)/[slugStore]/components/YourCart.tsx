@@ -103,8 +103,6 @@ const YourCart = ({ flavors, stock, revenue, sales, updateSetters, resetCart }: 
     updateSetters(newStock.informations(), newFlavors.flavors, newRevenue.informations())
   }
 
-
-
   return (
     <Card className="flex flex-col justify-between max-w-[20rem] min-w-[16rem] w-full h-fit">
       <CardHeader>

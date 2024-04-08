@@ -39,7 +39,7 @@ export default function Login() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      password: "1234"
+      password: ""
     },
   })
 
