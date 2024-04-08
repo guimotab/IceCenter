@@ -8,11 +8,12 @@ import flavorsRoute from './flavorsRoutes.js';
 import revenueRoute from './revenueRoutes.js';
 import addressRoute from './AddressRoute.js';
 import stockRoute from './StockRoutes.js';
+import salesRoutes from './salesRoutes.js';
 const routes = (app) => {
     app.get('/', (req, res) => {
         res.status(200).json({ msg: "Bem-vindo à nossa API!" });
     });
-    app.use(express.json(), authRoute, companyRoute, managerRoute, ownerRoute, storeRoute, addressRoute, stockRoute, flavorsRoute, revenueRoute);
+    app.use(express.json(), authRoute, companyRoute, managerRoute, ownerRoute, storeRoute, addressRoute, stockRoute, flavorsRoute, revenueRoute, salesRoutes);
 };
 export default routes;
 //# sourceMappingURL=index.js.map

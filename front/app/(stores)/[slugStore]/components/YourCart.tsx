@@ -1,3 +1,4 @@
+import { Cart } from "@/classes/Cart"
 import { Flavors } from "@/classes/Flavors"
 import { Revenue } from "@/classes/Revenue"
 import { Stock } from "@/classes/Stock"
@@ -6,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { FlavorsController } from "@/controller/FlavorsController"
 import { RevenueController } from "@/controller/RevenueController"
+import { SalesController } from "@/controller/SalesController"
 import { StockController } from "@/controller/StockController"
 import { pricesOfIceCream } from "@/enum/pricesOfIcecream"
 import { IFlavorsIceCream } from "@/interface/IFlavorsIceCream"
@@ -15,14 +17,19 @@ import useShoppingCart from "@/state/hooks/useShoppingCart"
 import flavorsIceCream from "@/types/flavorsIceCream"
 import { useEffect, useState } from "react"
 import { IoMdCart } from "react-icons/io";
+import { ISales } from "@/interface/ISales"
+import { Sales } from "@/classes/Sales"
 
 interface YourCartProps {
   stock: IStockStore
   flavors: IFlavorsIceCream[]
   revenue: IRevenueStore
+  sales: ISales[]
+  updateSetters(valueStock: IStockStore, valueFlavors: IFlavorsIceCream[], valueRevenue: IRevenueStore): Promise<void>
+  resetCart(): void
 }
 
-const YourCart = ({ flavors, stock, revenue }: YourCartProps) => {
+const YourCart = ({ flavors, stock, revenue, sales, updateSetters, resetCart }: YourCartProps) => {
   const shoppingCart = useShoppingCart()
   const [price, setPrice] = useState(0)
   const [canEndShopping, setCanEndShopping] = useState(false)
@@ -53,7 +60,7 @@ const YourCart = ({ flavors, stock, revenue }: YourCartProps) => {
     return itemRevenue.Baunilha + itemRevenue.Casquinha + itemRevenue.Chocolate + itemRevenue.Morango
   }
 
-  function endShopping() {
+  async function endShopping() {
 
     const newStock = new Stock(stock)
     const quantityCasquinha = shoppingCart.find(item => item.item === "Casquinha")
@@ -74,13 +81,29 @@ const YourCart = ({ flavors, stock, revenue }: YourCartProps) => {
     })
 
     const newRevenue = new Revenue(revenue)
-    newRevenue.putCash(newRevenue.cash + price)
+    newRevenue.putCash(price)
 
-    StockController.put(stock.id, newStock.informations())
-    FlavorsController.putByStockId(stock.id, newFlavors.flavors)
-    RevenueController.put(revenue.id, newRevenue.informations())
+    const newSales = new Sales(sales)
 
+    const manySales = shoppingCart.map(shop => {
+      return {
+        name: shop.item,
+        quantity: shop.quantity,
+        price: pricesOfIceCream[shop.item === "Casquinha" ? "Cone" : shop.item] * shop.quantity
+      }
+    })
+
+    const [respStock, respFlavor, respRevenue] = await Promise.all([
+      StockController.put(stock.id, newStock.informations()),
+      FlavorsController.putByStockId(stock.id, newFlavors.flavors),
+      RevenueController.put(revenue.id, newRevenue.informations()),
+      SalesController.postMany(newSales.addMany(manySales, revenue))
+    ])
+
+    updateSetters(newStock.informations(), newFlavors.flavors, newRevenue.informations())
   }
+
+
 
   return (
     <Card className="flex flex-col justify-between max-w-[20rem] w-full h-fit">
@@ -117,7 +140,7 @@ const YourCart = ({ flavors, stock, revenue }: YourCartProps) => {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogAction>Maravilha</AlertDialogAction>
+                  <AlertDialogAction onClick={resetCart}>Maravilha</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

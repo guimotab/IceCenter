@@ -8,6 +8,7 @@ import flavorsRoute from './flavorsRoutes.js'
 import revenueRoute from './revenueRoutes.js'
 import addressRoute from './AddressRoute.js'
 import stockRoute from './StockRoutes.js'
+import salesRoutes from './salesRoutes.js'
 const routes = (app: Application) => {
     app.get('/', (req, res) => {
         res.status(200).json({ msg: "Bem-vindo à nossa API!" })
@@ -24,6 +25,7 @@ const routes = (app: Application) => {
         stockRoute,
         flavorsRoute,
         revenueRoute,
+        salesRoutes,
     )
 }
 export default routes

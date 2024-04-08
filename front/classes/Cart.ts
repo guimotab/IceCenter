@@ -1,6 +1,5 @@
-import { IFlavorsIceCream } from "@/interface/IFlavorsIceCream";
 import { IShoppingCart } from "@/interface/IShoppingCart";
-import flavorsIceCream from "@/types/flavorsIceCream";
+import { startShoppingCart } from "@/state/atom";
 
 export class Cart {
   private _cart: IShoppingCart[];
@@ -11,15 +10,19 @@ export class Cart {
 
   putQuantity(quantity: number, index: number) {
     const fakeCart = [...this._cart]
-    
+
     const newShoppingCart = {
       ...this._cart[index],
       quantity
     } as IShoppingCart
-    
+
     fakeCart.splice(index, 1, newShoppingCart)
 
     this._cart = fakeCart
+  }
+
+  reset() {
+    this._cart = startShoppingCart
   }
 
   public get cart() {

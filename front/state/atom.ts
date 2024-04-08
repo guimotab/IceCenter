@@ -5,7 +5,7 @@ import { IShoppingCart } from "@/interface/IShoppingCart";
 import { IStore } from "@/interface/IStore";
 import { atom } from "recoil";
 
-const startShoppingCart = [
+export const startShoppingCart = [
   {
     item: "Baunilha",
     quantity: 0

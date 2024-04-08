@@ -10,13 +10,21 @@ import { StockController } from "@/controller/StockController"
 import { IStockStore } from "@/interface/IStockStore"
 import { IRevenueStore } from "@/interface/IRevenueStore"
 import { RevenueController } from "@/controller/RevenueController"
+import { useUpdateShoppingCart } from "@/state/hooks/useUpdateShoppingCart"
+import { Cart } from "@/classes/Cart"
+import useShoppingCart from "@/state/hooks/useShoppingCart"
+import { ISales } from "@/interface/ISales"
+import { SalesController } from "@/controller/SalesController"
 
 const Store = () => {
 
   const store = useCurrentStore()
+  const shoppingCart = useShoppingCart()
+  const setShoppingCart = useUpdateShoppingCart()
   const [stock, setStock] = useState<IStockStore>()
   const [flavors, setFlavors] = useState<IFlavorsIceCream[]>()
   const [revenue, setRevenue] = useState<IRevenueStore>()
+  const [sales, setSales] = useState<ISales[]>()
 
   useEffect(() => {
     if (store) {
@@ -36,10 +44,43 @@ const Store = () => {
     const respRevenue = await RevenueController.getByStoreId(store.id)
     if (respRevenue) {
       setRevenue(respRevenue)
+      const respSales = await SalesController.getAllByRevenueId(respRevenue.id)
+      if (respSales) {
+        setSales(respSales)
+      }
     }
   }
 
-  const itemsShop = [
+  function resetCart() {
+    const cartReset = new Cart(shoppingCart)
+    cartReset.reset()
+    setShoppingCart(cartReset.cart)
+
+    itemsShop = itemsShop.map(item => {
+      if (item.name === "Casquinha") {
+        item.remainingQuantity = stock!.cone
+      } else {
+        const flavorFinded = flavors!.find(flavor => flavor.name === item.name)
+        item.remainingQuantity = flavorFinded!.quantity
+      }
+      return item
+    })
+
+  }
+
+  /**
+   * Atualiza os setStock, setFlavors e setRevenue
+   * @param valueStock valor do Stock que será modificado
+   * @param valueFlavors valor do Flavors[] que será modificado
+   * @param valueRevenue valor do Revenue que será modificado
+   */
+  async function updateSetters(valueStock: IStockStore, valueFlavors: IFlavorsIceCream[], valueRevenue: IRevenueStore) {
+    setStock(valueStock)
+    setFlavors(valueFlavors)
+    setRevenue(valueRevenue)
+  }
+
+  let itemsShop = [
     {
       name: "Morango",
       remainingQuantity: flavors?.find(flavor => flavor.name === "Morango")?.quantity,
@@ -69,7 +110,7 @@ const Store = () => {
 
   return (
     <main className="flex flex-col items-center pt-10">
-      {store && flavors && stock && revenue &&
+      {store && flavors && stock && revenue && sales &&
         <div className="flex w-full max-w-[60rem] gap-10">
 
           <div className="flex gap-5 flex-wrap justify-evenly w-full">
@@ -79,7 +120,13 @@ const Store = () => {
             )}
           </div>
 
-          <YourCart stock={stock} flavors={flavors} revenue={revenue} />
+          <YourCart
+            stock={stock}
+            flavors={flavors}
+            revenue={revenue}
+            sales={sales}
+            updateSetters={updateSetters}
+            resetCart={resetCart} />
 
         </div>
       }

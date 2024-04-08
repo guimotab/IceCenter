@@ -9,7 +9,7 @@ import { useUpdateShoppingCart } from "@/state/hooks/useUpdateShoppingCart"
 import flavorsIceCream from "@/types/flavorsIceCream"
 import { Content } from "@radix-ui/react-dropdown-menu"
 import { Title, Description } from "@radix-ui/react-toast"
-import { ChangeEvent, ChangeEventHandler, useState } from "react"
+import { ChangeEvent, ChangeEventHandler, useEffect, useState } from "react"
 
 export interface CardsItemShopProps {
   name: flavorsIceCream | "Casquinha",
@@ -25,6 +25,10 @@ const CardsItemShop = ({ name, image, className, remainingQuantity, price }: Car
   const [disableRemoveButton, setDisableRemoveButtom] = useState(true)
   const shoppingCart = useShoppingCart()
   const setShoppingCart = useUpdateShoppingCart()
+
+  useEffect(() => {
+    setQuantity(0)
+  }, [remainingQuantity])
 
   function addItem() {
     const newQuantity = quantity + 1

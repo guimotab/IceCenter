@@ -3,5 +3,6 @@ export interface ISales {
   date: Date
   name: string
   quantity: number
+  price: number
   revenueId: string
 }

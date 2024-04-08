@@ -1,6 +1,5 @@
 import { HttpService } from "./HttpService";
 import axios from "axios";
-import { IFlavorsIceCream } from "@/interface/IFlavorsIceCream";
 import { IRevenueStore } from "@/interface/IRevenueStore";
 
 export class RevenueService extends HttpService<IRevenueStore> {
