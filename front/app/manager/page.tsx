@@ -51,7 +51,7 @@ export default function Login() {
     }
   }
 
-  function showErrorUrl(title: string, desc: string) { 
+  function showErrorUrl(title: string, desc: string) {
     setErrorUrl({ title, desc })
   }
 
@@ -69,12 +69,12 @@ export default function Login() {
   return (
     <main className="flex justify-between h-screen">
       <Toaster />
-      <div className="flex items-center justify-center flex-1">
+      <div className="hidden md:flex items-center justify-center">
         <div className="h-full w-full bg-[#e0475e] absolute opacity-90"></div>
-        <img src="/assets/IceCenterLogo1.png" alt="" className="max-h-screen z-10 max-w-[50rem] p-10" />
+        <img src="/assets/IceCenterLogo1.png" alt="" className="max-h-screen z-10 max-w-[50rem] w-full p-10" />
       </div>
-      <div className="flex flex-col items-center  w-full h-full max-w-[32rem] py-3 z-10 bg-white shadow-lg">
-        <div className="flex items-center  w-full h-full px-10">
+      <div className="flex flex-col items-center w-full h-full md:max-w-[32rem] min-w-[23rem] py-3 z-10 bg-white justify-center md:shadow-lg  flex-1">
+        <div className="flex items-center  w-full h-full px-10 md:px-6">
           <div className="relative w-full flex flex-col gap-5 justify-center h-fit">
             {errorUrl &&
               <div className="absolute w-full -top-32">
@@ -86,8 +86,11 @@ export default function Login() {
                 </Alert>
               </div>
             }
-            <div className="flex flex-col items-center">
-              <h1 className="text-xl font-semibold">Login</h1>
+            <div className="flex flex-col items-center gap-4">
+              <h1 className="text-2xl font-semibold">IceCenter</h1>
+              <div className="flex flex-col items-center">
+                <h2 className="text-xl font-semibold">Login - Gerente</h2>
+              </div>
             </div>
 
             <div>
