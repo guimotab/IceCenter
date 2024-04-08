@@ -87,7 +87,7 @@ export default function Login() {
               </div>
             }
             <div className="flex flex-col items-center gap-4">
-              <h1 className="text-2xl font-semibold">IceCenter</h1>
+              <h1 className="md:hidden text-2xl font-semibold">IceCenter</h1>
               <div className="flex flex-col items-center">
                 <h2 className="text-xl font-semibold">Login - Gerente</h2>
               </div>
