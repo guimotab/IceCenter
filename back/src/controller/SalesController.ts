@@ -4,10 +4,10 @@ import { ISales } from '../interface/ISales.js';
 
 
 abstract class SalesController {
-	public static async createSale(req: Request, res: Response) { 
+	public static async createSale(req: Request, res: Response) {
 		const { data } = req.body as { data: ISales }
 		try {
-			const sales = await prisma.sales.create({ data }) 
+			const sales = await prisma.sales.create({ data })
 			return res.status(201).json({ resp: "Success", data: sales })
 		} catch (error) {
 			console.log(error);
