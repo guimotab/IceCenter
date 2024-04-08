@@ -42,26 +42,26 @@ const Header = () => {
   }
   return (
     <header className="flex flex-col items-center w-full border-b">
-      <div className="flex items-center justify-between py-3 px-8 max-w-[80rem] w-full">
+      <div className="flex items-center justify-between py-3 px-8 sm:px-10 max-w-[80rem] w-full">
         {manager && store ?
           <>
             <div className="flex items-center gap-7">
-              <h1 className="text-2xl font-semibold">
+              <h1 className="text-xl sm:text-2xl font-semibold">
                 IceCenter
               </h1>
               <div className="flex items-center gap-6">
-                <Link href={"store"}>Loja</Link>
-                <Link href={"stock"}>Estoque</Link>
+                <Link href={"store"} className="text-sm sm:text-base">Loja</Link>
+                <Link href={"stock"} className="text-sm sm:text-base">Estoque</Link>
               </div>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger className="outline-none">
                 <div className="flex items-center gap-3">
-                  <h2>
+                  <h2 className="hidden sm:block">
                     {store.name}
                   </h2>
                   <Avatar>
-                    <div className="flex items-center justify-center w-10 h-10 bg-slate-300 rounded-full">
+                    <div className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-slate-300 rounded-full">
                       {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
                       <AvatarFallback className="font-medium">{store.name[0].toLocaleUpperCase()}</AvatarFallback>
                     </div>

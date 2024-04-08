@@ -176,7 +176,7 @@ const BuyStock = ({ currentStore, currentFlavors, currentRevenue, currentStock, 
       {revenue &&
         <>
           <div className="flex flex-col gap-5">
-            <div className="flex gap-8">
+            <div className="flex flex-wrap gap-8">
               {arrayItemShop.map(item =>
                 <div key={item.name} className="flex flex-col gap-2">
                   <Label>{`${item.name} (R$${item.price.toFixed(2).replace(".", ",")})`}</Label>

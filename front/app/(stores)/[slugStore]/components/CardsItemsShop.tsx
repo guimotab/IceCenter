@@ -94,7 +94,7 @@ const CardsItemShop = ({ name, image, className, remainingQuantity, price }: Car
   }
 
   return (
-    <Card className="flex flex-col justify-between w-full max-w-[16rem]">
+    <Card className="flex flex-col justify-between w-full max-w-[20rem] sm:max-w-[17rem]">
       <CardHeader>
         <CardTitle>{name === "Casquinha" ? name : `Pote de ${name}`}</CardTitle>
         <CardDescription>R${price.toFixed(2).replace(".", ",")} ({remainingQuantity} restantes)</CardDescription>

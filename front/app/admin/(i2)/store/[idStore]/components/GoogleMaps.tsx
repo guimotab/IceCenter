@@ -53,7 +53,7 @@ const GoogleMaps = ({ startingPosition, address }: GoogleMapsProps) => {
           value={valueInput}
           onChange={event => setValueInput(event.target.value)}
           placeholder='Digite um endereço...'
-          className='w-full max-w-[26rem] h-12 absolute left-[27rem] -ml-32 mt-2 bg-white' />
+          className='w-[20rem] lg:w-[26rem] h-12 absolute left-[9rem] md:left-[23rem] lg:left-[27rem] -ml-32 mt-16 md:mt-2 bg-white' />
       </StandaloneSearchBox>
       <Marker position={position} />
 

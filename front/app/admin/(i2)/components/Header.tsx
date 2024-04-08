@@ -41,23 +41,23 @@ const Header = () => {
     router.push("/admin")
   }
   return (
-    <header className="flex flex-col items-center w-full border-b min-h-16">
-      <div className="flex items-center justify-between py-3 px-8 max-w-[80rem] w-full">
+    <header className="flex flex-col items-center w-full border-b">
+      <div className="flex items-center justify-between py-3 px-8 sm:px-10 max-w-[80rem] w-full">
         {owner && company ?
           <>
             <div className="flex items-center gap-7">
-              <h1 className="text-2xl font-semibold">
+              <h1 className="text-xl sm:text-2xl font-semibold">
                 IceCenter
               </h1>
               <div className="flex items-center gap-6">
-                <Link href={"/admin/stores"}>Lojas</Link>
-                <Link href={"/admin/create-store"}>Nova Loja</Link>
+                <Link className="text-sm sm:text-base" href={"/admin/stores"}>Lojas</Link>
+                <Link className="text-sm sm:text-base" href={"/admin/create-store"}>Nova Loja</Link>
               </div>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger className="outline-none">
                 <div className="flex items-center gap-3">
-                  <h2>
+                  <h2 className="hidden sm:block">
                     {company.name}
                   </h2>
                   <Avatar>

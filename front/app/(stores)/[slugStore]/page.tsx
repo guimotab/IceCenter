@@ -109,25 +109,25 @@ const Store = () => {
   ] as CardsItemShopProps[]
 
   return (
-    <main className="flex flex-col items-center pt-10">
+    <main className="flex flex-col items-center py-10 px-4 sm:px-6">
       {store && flavors && stock && revenue && sales &&
-        <div className="flex w-full max-w-[60rem] gap-10">
+        <div className="grid w-full max-w-[60rem] gap-10">
 
-          <div className="flex gap-5 flex-wrap justify-evenly w-full">
+          <div className="flex gap-5 flex-wrap justify-evenly max-w-[36rem] w-full">
             {itemsShop.map(item =>
               item.remainingQuantity !== 0 &&
               <CardsItemShop {...item} />
             )}
           </div>
-
-          <YourCart
-            stock={stock}
-            flavors={flavors}
-            revenue={revenue}
-            sales={sales}
-            updateSetters={updateSetters}
-            resetCart={resetCart} />
-
+          <div className="flex w-full justify-center row-start-1 sm:col-start-2">
+            <YourCart
+              stock={stock}
+              flavors={flavors}
+              revenue={revenue}
+              sales={sales}
+              updateSetters={updateSetters}
+              resetCart={resetCart} />
+          </div>
         </div>
       }
     </main>

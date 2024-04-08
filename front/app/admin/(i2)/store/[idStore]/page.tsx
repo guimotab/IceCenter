@@ -34,9 +34,9 @@ const Store = () => {
       const storeResp = await StoreController.get(searchParams.idStore)
       const addressResp = await AddressController.getByStoreId(searchParams.idStore)
       if (storeResp && addressResp) {
-        setStore(storeResp)
+        setStore(storeResp.data)
         setAddress(addressResp)
-        const manager = await ManagerController.getByStoreId(storeResp.id!)
+        const manager = await ManagerController.getByStoreId(storeResp.data!.id!)
         if (manager) {
           setManager(manager)
         }
@@ -46,11 +46,11 @@ const Store = () => {
   }, [editInformations])
 
   return (
-    <main className="flex flex-col items-center">
+    <main className="flex flex-col items-center px-4 sm:px-6">
       <div className="w-full max-w-[70rem] my-10">
         {store && company && address && manager &&
           <div>
-            <Card className="px-8 py-6">
+            <Card className="px-5 py-4 sm:px-8 sm:py-6">
               {isLoaded &&
                 editInformations ?
                 <EditInformations manager={manager} address={address} company={company} store={store} setEditInformations={setEditInformations} />

@@ -1,21 +1,17 @@
 "use client"
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Toaster } from "@/components/ui/toaster";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 import { FlavorsController } from "@/controller/FlavorsController";
 import { RevenueController } from "@/controller/RevenueController";
-import { SalesController } from "@/controller/SalesController";
 import { StockController } from "@/controller/StockController";
 import { StoreController } from "@/controller/StoreController";
 import { IFlavorsIceCream } from "@/interface/IFlavorsIceCream";
 import { IRevenueStore } from "@/interface/IRevenueStore";
-import { ISales } from "@/interface/ISales";
 import { IStockStore } from "@/interface/IStockStore";
 import { IStore } from "@/interface/IStore";
 import useCurrentStore from "@/state/hooks/useCurrentStore";
@@ -28,6 +24,7 @@ import { IoEyeSharp } from "react-icons/io5";
 import { IoEyeOutline } from "react-icons/io5";
 import { TbWorldShare } from "react-icons/tb";
 import TableHistoric from "./components/TableHistoric";
+import { TbReload } from "react-icons/tb";
 
 interface IDialogRevenue {
   name: flavorsIceCream | "Cone"
@@ -71,6 +68,7 @@ const Store = () => {
       }
     }
   }
+
 
 
   function handleCashVisibily() {
@@ -120,11 +118,11 @@ const Store = () => {
   }
 
   return (
-    <main className="flex flex-col items-center w-full h-screen">
+    <main className="flex flex-col items-center w-full px-4">
       <Toaster />
 
       {store && stock && flavors && revenue &&
-        <div className="w-full flex flex-col items-center mt-10 max-w-[70rem]">
+        <div className="w-full flex flex-col items-center my-10 max-w-[70rem]">
           <div className="w-full flex flex-col gap-3">
 
             <div className="flex items-center gap-3">
@@ -136,7 +134,7 @@ const Store = () => {
                     size={"sm"}
                     className="space-x-2">
                     <TbWorldShare className="text-xl" />
-                    <p>Acessar na Web</p>
+                    <p className="hidden sm:block">Acessar na Web</p>
                   </Button>
                 </Link>
                 :
@@ -158,6 +156,41 @@ const Store = () => {
                   </Tooltip>
                 </TooltipProvider>
               }
+              <AlertDialog>
+                {canOpenStore ?
+                  <AlertDialogTrigger>
+                    <Button variant={"outline"} className="text-xs px-2 py-1 sm:text-sm sm:px-4 sm:py-2 self-start" onClick={openStore}>Simular vendas</Button>
+                  </AlertDialogTrigger>
+                  :
+                  <Button className="text-xs px-2 py-1 sm:text-sm sm:px-4 sm:py-2 self-start" onClick={event => showError("Você não tem estoques para vender.", "A loja não foi aberta!")}>Simular vendas</Button>
+                }
+                <AlertDialogContent>
+
+                  {dialogRevenue &&
+                    <>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle> Dia finalizado!</AlertDialogTitle>
+                        <AlertDialogDescription className="flex flex-col gap-2">
+                          <Label>Resumo do dia:</Label>
+                          <div className="flex flex-col gap-1">
+                            {dialogRevenue.items.map(revenue =>
+                              revenue.qtdSold !== 0 && <li key={revenue.name} className="list-disc" >{revenue.name} = {revenue.qtdSold} vendidos.</li>
+                            )}
+                          </div>
+                          <div>
+                            <p className="text-black">Você abriu a loja hoje e conseguiu R${dialogRevenue.profit.toFixed(2).replace(".", ",")}!</p>
+                            <p className="text-black">Seu saldo agora é de: R${revenue.cash.toFixed(2).replace(".", ",")}.</p>
+                          </div>
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogAction>Maravilha!</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </>
+                  }
+
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
 
             <Card className="flex flex-col w-full px-6 py-3 gap-3">
@@ -174,43 +207,13 @@ const Store = () => {
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <AlertDialog>
-                        {canOpenStore ?
-                          <AlertDialogTrigger>
-                            <Button variant={"outline"} className="self-start" onClick={openStore}>Simular dia de venda</Button>
-                          </AlertDialogTrigger>
-                          :
-                          <Button className="self-start" onClick={event => showError("Você não tem estoques para vender.", "A loja não foi aberta!")}>Simular dia de venda</Button>
-                        }
-                        <AlertDialogContent>
 
-                          {dialogRevenue &&
-                            <>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle> Dia finalizado!</AlertDialogTitle>
-                                <AlertDialogDescription className="flex flex-col gap-2">
-                                  <Label>Resumo do dia:</Label>
-                                  <div className="flex flex-col gap-1">
-                                    {dialogRevenue.items.map(revenue =>
-                                      revenue.qtdSold !== 0 && <li key={revenue.name} className="list-disc" >{revenue.name} = {revenue.qtdSold} vendidos.</li>
-                                    )}
-                                  </div>
-                                  <div>
-                                    <p className="text-black">Você abriu a loja hoje e conseguiu R${dialogRevenue.profit.toFixed(2).replace(".", ",")}!</p>
-                                    <p className="text-black">Seu saldo agora é de: R${revenue.cash.toFixed(2).replace(".", ",")}.</p>
-                                  </div>
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogAction>Maravilha!</AlertDialogAction>
-                              </AlertDialogFooter>
-                            </>
-                          }
-
-                        </AlertDialogContent>
-                      </AlertDialog>
                       <div>
-                        <Button variant={store.isOpen ? "destructive" : "default"} onClick={handleOpenStore}>{store.isOpen ? "Fechar loja" : "Abrir loja"}</Button>
+                        <Button
+                          variant={store.isOpen ? "destructive" : "default"}
+                          onClick={handleOpenStore}
+                          className="text-xs px-2.5 py-1 sm:text-sm sm:px-4 sm:py-2 "
+                        >{store.isOpen ? "Fechar loja" : "Abrir loja"}</Button>
                       </div>
                     </div>
 
@@ -224,10 +227,9 @@ const Store = () => {
             </Card>
 
             <div className="flex flex-col gap-3">
-              <h2 className="text-xl font-semibold">Histórico de Vendas</h2>
-              <Card className="flex flex-col w-full px-6 py-3 gap-3">
-                <TableHistoric store={store} revenue={revenue} />
-              </Card>
+              <TableHistoric
+                store={store}
+                revenue={revenue} />
             </div>
 
 

@@ -106,7 +106,7 @@ const YourCart = ({ flavors, stock, revenue, sales, updateSetters, resetCart }: 
 
 
   return (
-    <Card className="flex flex-col justify-between max-w-[20rem] w-full h-fit">
+    <Card className="flex flex-col justify-between max-w-[20rem] min-w-[16rem] w-full h-fit">
       <CardHeader>
         <CardTitle className="flex items-center gap-1">
           <IoMdCart className="text-2xl" />

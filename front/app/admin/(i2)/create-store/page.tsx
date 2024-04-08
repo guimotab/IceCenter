@@ -27,10 +27,10 @@ const CreateStores = () => {
 
 
   return (
-    <main className="flex flex-col items-center w-full ">
+    <main className="flex flex-col items-center w-full px-4 sm:px-8">
       <Toaster />
       {company ?
-        <div className="w-full flex flex-col items-center mt-10 max-w-[70rem]">
+        <div className="w-full flex flex-col items-center my-10 max-w-[70rem]">
           <div className="flex flex-col w-full gap-5">
             <h1 className="text-2xl font-semibold">Criar Loja</h1>
             <Card className="flex flex-col items-center p-6">

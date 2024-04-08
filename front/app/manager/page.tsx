@@ -67,7 +67,7 @@ export default function Login() {
   }
 
   return (
-    <main className="flex  justify-between h-screen">
+    <main className="flex justify-between h-screen">
       <Toaster />
       <div className="flex items-center justify-center flex-1">
         <div className="h-full w-full bg-[#e0475e] absolute opacity-90"></div>

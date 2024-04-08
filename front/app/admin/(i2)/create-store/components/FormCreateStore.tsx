@@ -134,7 +134,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
     {
       id: "nameStore",
       label: "Nome da Loja",
-      style: "col-span-2"
+      style: "sm:col-span-2"
     }, {
       id: "cep",
       label: "CEP",
@@ -143,7 +143,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       id: "uf",
       label: "UF",
       readOnly: true,
-      style: "w-32"
+      style: "sm:w-32"
     }, {
       id: "city",
       label: "Cidade",
@@ -156,7 +156,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       id: "neighborhood",
       label: "Bairro",
       readOnly: true,
-      style: "col-span-2"
+      style: "sm:col-span-2"
     }, {
       id: "number",
       label: "Número",
@@ -175,14 +175,12 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
     },
   ] as { id: inputAccess, label: string, style?: string, onBlur?: () => void, isPassword?: boolean }[]
 
-
-
   return (
     <FormProvider {...formInformation}>
       <form onSubmit={formInformation.handleSubmit(onSubmit)} className="space-y-7 w-full">
         <div className="flex flex-col gap-2">
           <h3 className="text-xl font-semibold">Informações</h3>
-          <div className="grid grid-cols-[auto_1fr_1fr] gap-x-7 gap-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr_1fr] gap-x-7 gap-y-3">
 
             {inputsForm.map(input =>
               <div key={input.id} className={`${input.style} self-start`}>
@@ -211,7 +209,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
         </div>
         <div className="flex flex-col gap-2">
           <h3 className="text-xl font-semibold">Acesso à Loja</h3>
-          <div className="flex gap-5">
+          <div className="flex flex-wrap gap-5">
 
             {inputAccess.map(input =>
               <div key={input.id} className={`${input.style} self-starts`}>

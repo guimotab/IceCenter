@@ -121,7 +121,7 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
         <div className="space-y-5">
 
           <div className="flex w-full gap-4">
-            <h2 className="text-xl font-semibold">Informações</h2>
+            <h2 className="text-lg sm:text-xl font-semibold">Informações</h2>
             <div className="flex justify-between items-center w-full">
 
               <div className="flex gap-3">
@@ -130,7 +130,7 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
                   onClick={editInformations}
                   className="space-x-2">
                   <MdModeEdit className="text-lg" />
-                  <p>Editar Informações</p>
+                  <p className="hidden sm:block">Editar Informações</p>
                 </Button>
                 <Link href={`/${store.slug}`} target="_blank">
                   <Button
@@ -138,7 +138,7 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
                     variant={"outline"}
                     className="space-x-2">
                     <TbWorldShare className="text-xl" />
-                    <p>Acessar na Web</p>
+                    <p className="hidden md:block">Acessar na Web</p>
                   </Button>
                 </Link>
               </div>
@@ -150,7 +150,7 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
                     size={"sm"}
                     className="space-x-2">
                     <MdDelete className="text-lg" />
-                    <p>Excluir loja</p>
+                    <p className="hidden sm:block">Excluir loja</p>
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -197,10 +197,10 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
       <div className="space-y-5">
 
         <div className="flex items-center gap-3">
-          <h2 className="text-xl font-semibold">Localização</h2>
+          <h2 className="text-lg sm:text-xl font-semibold">Localização</h2>
           <Button size={"sm"} onClick={handleMap} className="self-start space-x-2">
             <FaMapLocationDot className="text-lg" />
-            <p>{openMap ? "Fechar mapa" : "Abrir mapa"}</p>
+            <p className="hidden sm:block">{openMap ? "Fechar mapa" : "Abrir mapa"}</p>
           </Button>
           <Button
             variant={"outline"}
@@ -208,7 +208,7 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
             onClick={event => handleCopy("Endereço Copiado!", "Endereço salvo na sua área de transferência.", addressString)}
             className="self-start space-x-2">
             <MdContentCopy className="text-lg" />
-            <p>Copiar endereço</p>
+            <p className="hidden sm:block">Copiar endereço</p>
           </Button>
         </div>
 

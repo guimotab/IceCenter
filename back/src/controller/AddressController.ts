@@ -11,7 +11,7 @@ abstract class AddressController {
             const addresses = await prisma.address.findMany({})
             if (!addresses) {
                 return res.json({ resp: "Endereços não encontrados" })
-            }
+            } 
             res.status(200).json({ resp: "Success", data: addresses })
         } catch (error) {
             console.log(error);
@@ -45,22 +45,6 @@ abstract class AddressController {
             res.json({ resp: "Ocorreu um erro no servidor" })
         }
     }
-    // static async deleteManager(req: Request<{}, {}, RequestBodyPassword>, res: Response) {
-    //     const { myId, key, myPassword } = req.params as RequestBodyPassword
-    //     const saltToken = process.env.SALT!
-    //     const passwordSalt = jwt.verify(myPassword, saltToken) as string
-    //     try {
-    //         const user = await User.findOne({ _id: myId })
-    //         const checkPassword = await bcrypt.compare(passwordSalt, user!.password)
-    //         if (!checkPassword) {
-    //             return res.json({ resp: "Senha incorreta!" })
-    //         }
-    //         const teste = await Key.deleteOne({ key: key })
-    //         return res.json({ resp: "Success" })
-    //     } catch (error) {
-    //         console.log(error);
-    //         return res.json({ resp: "Ocorreu um erro ao deleter a chave!" })
-    //     }
-    // }
+
 }
 export default AddressController
