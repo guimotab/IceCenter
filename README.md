@@ -1,5 +1,4 @@
 ## Visualização Rápida para o FrontEnd
-Não disponível ainda!
 
 **Antes de acessar o projeto pela visualização rápida, você precisa seguir o passo a passo [#Iniciando o BackEnd](#Iniciando-o-BackEnd)**
 
