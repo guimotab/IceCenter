@@ -1,6 +1,6 @@
 ## Visualização Rápida para o FrontEnd
 
-**Antes de acessar o projeto pela visualização rápida, você precisa seguir o passo a passo [#Iniciando o BackEnd](#Iniciando-o-BackEnd)**
+**Antes de acessar o projeto pela visualização rápida, você precisa seguir o passo a passo [#Configurando Postgresql](#Configurando-Postgresql) [#Iniciando o BackEnd](#Iniciando-o-BackEnd)**
 
 Após iniciar o backend, e rodá-lo, acesse o link <https://icecenter.vercel.app/> para visualizar o projeto
 
