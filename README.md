@@ -25,7 +25,7 @@ npm run start
 ```
 
 ## Configurando Postgresql
-Após [instalar o Postgresql](https://nodejs.org/en/download), siga o [tutorial de instalação](https://youtu.be/UbX-2Xud1JA?si=3yfqEYU-ol6L6Xg_&t=56).
+Após [baixar o Postgresql](https://nodejs.org/en/download), siga o [tutorial de instalação](https://youtu.be/UbX-2Xud1JA?si=3yfqEYU-ol6L6Xg_&t=56).
 
 Após instalado, abra o programa. Crie um novo database clicando com o botão direito em `Servers` e em `Register`:
 
