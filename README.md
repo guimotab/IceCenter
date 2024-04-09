@@ -1,8 +1,9 @@
 ## Visualização Rápida para o FrontEnd
 Não disponível ainda!
 
-Para utilizar a visualização rápida, basta acessar o site ... e rodar o backend seguindo o passo a passo [#Iniciando o BackEnd](#Iniciando-o-BackEnd)
-<!-- Para visualizar o projeto de maneira fácil, basta acessar o link <https://guibank.vercel.app/> -->
+**Antes de acessar o projeto pela visualização rápida, você precisa seguir o passo a passo [#Iniciando o BackEnd](#Iniciando-o-BackEnd)**
+
+Após iniciar o backend, e rodá-lo, acesse o link <https://icecenter.vercel.app/> para visualizar o projeto
 
 ## Requisitos para rodar o projeto
 * NodeJs instalado ( [baixar](https://nodejs.org/en/download) )

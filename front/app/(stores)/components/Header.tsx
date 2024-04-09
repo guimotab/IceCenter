@@ -37,18 +37,19 @@ const Header = () => {
                 {store.name}
               </h1>
               <div className="flex items-center gap-6">
-                <Link href={``}>Home</Link>
+                <Label className="text-base">A Melhor página de sorvetes do mundo!</Label>
+                {/* <Link href={``}>A Melhor página de sorvetes do mundo!</Link> */}
                 {/* <Link href={`${store.slug}/contacts`}>Contatos</Link> */}
               </div>
 
             </div>
 
           </div>
-        :
-        <div className="flex items-center gap-6">
-          <h1 className="text-xl font-semibold">Ice Center</h1>
-          <Label className="text-base">A Melhor página de sorvetes do mundo!</Label>
-        </div>
+          :
+          <div className="flex items-center gap-6">
+            <h1 className="text-xl font-semibold">Ice Center</h1>
+            <Label className="text-base">A Melhor página de sorvetes do mundo!</Label>
+          </div>
         }
       </div>
     </header>

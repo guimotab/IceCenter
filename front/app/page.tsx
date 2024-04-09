@@ -20,7 +20,7 @@ export default function Login() {
             <h1 className="text-2xl sm:text-3xl font-bold">Bem vindos ao projeto IceCenter!</h1>
             <Label className="text-lg text-center">
               A ideia desse projeto é você poder gerenciar uma rede de sorvetes de maneira completa,
-              <br className="hidden sm:block"/> desde a criação da empresa até a visualização da sua loja!
+              <br className="hidden sm:block" /> desde a criação da empresa até a visualização da sua loja!
             </Label>
           </div>
           <Card>
@@ -44,7 +44,7 @@ export default function Login() {
                 </div>
                 <Label className="text-lg">Crie uma empresas e crie quantas franquias você quiser de maneira intuitiva e prática!</Label>
               </div>
-              <p className="text-base">Clicando no botão <Badge variant={"outline"}>"Criar empresa"</Badge> você poderá ir para página para cadastrar sua empresa e com ela, poder iniciar seu negócio.</p>
+              <p className="text-base">Clicando no botão <span className="badge">"Criar empresa"</span> você poderá ir para página para cadastrar sua empresa e com ela, poder iniciar seu negócio.</p>
             </div>
             <Card>
               <img src="/assets/imagesBase/admin.png" className="max-w-[55rem] w-full rounded-xl" alt="" />
@@ -63,8 +63,8 @@ export default function Login() {
               </div>
               <Label className="text-lg">Após a criação da sua franquia, você pode acessá-la utilizando o email e a senha cadastrada!</Label>
               <div>
-                <p className="text-base">Ao criar uma franquia/loja pelo perfil de Administrador, você poderá acessar a sua loja 
-                clicando no botão  <Badge variant={"outline"}>"Gerenciar loja"</Badge> e entrar com seu email e senha cadastras.</p>
+                <p className="text-base">Ao criar uma franquia/loja pelo perfil de Administrador, você poderá acessar a sua loja
+                  clicando no botão <span className="badge">"Gerenciar loja"</span> e entrar com seu email e senha cadastras.</p>
                 <p className="text-base">No perfil da loja, você poderá gerenciar o estoque e as vendas, bem como abrir a loja, o que permitirá ela ser acessível na web pelo seu slug.</p>
               </div>
             </div>
