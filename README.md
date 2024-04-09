@@ -47,7 +47,14 @@ npm i
 
 Crie um arquivo `.env` na pasta `back` e copie o padrão do arquivo `.env.example`.
 
-No campo `SECRET`, `REFRESH` e `SALT`, coloque os mesmos valores colocados em [#Iniciando o FrontEnd](#Iniciando-o-FrontEnd).
+Se você está seguindo pelo [#Visualização Rápida para o FrontEnd](#Visualização-Rápida-para-o-FrontEnd), então adicione nos campos `SECRET`, `REFRESH` e `SALT` os seguintes valores:
+```
+SECRET="njofdsnuoniooi"
+REFRESH="d13d31fd"
+SALT="O2f3g5gtdfh"
+```
+
+Caso esteja você não esteja fazendo a [#Visualização Rápida para o FrontEnd](#Visualização-Rápida-para-o-FrontEnd), então adicione nos campos `SECRET`, `REFRESH` e `SALT` os mesmos valores colocados em [#Iniciando o FrontEnd](#Iniciando-o-FrontEnd).
 
 No campo `DATABASE_URL`, substitua as letras maiúsculas pelos seus dados.
 
