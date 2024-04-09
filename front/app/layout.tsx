@@ -2,6 +2,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { RecoilRoot } from "recoil";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,9 +13,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <RecoilRoot>
-        <body className={inter.className}>{children}</body>
-      </RecoilRoot>
-    </html>
+      <Suspense>
+        <RecoilRoot>
+          <body className={inter.className}>{children}</body>
+        </RecoilRoot>
+      </Suspense>
+    </html >
   );
 }
