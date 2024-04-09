@@ -53,7 +53,7 @@ REFRESH="d13d31fd"
 SALT="O2f3g5gtdfh"
 ```
 
-Caso esteja você não esteja fazendo a [#Visualização Rápida para o FrontEnd](#Visualização-Rápida-para-o-FrontEnd), então adicione nos campos `SECRET`, `REFRESH` e `SALT` os mesmos valores colocados em [#Iniciando o FrontEnd](#Iniciando-o-FrontEnd).
+Caso esteja rodando o front no seu computador, então adicione nos campos `SECRET`, `REFRESH` e `SALT` os mesmos valores colocados em [#Iniciando o FrontEnd](#Iniciando-o-FrontEnd).
 
 No campo `DATABASE_URL`, substitua as letras maiúsculas pelos seus dados.
 
