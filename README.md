@@ -31,7 +31,7 @@ Após instalado, abra o programa. Crie um novo database clicando com o botão di
 
 Em `General`, coloque um nome para seu database.
 
-Em `Connection` coloque no campo Password uma senha para acessar o banco de dados.
+Em `Connection` coloque no campo Host o valor `localhost` e no campo Password uma senha para acessar o banco de dados.
 
 **Anote o Host, Port, Username e o Password, pois será necessário para próxima etapa!** 
 
