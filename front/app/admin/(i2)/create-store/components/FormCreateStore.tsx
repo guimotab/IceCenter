@@ -98,7 +98,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       id: uuid(),
       companyId: company.id,
       name: values.nameStore.trim(),
-      slug: values.nameStore.trim().replaceAll(" " , "-").toLowerCase(),
+      slug: values.nameStore.trim().replaceAll(" ", "-").toLowerCase(),
       revenue: { cash: 1000 } as IRevenueStore,
       stock: {} as IStockStore,
       isOpen: false,
@@ -137,8 +137,9 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       style: "sm:col-span-2"
     }, {
       id: "cep",
-      label: "CEP",
-      onBlur: onBlurCep
+      label: "CEP (Apenas números)",
+      onBlur: onBlurCep,
+      maxLength: 8
     }, {
       id: "uf",
       label: "UF",
@@ -162,7 +163,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
       label: "Número",
       style: "w-40"
     }
-  ] as { id: inputInformation, erro?: string, regex?: string, label?: string, style?: string, onBlur?: (value: string) => Promise<void>, readOnly?: boolean }[]
+  ] as { id: inputInformation, erro?: string, regex?: string, label?: string, maxLength?: number, style?: string, onBlur?: (value: string) => Promise<void>, readOnly?: boolean }[]
   const inputAccess = [
     {
       id: "email",
@@ -179,7 +180,10 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
     <FormProvider {...formInformation}>
       <form onSubmit={formInformation.handleSubmit(onSubmit)} className="space-y-7 w-full">
         <div className="flex flex-col gap-2">
-          <h3 className="text-xl font-semibold">Informações</h3>
+          <div>
+            <h3 className="text-xl font-semibold">Informações</h3>
+            <Label>Informe os dados para criação de sua loja</Label>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr_1fr] gap-x-7 gap-y-3">
 
             {inputsForm.map(input =>
@@ -192,6 +196,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
                       <FormLabel>{input.label}</FormLabel>
                       <FormControl>
                         <Input
+                          maxLength={input.maxLength}
                           onBlur={event => input.onBlur && input.onBlur(event.target.value)}
                           pattern={input.regex}
                           readOnly={input.readOnly}
@@ -208,7 +213,10 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <h3 className="text-xl font-semibold">Acesso à Loja</h3>
+          <div>
+            <h3 className="text-xl font-semibold">Acesso à Loja</h3>
+            <Label>Crie o acesso para logar na sua loja</Label>
+          </div>
           <div className="flex flex-wrap gap-5">
 
             {inputAccess.map(input =>
@@ -220,7 +228,7 @@ const FormCreateStore = ({ company }: FormCreateStoreProps) => {
                     <FormItem>
                       <FormLabel>{input.label}</FormLabel>
                       <FormControl>
-                        <Input type={input.isPassword? "password": "text" } onBlur={input.onBlur}  {...field} />
+                        <Input type={input.isPassword ? "password" : "text"} onBlur={input.onBlur}  {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

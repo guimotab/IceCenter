@@ -132,15 +132,35 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
                   <MdModeEdit className="text-lg" />
                   <p className="hidden sm:block">Editar Informações</p>
                 </Button>
-                <Link href={`/${store.slug}`} target="_blank">
-                  <Button
-                    size={"sm"}
-                    variant={"outline"}
-                    className="space-x-2">
-                    <TbWorldShare className="text-xl" />
-                    <p className="hidden md:block">Acessar na Web</p>
-                  </Button>
-                </Link>
+                {store.isOpen ?
+                  <Link href={`/${store.slug}`} target="_blank">
+                    <Button
+                      variant={"outline"}
+                      size={"sm"}
+                      className="space-x-2">
+                      <TbWorldShare className="text-xl" />
+                      <p className="hidden sm:block">Acessar na Web</p>
+                    </Button>
+                  </Link>
+                  :
+                  <TooltipProvider delayDuration={300}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Button
+                          variant={"secondary"}
+                          disabled
+                          size={"sm"}
+                          className="space-x-2">
+                          <TbWorldShare className="text-xl" />
+                          <p>Acessar na Web</p>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
+                        <p>Abra a loja pelo login de gerente para acessar</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                }
               </div>
 
               <AlertDialog>
@@ -183,78 +203,78 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
                         className="self-start text-sm cursor-pointer hover:shadow-sm">
                         <p>{info.value}</p>
                       </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Clique para copiar o valor</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Clique para copiar o valor</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             )}
-        </div>
-      </div>
-
-      <div className="space-y-5">
-
-        <div className="flex items-center gap-3">
-          <h2 className="text-lg sm:text-xl font-semibold">Localização</h2>
-          <Button size={"sm"} onClick={handleMap} className="self-start space-x-2">
-            <FaMapLocationDot className="text-lg" />
-            <p className="hidden sm:block">{openMap ? "Fechar mapa" : "Abrir mapa"}</p>
-          </Button>
-          <Button
-            variant={"outline"}
-            size={"sm"}
-            onClick={event => handleCopy("Endereço Copiado!", "Endereço salvo na sua área de transferência.", addressString)}
-            className="self-start space-x-2">
-            <MdContentCopy className="text-lg" />
-            <p className="hidden sm:block">Copiar endereço</p>
-          </Button>
+          </div>
         </div>
 
-        <div className="flex flex-wrap justify-between gap-x-7 gap-y-4">
-          {inputsForm.map(input =>
-            <div key={input.label} className="flex flex-col">
-              <div >
-                <Label htmlFor={input.label}>{input.label}</Label>
+        <div className="space-y-5">
+
+          <div className="flex items-center gap-3">
+            <h2 className="text-lg sm:text-xl font-semibold">Localização</h2>
+            <Button size={"sm"} onClick={handleMap} className="self-start space-x-2">
+              <FaMapLocationDot className="text-lg" />
+              <p className="hidden sm:block">{openMap ? "Fechar mapa" : "Abrir mapa"}</p>
+            </Button>
+            <Button
+              variant={"outline"}
+              size={"sm"}
+              onClick={event => handleCopy("Endereço Copiado!", "Endereço salvo na sua área de transferência.", addressString)}
+              className="self-start space-x-2">
+              <MdContentCopy className="text-lg" />
+              <p className="hidden sm:block">Copiar endereço</p>
+            </Button>
+          </div>
+
+          <div className="flex flex-wrap justify-between gap-x-7 gap-y-4">
+            {inputsForm.map(input =>
+              <div key={input.label} className="flex flex-col">
+                <div >
+                  <Label htmlFor={input.label}>{input.label}</Label>
+                </div>
+                <TooltipProvider delayDuration={300}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Badge
+                        id={input.label}
+                        variant={"outline"}
+                        onClick={event => handleCopy(`${input.label} Copiado!`, `${input.label} salvo na sua área de transferência.`, input.value)}
+                        className="flex items-center gap-2 self-start text-sm cursor-pointer hover:shadow-sm">
+                        <p>{input.value}</p>
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Clique para copiar o valor</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
-              <TooltipProvider delayDuration={300}>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Badge
-                      id={input.label}
-                      variant={"outline"}
-                      onClick={event => handleCopy(`${input.label} Copiado!`, `${input.label} salvo na sua área de transferência.`, input.value)}
-                      className="flex items-center gap-2 self-start text-sm cursor-pointer hover:shadow-sm">
-                      <p>{input.value}</p>
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Clique para copiar o valor</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-      </div>
-    </div>
-      {
-    openMap ?
-      <>
-        <div className="w-full h-[30rem] border-2">
-          <GoogleMaps startingPosition={position} address={address} />
         </div>
-        <Link href={`https://www.google.com.br/maps/@${position.lat},${position.lng},20z?`} target="_blank">
-          <Button className="space-x-2">
-            <FaMapMarkerAlt />
-            <p>Abrir endereço no maps</p>
-          </Button>
-        </Link>
-      </>
-      : ""
-  }
+      </div>
+      {
+        openMap ?
+          <>
+            <div className="w-full h-[30rem] border-2">
+              <GoogleMaps startingPosition={position} address={address} />
+            </div>
+            <Link href={`https://www.google.com.br/maps/@${position.lat},${position.lng},20z?`} target="_blank">
+              <Button className="space-x-2">
+                <FaMapMarkerAlt />
+                <p>Abrir endereço no maps</p>
+              </Button>
+            </Link>
+          </>
+          : ""
+      }
 
     </div >
   )

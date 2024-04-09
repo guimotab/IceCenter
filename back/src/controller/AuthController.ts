@@ -17,6 +17,17 @@ interface RequestBodyManager {
 abstract class AuthController {
     public static async register(req: Request<{}, {}, RequestBody>, res: Response) {
         const { name, email, password } = req.body
+
+        const owner = await prisma.owner.findUnique({ where: { email } })
+        if (owner) {
+            return res.json({ resp: "Esse email já está em uso!" })
+        }
+
+        const company = await prisma.company.findUnique({ where: { name } })
+        if (company) {
+            return res.json({ resp: "Esse nome já está em uso!" })
+        }
+
         try {
             const salt = await bcrypt.genSalt(12)
             const passwordHash = await bcrypt.hash(password, salt)

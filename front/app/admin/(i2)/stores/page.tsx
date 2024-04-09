@@ -1,6 +1,8 @@
 "use client"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
 import { StoreController } from "@/controller/StoreController"
 import { IStore } from "@/interface/IStore"
 import useCurrentCompany from "@/state/hooks/useCurrentCompany"
@@ -38,7 +40,7 @@ const Home = () => {
             </div>
           }
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
-            {stores && stores.map(store =>
+            {stores ? stores.map(store =>
               <Card key={store.id}>
                 <CardHeader className="py-4">
                   <CardTitle className="text-lg">
@@ -63,7 +65,11 @@ const Home = () => {
                   </Link>
                 </CardContent>
               </Card>
-            )}
+            )
+              :
+              <Label className="text-lg font-normal">Não há lojas no momento! <br />
+                Clique em <Badge variant={"outline"}>Nova loja</Badge> para adicionar sua loja</Label>
+            }
           </div>
         </div>
       </div>

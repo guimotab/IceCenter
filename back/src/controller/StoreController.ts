@@ -59,12 +59,12 @@ abstract class StoreController {
 			const { data } = req.body as { data: IStore }
 
 			const checkStoreExist = await prisma.store.findUnique({ where: { name: data.name } })
-			if (checkStoreExist?.name !== data.name) {
+			if (checkStoreExist && checkStoreExist.name !== data.name) {
 				return res.json({ resp: "O nome da loja já está sendo usada!" })
 			}
 
 			const checkSlugExist = await prisma.store.findUnique({ where: { slug: data.slug } })
-			if (checkSlugExist?.slug !== data.slug) {
+			if (checkSlugExist && checkSlugExist.slug !== data.slug) {
 				return res.json({ resp: "O slug já está em uso!" })
 			}
 

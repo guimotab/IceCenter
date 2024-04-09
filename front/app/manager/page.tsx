@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { messageTokenService } from "@/interface/IResponseTokenService";
 import { Toaster } from "@/components/ui/toaster";
+import Link from "next/link";
 
 export default function Login() {
   const router = useRouter()
@@ -130,6 +131,7 @@ export default function Login() {
                 </form>
               </FormProvider >
             </div>
+            <Link href={"/admin"}><Button variant={"link"}>Ir para login de administrador</Button></Link>
 
           </div>
         </div>

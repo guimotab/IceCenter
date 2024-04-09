@@ -94,7 +94,7 @@ export default function Login() {
         <div className="h-full w-full bg-[#e0475e] absolute opacity-90"></div>
         <img src="/assets/IceCenterLogo1.png" alt="" className="max-h-screen z-10 max-w-[50rem] w-full p-10" />
       </div>
-      <div className="flex flex-col items-center w-full h-full md:max-w-[32rem] min-w-[23rem] py-3 z-10 bg-white justify-center md:shadow-lg  flex-1">
+      <div className="flex flex-col items-center w-full h-full md:max-w-[32rem] min-w-[24rem] py-3 z-10 bg-white justify-center md:shadow-lg  flex-1">
         <div className="flex items-center  w-full h-full px-10 md:px-6">
           <div className="flex flex-col gap-4 w-full">
             {errorUrl &&
@@ -143,7 +143,7 @@ export default function Login() {
               <Link href={"./admin/createCompany"} className="text-sm w-full"><Button variant={"outline"} className="w-full">Criar nova empresa</Button></Link>
             </div>
 
-            <Link href={"/"}><Button variant={"link"}>Ir para login de gerentes</Button></Link>
+            <Link href={"/manager"}><Button variant={"link"}>Ir para login de gerentes</Button></Link>
           </div>
         </div>
       </div>

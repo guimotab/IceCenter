@@ -15,7 +15,7 @@ const CreateStores = () => {
     async function load() {
       if (company.storeId) {
         const resp = await StoreController.findAllByCompanyId(company.id)
-        if(resp){
+        if (resp) {
           setStores(resp)
         }
       }

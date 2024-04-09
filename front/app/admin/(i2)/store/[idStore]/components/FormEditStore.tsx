@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { toast } from "@/components/ui/use-toast"
 import { AddressController } from "@/controller/AddressController"
 import { ManagerController } from "@/controller/ManagerController"
 import { StoreController } from "@/controller/StoreController"
@@ -97,15 +98,15 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
     if (!result) {
       return
     }
+    const newStore = {
+      ...store,
+      slug: values.nameStore.trim().toLocaleLowerCase().replaceAll(" " , "-"),
+      name: values.nameStore.trim(),
+    } as IStore
 
     const newAddress = {
       cep: values.cep, city: values.city, neighborhood: values.neighborhood, number: values.number, street: values.street, uf: values.uf
     } as IAddress
-
-    const newStore = {
-      ...store,
-      name: values.nameStore.trim(),
-    } as IStore
 
     const newManager = {
       ...manager,
@@ -118,9 +119,29 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
       AddressController.put(address.id, newAddress),
       ManagerController.put(manager.id, newManager)
     ])
+    
+    if (resultStore.resp !== "Success") {
+      showToastError(resultStore.resp)
+      return
+    } else if (resultAddress.resp !== "Success") {
+      showToastError(resultAddress.resp)
+      return
+    } else if (resultManager.resp !== "Success") {
+      showToastError(resultManager.resp)
+      return
+    }
 
     closeEdit()
   }
+
+  async function showToastError(description: string, title?: string) {
+    toast({
+      variant: "destructive",
+      title: title,
+      description: description,
+    })
+  }
+
   function onBlurRepeatNewPassord() {
     formInformation.clearErrors(["newPassword", "repeatNewPassword"])
     if (formInformation.getValues("repeatNewPassword") !== formInformation.getValues("newPassword")) {
@@ -133,7 +154,7 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
     {
       id: "nameStore",
       label: "Nome da Loja",
-      style: "col-span-2"
+      style: "sm:col-span-2"
     }, {
       id: "cep",
       label: "CEP",
@@ -142,7 +163,7 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
       id: "uf",
       label: "UF",
       readOnly: true,
-      style: "w-32"
+      style: "sm:w-32"
     }, {
       id: "city",
       label: "Cidade",
@@ -155,11 +176,11 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
       id: "neighborhood",
       label: "Bairro",
       readOnly: true,
-      style: "col-span-2"
+      style: "sm:col-span-2"
     }, {
       id: "number",
       label: "Número",
-      style: "w-40"
+      style: "sm:w-40"
     }
   ] as { id: inputInformation, erro?: string, regex?: string, label?: string, style?: string, onBlur?: (value: string) => Promise<void>, readOnly?: boolean }[]
 
@@ -188,7 +209,7 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
         <form onSubmit={formInformation.handleSubmit(onSubmit)} className="space-y-8">
           <div className="flex flex-col gap-2">
             <h3 className="text-xl font-semibold">Informações</h3>
-            <div className="grid grid-cols-[auto_1fr_1fr] gap-x-7 gap-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr_1fr] gap-x-7 gap-y-3">
 
               {inputsForm.map(input =>
                 <div key={input.id} className={`${input.style} self-start`}>
@@ -217,7 +238,7 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
           </div>
           <div className="flex flex-col gap-2">
             <h3 className="text-xl font-semibold">Acesso à loja</h3>
-            <div className="flex gap-5">
+            <div className="flex flex-wrap gap-5">
 
               {inputAccess.map(input =>
                 <div key={input.id} className={`${input.style} self-starts`}>
@@ -228,7 +249,7 @@ const FormEditStore = ({ manager, store, address, company, closeEdit }: FormEdit
                       <FormItem>
                         <FormLabel>{input.label}</FormLabel>
                         <FormControl>
-                          <Input type={input.isPassword? "password" : "text"} onBlur={input.onBlur}  {...field} />
+                          <Input type={input.isPassword ? "password" : "text"} onBlur={input.onBlur}  {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

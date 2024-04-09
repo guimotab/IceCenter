@@ -43,11 +43,11 @@ class StoreController {
             const { storeId } = req.params;
             const { data } = req.body;
             const checkStoreExist = await prisma.store.findUnique({ where: { name: data.name } });
-            if ((checkStoreExist === null || checkStoreExist === void 0 ? void 0 : checkStoreExist.name) !== data.name) {
+            if (checkStoreExist && checkStoreExist.name !== data.name) {
                 return res.json({ resp: "O nome da loja já está sendo usada!" });
             }
             const checkSlugExist = await prisma.store.findUnique({ where: { slug: data.slug } });
-            if ((checkSlugExist === null || checkSlugExist === void 0 ? void 0 : checkSlugExist.slug) !== data.slug) {
+            if (checkSlugExist && checkSlugExist.slug !== data.slug) {
                 return res.json({ resp: "O slug já está em uso!" });
             }
             const store = await prisma.store.update({ where: { id: storeId }, data });
