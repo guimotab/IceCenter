@@ -68,5 +68,6 @@ npx prisma migrate dev
 
 Por fim, use o comando para rodar o servidor:
 ```
+npm run build
 npm run start
 ```
