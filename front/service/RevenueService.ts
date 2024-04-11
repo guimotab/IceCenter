@@ -1,7 +1,11 @@
 import { HttpService } from "./HttpService";
 import axios from "axios";
 import { IRevenueStore } from "@/interface/IRevenueStore";
-
+const errorAxios = {
+  data: {
+    resp: "Ocorreu um erro na conexão!"
+  }
+}
 export class RevenueService extends HttpService<IRevenueStore> {
   private static revenueService: RevenueService | undefined
   private static _urlAddress = "http://localhost:4000/revenue"
@@ -16,7 +20,7 @@ export class RevenueService extends HttpService<IRevenueStore> {
   }
 
   async getByStoreId(stockId: string) {
-    const resp = await axios.get(`${RevenueService._urlAddress}/stock/${stockId}`)
+    const resp = await axios.get(`${RevenueService._urlAddress}/stock/${stockId}`).catch(e => errorAxios)
     return resp.data as { resp: string, data?: IRevenueStore }
   }
 }

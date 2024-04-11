@@ -19,8 +19,8 @@ const Header = () => {
 
   async function onPageLoad() {
     const result = await StoreController.getStoreBySlug(searchParams.slugStore)
-    if (result && result.isOpen) {
-      return setStore(result)
+    if (result && result.data) {
+      return setStore(result.data)
     }
     router.push("/not-found")
   }
@@ -37,7 +37,7 @@ const Header = () => {
                 {store.name}
               </h1>
               <div className="flex items-center gap-6">
-                <Label className="text-base">A Melhor página de sorvetes do mundo!</Label>
+                <Label className="text-base">A melhor página de sorvetes do mundo!</Label>
                 {/* <Link href={``}>A Melhor página de sorvetes do mundo!</Link> */}
                 {/* <Link href={`${store.slug}/contacts`}>Contatos</Link> */}
               </div>
@@ -48,7 +48,7 @@ const Header = () => {
           :
           <div className="flex items-center gap-6">
             <h1 className="text-xl font-semibold">Ice Center</h1>
-            <Label className="text-base">A Melhor página de sorvetes do mundo!</Label>
+            <Label className="text-base">A melhor página de sorvetes do mundo!</Label>
           </div>
         }
       </div>

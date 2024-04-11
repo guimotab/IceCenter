@@ -28,7 +28,7 @@ const Store = () => {
 
   useEffect(() => {
     if (store) {
-      loadData()
+        loadData()
     }
   }, [store])
 
@@ -46,9 +46,10 @@ const Store = () => {
       setRevenue(respRevenue)
       const respSales = await SalesController.getAllByRevenueId(respRevenue.id)
       if (respSales) {
-        setSales(respSales)
+        return setSales(respSales)
       }
     }
+    throw new Error()
   }
 
   function resetCart() {

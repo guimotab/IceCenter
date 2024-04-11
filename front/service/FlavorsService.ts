@@ -1,7 +1,11 @@
 import { HttpService } from "./HttpService";
 import axios from "axios";
 import { IFlavorsIceCream } from "@/interface/IFlavorsIceCream";
-
+const errorAxios = {
+  data: {
+    resp: "Ocorreu um erro na conexão!"
+  }
+}
 export class FlavorsService extends HttpService<IFlavorsIceCream[]> {
   private static stockService: FlavorsService | undefined
   private static _urlAddress = "http://localhost:4000/flavors"
@@ -17,7 +21,7 @@ export class FlavorsService extends HttpService<IFlavorsIceCream[]> {
 
 
   async getAllByStockId(stockId: string) {
-    const resp = await axios.get(`${FlavorsService._urlAddress}/all/stock/${stockId}`)
+    const resp = await axios.get(`${FlavorsService._urlAddress}/all/stock/${stockId}`).catch(e => errorAxios)
     return resp.data as { resp: string, data?: IFlavorsIceCream[] }
   }
 }

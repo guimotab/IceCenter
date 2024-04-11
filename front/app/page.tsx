@@ -31,7 +31,7 @@ export default function Login() {
         <Separator />
 
         <section className="flex flex-col gap-10 w-full">
-          <h2 className="self-center text-xl sm:text-2xl font-medium underline text-slate-500">Entenda o Passo a Passo (2 min)</h2>
+          <h2 className="text-xl sm:text-2xl font-medium underline text-slate-500">Entenda o Passo a Passo (2 min)</h2>
 
           <div className="flex flex-col items-center w-full gap-6">
             <div className="space-y-1 self-start">
@@ -39,7 +39,7 @@ export default function Login() {
                 <div className="flex items-center gap-2">
                   <h2 className="text-xl sm:text-2xl font-semibold">Seja Dono de Sua Empresa e Franquias</h2>
                   <Link target="_blank" href={"admin/createCompany"} >
-                    <Button size={"sm"}>Criar empresa</Button>
+                    <Button >Criar empresa</Button>
                   </Link>
                 </div>
                 <Label className="text-lg">Crie uma empresas e crie quantas franquias você quiser de maneira intuitiva e prática!</Label>
@@ -58,7 +58,7 @@ export default function Login() {
               <div className="flex items-center gap-2">
                 <h3 className="text-xl sm:text-2xl font-semibold">Gerencie Suas Franquias Com Perfil de Gerente</h3>
                 <Link target="_blank" href={"manager/"} >
-                  <Button size={"sm"}>Gerenciar loja</Button>
+                  <Button >Gerenciar loja</Button>
                 </Link>
               </div>
               <Label className="text-lg">Após a criação da sua franquia, você pode acessá-la utilizando o email e a senha cadastrada!</Label>

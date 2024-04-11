@@ -1,7 +1,11 @@
 import { HttpService } from "./HttpService";
 import axios from "axios";
 import { ISales } from "@/interface/ISales";
-
+const errorAxios = {
+  data: {
+    resp: "Ocorreu um erro na conexão!"
+  }
+}
 export class SalesService extends HttpService<ISales> {
   private static salesService: SalesService | undefined
   private static _urlAddress = "http://localhost:4000/sales"
@@ -16,12 +20,12 @@ export class SalesService extends HttpService<ISales> {
   }
 
   async getAllByRevenueId(revenueId: string) {
-    const resp = await axios.get(`${SalesService._urlAddress}/all/${revenueId}`)
+    const resp = await axios.get(`${SalesService._urlAddress}/all/${revenueId}`).catch(e=> errorAxios)
     return resp.data as { resp: string, data?: ISales[] }
   }
 
   async postMany(data: ISales[]) {
-    const resp = await axios.post(`${SalesService._urlAddress}/createMany/`, { data })
+    const resp = await axios.post(`${SalesService._urlAddress}/createMany/`, { data }).catch(e=> errorAxios)
     return resp.data as { resp: string, data?: ISales[] }
   }
 }

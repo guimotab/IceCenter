@@ -38,7 +38,7 @@ const Header = () => {
   }, [])
   function handleLogout() {
     TokenService.deleteTokens()
-    router.push("/")
+    router.push("/manager")
   }
   return (
     <header className="flex flex-col items-center w-full border-b">

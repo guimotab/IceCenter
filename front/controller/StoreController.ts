@@ -21,9 +21,7 @@ export abstract class StoreController {
 
   static async getStoreBySlug(slug: string) {
     const resp = await this.storeService.getBySlug(slug)
-    if (resp.data) {
-      return resp.data
-    }
+    return resp
   }
 
   static async put(id: string, data: IStore) {

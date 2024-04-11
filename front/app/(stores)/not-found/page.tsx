@@ -2,15 +2,12 @@
 
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { useEffect } from "react";
 import { MdOutlineWifiFind } from "react-icons/md";
 const pageNotFound = () => {
 
-  useEffect(() => {
-  }, [])
   return (
     <main className="flex flex-col items-center">
-      <div className="py-10">
+      <div className="w-fit py-10">
         <Card className="py-5 px-7 space-y-3">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-3">

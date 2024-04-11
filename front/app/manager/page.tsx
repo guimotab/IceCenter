@@ -59,7 +59,7 @@ export default function Login() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setErrorSubmit(undefined)
     const result = await AuthController.loginManager(values.email, values.password)
-    if (result && result.resp === "Success") {
+    if (result && result.resp === "Success" && result.manager) {
       setManager(result.manager)
       setErrorUrl(undefined)
       return router.push("manager/store")
