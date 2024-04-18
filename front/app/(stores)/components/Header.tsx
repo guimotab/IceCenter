@@ -2,7 +2,6 @@ import { Label } from "@/components/ui/label"
 import { StoreController } from "@/controller/StoreController"
 import useCurrentStore from "@/state/hooks/useCurrentStore"
 import { useUpdateCurrentStore } from "@/state/hooks/useUpdateCurrentStore"
-import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect } from "react"
 

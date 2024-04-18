@@ -43,7 +43,7 @@ export default function SignIn() {
     }
     const auth = await AuthController.createCompany(values.nameCompany, values.email, values.password)
     if (auth.resp === "Success") {
-      setCurrentOwner(auth.owner)
+      setCurrentOwner(auth.owner!)
       router.push("./stores")
     } else {
       setErrorLogin(auth.resp)

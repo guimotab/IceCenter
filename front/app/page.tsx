@@ -1,15 +1,11 @@
 "use client"
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export default function Login() {
-  const router = useRouter()
-
   return (
     <main className="flex flex-col items-center">
 

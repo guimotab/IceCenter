@@ -3,13 +3,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { pricesOfIceCream } from "@/enum/pricesOfIcecream"
-import { IShoppingCart } from "@/interface/IShoppingCart"
 import useShoppingCart from "@/state/hooks/useShoppingCart"
 import { useUpdateShoppingCart } from "@/state/hooks/useUpdateShoppingCart"
 import flavorsIceCream from "@/types/flavorsIceCream"
-import { Content } from "@radix-ui/react-dropdown-menu"
-import { Title, Description } from "@radix-ui/react-toast"
-import { ChangeEvent, ChangeEventHandler, useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 
 export interface CardsItemShopProps {
   name: flavorsIceCream | "Casquinha",
