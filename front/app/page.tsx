@@ -13,7 +13,7 @@ export default function Login() {
 
         <section className="flex flex-col items-center w-full gap-4">
           <div className="flex flex-col items-center gap-1 min-w-[20rem]">
-            <h1 className="text-2xl sm:text-3xl font-bold">Bem vindos ao projeto IceCenter!</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-center">Bem vindos ao projeto IceCenter!</h1>
             <Label className="text-lg text-center">
               A ideia desse projeto é você poder gerenciar uma rede de sorvetes de maneira completa,
               <br className="hidden sm:block" /> desde a criação da empresa até a visualização da sua loja!
