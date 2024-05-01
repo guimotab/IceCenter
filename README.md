@@ -21,6 +21,7 @@ cd front
 Para baixar as dependências e rodar o projeto, use os comandos:
 ```
 npm i
+npm run build
 npm run start
 ```
 
@@ -68,6 +69,5 @@ npx prisma migrate dev
 
 Por fim, use o comando para rodar o servidor:
 ```
-npm run build
 npm run start
 ```
