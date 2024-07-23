@@ -1,0 +1,92 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Owner {
+  id       String    @id @default(uuid())
+  email    String    @unique
+  password String
+  company  Company[]
+}
+
+model Company {
+  id      String  @id @default(uuid())
+  name    String  @unique
+  storeId String?
+  store   Store[]
+  owner   Owner   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId String  @unique
+}
+
+model Store {
+  id        String      @id @default(uuid())
+  name      String      @unique
+  slug      String      @unique
+  isOpen    Boolean     @default(false)
+  revenue   Revenue?
+  manager   Manager?
+  address   Address?
+  stock     StockStore?
+  company   Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId String
+}
+
+model Manager {
+  id       String @id @default(uuid())
+  store    Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  storeId  String @unique
+  email    String @unique
+  password String
+}
+
+model StockStore {
+  id      String            @id @default(uuid())
+  cone    Int
+  store   Store             @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  storeId String            @unique
+  flavors FlavorsIceCream[]
+}
+
+model FlavorsIceCream {
+  id       String     @id @default(uuid())
+  name     String
+  quantity Int
+  stock    StockStore @relation(fields: [stockId], references: [id], onDelete: Cascade)
+  stockId  String
+}
+
+model Address {
+  id           String @id @default(uuid())
+  store        Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  storeId      String @unique
+  cep          String
+  city         String
+  neighborhood String
+  number       String
+  street       String
+  uf           String
+}
+
+model Revenue {
+  id      String  @id @default(uuid())
+  store   Store   @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  storeId String  @unique
+  cash    Float
+  sales   Sales[]
+}
+
+model Sales {
+  id        String   @id @default(uuid())
+  date      DateTime @default(now())
+  name      String
+  quantity  Int
+  price     Float
+  revenue   Revenue  @relation(fields: [revenueId], references: [id], onDelete: Cascade)
+  revenueId String   
+}

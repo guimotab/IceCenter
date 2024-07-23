@@ -1,1 +1,0 @@
-{"version":3,"file":"companyRoutes.js","sourceRoot":"","sources":["../../../src/routes/companyRoutes.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,MAAM,SAAS,CAAC;AAE9B,OAAO,iBAAiB,MAAM,oCAAoC,CAAC;AAEnE,MAAM,YAAY,GAAG,OAAO,CAAC,MAAM,EAAE,CAAA;AACrC,YAAY;KAGP,GAAG,CAAC,yBAAyB,EAAE,iBAAiB,CAAC,YAAY,CAAC;KAC9D,IAAI,CAAC,iBAAiB,EAAE,iBAAiB,CAAC,MAAM,CAAC,CAAA;AAKtD,eAAe,YAAY,CAAA"}
