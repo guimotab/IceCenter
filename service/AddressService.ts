@@ -1,11 +1,13 @@
+import { HttpService } from "./HttpService";
+import axios from "axios";
 import { IAddress } from "@/interface/IAddress";
-import { prisma } from "@/lib/prisma";
 
-export class AddressService {
+export class AddressService extends HttpService<IAddress> {
   private static addressService: AddressService | undefined
-  
-  private constructor() {}
-
+  private static _urlAddress = "http://localhost:3000/address"
+  private constructor(url = "address") {
+    super(url);
+  }
   static getInstance() {
     if (!this.addressService) {
       this.addressService = new AddressService()
@@ -13,27 +15,9 @@ export class AddressService {
     return this.addressService
   }
 
-  async putData(addressId: string, data: IAddress) {
-    try {
-      const address = await prisma.address.update({ where: { id: addressId }, data })
-      return { resp: "Success", data: address }
-    } catch (error) {
-      console.log(error);
-      return { resp: "Ocorreu um erro no servidor" }
-    }
-  }
-
   async getByStoreId(storeId: string) {
-    try {
-      const address = await prisma.address.findUnique({ where: { storeId } })
-      if (!address) {
-        return { resp: "Endereço não encontrado" }
-      }
-      return { resp: "Success", data: address }
-    } catch (error) {
-      console.log(error);
-      return { resp: "Ocorreu um erro no servidor" }
-    }
+    const resp = await axios.get(`${AddressService._urlAddress}/byStoreId/${storeId}`)
+    return resp.data as { resp: string, data?: IAddress }
   }
 }
 
