@@ -1,10 +1,9 @@
 import { prisma } from "@/lib/prisma"
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { v4 as uuid } from 'uuid';
 
 export class AuthService {
-  static baseUrl = "http://localhost:4000/auth"
 
   static async registerCompany(name: string, email: string, password: string) {
 
@@ -76,7 +75,6 @@ export class AuthService {
   }
 
   static async loginManager(email: string, password: string) {
-
     //check if user exist
     const manager = await prisma.manager.findUnique({ where: { email } })
     if (!manager) {
