@@ -1,14 +1,11 @@
-import { HttpService } from "./HttpService";
+import { errorAxios, HttpService } from "./HttpService";
 import axios from "axios";
 import { ISales } from "@/interface/ISales";
-const errorAxios = {
-  data: {
-    resp: "Ocorreu um erro na conexão!"
-  }
-}
+import { IFlavorsIceCream } from "@/interface/IFlavorsIceCream";
+
 export class SalesService extends HttpService<ISales> {
   private static salesService: SalesService | undefined
-  private static _urlAddress = "http://localhost:3000/sales"
+
   private constructor(url = "sales") {
     super(url);
   }
@@ -19,13 +16,14 @@ export class SalesService extends HttpService<ISales> {
     return this.salesService
   }
 
+
   async getAllByRevenueId(revenueId: string) {
-    const resp = await axios.get(`${SalesService._urlAddress}/${revenueId}/getAll`).catch(e=> errorAxios)
+    const resp = await axios.get(`${this._url}/byRevenue/${revenueId}/getAll`).catch(e => errorAxios(e))
     return resp.data as { resp: string, data?: ISales[] }
   }
 
   async postMany(data: ISales[]) {
-    const resp = await axios.post(`${SalesService._urlAddress}/createMany/`, { data }).catch(e=> errorAxios)
+    const resp = await axios.post(`${this._url}/createMany/`, { data }).catch(e => errorAxios(e))
     return resp.data as { resp: string, data?: ISales[] }
   }
 }

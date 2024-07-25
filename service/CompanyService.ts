@@ -1,10 +1,10 @@
 import axios from "axios";
-import { HttpService } from "./HttpService";
+import { errorAxios, HttpService } from "./HttpService";
 import { ICompany } from "@/interface/ICompany";
 
 export class CompanyService extends HttpService<ICompany> {
   private static companyService: CompanyService | undefined
-  private static _urlCompany = "http://localhost:3000/company"
+
   private constructor(url = "company") {
     super(url);
   }
@@ -15,7 +15,7 @@ export class CompanyService extends HttpService<ICompany> {
     return this.companyService
   }
   async getByOwnerId(id: string) {
-    const resp = await axios.get(`${CompanyService._urlCompany}/byOwner/${id}`)
+    const resp = await axios.get(`${this._url}/byOwner/${id}`).catch(e => errorAxios(e))
     return resp.data as {resp: string, data?: ICompany}
   }
 }

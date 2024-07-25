@@ -1,6 +1,6 @@
 "use client"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { ICompany } from "@/interface/ICompany"
 import { IStore } from "@/interface/IStore"
@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation"
 import { useToast } from "@/components/ui/use-toast"
 import { TbWorldShare } from "react-icons/tb";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
 
 
 interface StoreInformationsProps {
@@ -145,15 +146,9 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
                   :
                   <TooltipProvider delayDuration={300}>
                     <Tooltip>
-                      <TooltipTrigger>
-                        <Button
-                          variant={"secondary"}
-                          disabled
-                          size={"sm"}
-                          className="space-x-2">
-                          <TbWorldShare className="text-xl" />
-                          <p>Acessar na Web</p>
-                        </Button>
+                      <TooltipTrigger className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "space-x-2")}>
+                        <TbWorldShare className="text-xl" />
+                        <p>Acessar na Web</p>
                       </TooltipTrigger>
                       <TooltipContent side="bottom">
                         <p>Abra a loja pelo login de gerente para acessar</p>
@@ -164,14 +159,9 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
               </div>
 
               <AlertDialog>
-                <AlertDialogTrigger>
-                  <Button
-                    variant={"destructive"}
-                    size={"sm"}
-                    className="space-x-2">
-                    <MdDelete className="text-lg" />
-                    <p className="hidden sm:block">Excluir loja</p>
-                  </Button>
+                <AlertDialogTrigger className={cn(buttonVariants({ variant: "destructive", size: "sm" }), "space-x-2")}>
+                  <MdDelete className="text-lg" />
+                  <p className="hidden sm:block">Excluir loja</p>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>

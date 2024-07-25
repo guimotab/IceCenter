@@ -9,14 +9,14 @@ interface IParamsProps {
 }
 
 export async function POST(res: Request, { params }: IParamsProps) {
-  const { ...data } = await res.json() as IStore& { address: IAddress }
+  const { ...data } = await res.json() as IStore & { address: IAddress }
 
   // create password
   try {
     const checkStoreExist = await prisma.store.findUnique({ where: { name: data.name } })
     if (checkStoreExist) {
-    return NextResponse.json({ resp: "O nome da loja já está sendo usada!" })
-  }
+      return NextResponse.json({ resp: "O nome da loja já está sendo usada!" })
+    }
 
     let slug = data.slug
     const checkSlugExist = await prisma.store.findUnique({ where: { slug: data.slug } })

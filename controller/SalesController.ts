@@ -18,7 +18,7 @@ export abstract class SalesController {
   }
 
   static async post(data: ISales) {
-    return await this.salesService.postData("create", data)
+    return await this.salesService.postData(data)
   }
 
   static async postMany(data: ISales[]) {

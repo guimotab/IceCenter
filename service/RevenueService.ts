@@ -1,14 +1,10 @@
-import { HttpService } from "./HttpService";
+import { errorAxios, HttpService } from "./HttpService";
 import axios from "axios";
 import { IRevenueStore } from "@/interface/IRevenueStore";
-const errorAxios = {
-  data: {
-    resp: "Ocorreu um erro na conexão!"
-  }
-}
+
 export class RevenueService extends HttpService<IRevenueStore> {
   private static revenueService: RevenueService | undefined
-  private static _urlAddress = "http://localhost:3000/revenue"
+
   private constructor(url = "revenue") {
     super(url);
   }
@@ -19,8 +15,8 @@ export class RevenueService extends HttpService<IRevenueStore> {
     return this.revenueService
   }
 
-  async getByStoreId(stockId: string) {
-    const resp = await axios.get(`${RevenueService._urlAddress}/byStock/${stockId}`).catch(e => errorAxios)
+  async getByStoreId(storeId: string) {
+    const resp = await axios.get(`${this._url}/byStore/${storeId}`).catch(e => errorAxios(e))
     return resp.data as { resp: string, data?: IRevenueStore }
   }
 }

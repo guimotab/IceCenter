@@ -20,7 +20,7 @@ export abstract class AddressController {
   }
 
   static async post(data: IAddress) {
-    return await this.addressService.postData("create", data)
+    return await this.addressService.postData(data)
   }
 
   static async delete(id: string) {

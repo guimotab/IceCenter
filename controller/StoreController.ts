@@ -30,7 +30,7 @@ export abstract class StoreController {
 
   static async post(storeData: IStore, address: IAddress) {
     const data = { ...storeData, address } as IStore
-    return await this.storeService.postData("create", data)
+    return await this.storeService.postData(data)
   }
 
   static async delete(id: string) {

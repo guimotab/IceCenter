@@ -1,3 +1,4 @@
+"use client"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { CompanyController } from "@/controller/CompanyController"
 import { OwnerController } from "@/controller/OwnerController"

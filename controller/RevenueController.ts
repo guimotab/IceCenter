@@ -20,7 +20,7 @@ export abstract class RevenueController {
   }
 
   static async post(data: IRevenueStore) {
-    return await this.flavorsService.postData("create", data)
+    return await this.flavorsService.postData(data)
   }
 
   static async delete(id: string) {

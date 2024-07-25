@@ -15,7 +15,7 @@ export default function RootLayout({
     <html lang="en">
       <Suspense>
         <RecoilRoot>
-          <body className={inter.className}>{children}</body>
+          <body className={inter.className} suppressHydrationWarning={true}>{children}</body>
         </RecoilRoot>
       </Suspense>
     </html >

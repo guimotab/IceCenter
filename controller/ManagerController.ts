@@ -31,7 +31,7 @@ export abstract class ManagerController {
   }
 
   static async post(data: IManager) {
-    return await this.managerController.postData("create", data)
+    return await this.managerController.postData(data)
   }
 
   static async delete(id: string): Promise<void> {

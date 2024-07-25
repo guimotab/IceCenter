@@ -9,7 +9,6 @@ interface IParamsProps {
 export async function GET(res: Request, { params }: IParamsProps) {
   const { storeId } = params
 
-
   try {
     const revenue = await prisma.revenue.findUnique({ where: { storeId } })
     if (!revenue) {

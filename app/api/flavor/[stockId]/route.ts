@@ -8,7 +8,7 @@ interface IParamsProps {
 }
 
 export async function PUT(res: Request, { params }: IParamsProps) {
-  const { ...data } = await res.json() as IFlavorsIceCream[]
+  const data = await res.json() as IFlavorsIceCream[]
   const { stockId } = params
 
   try {

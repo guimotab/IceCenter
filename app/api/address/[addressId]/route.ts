@@ -4,17 +4,15 @@ import { prisma } from "@/lib/prisma"
 import { NextResponse } from "next/server";
 
 interface IParamsProps {
-  params: { storeId: string }
+  params: { addressId: string }
 }
 
-export async function GET(res: Request, { params }: IParamsProps) {
-  const { storeId } = params
+export async function PUT(res: Request, { params }: IParamsProps) {
+  const { ...data } = await res.json() as IAddress
+  const { addressId } = params
 
   try {
-    const address = await prisma.address.findUnique({ where: { storeId } })
-    if (!address) {
-      return NextResponse.json({ resp: "Endereço não encontrado" })
-    }
+    const address = await prisma.address.update({ where: { id: addressId }, data })
     return NextResponse.json({ resp: "Success", data: address })
   } catch (error) {
     console.log(error);

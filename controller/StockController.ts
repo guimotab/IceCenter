@@ -19,7 +19,7 @@ export abstract class StockController {
   }
 
   static async post(data: IStockStore) {
-    return await this.stockService.postData("create", data)
+    return await this.stockService.postData(data)
   }
 
   static async delete(id: string) {

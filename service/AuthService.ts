@@ -7,7 +7,7 @@ const errorAxios = {
 }
 
 export class AuthService {
-  static baseUrl = "http://localhost:3000/auth"
+  static baseUrl = "http://localhost:3000/api/auth"
 
   static async registerCompany(name: string, email: string, password: string) {
     const resp = (await axios.post(`${this.baseUrl}/company`, { name, email, password }).catch(e => errorAxios)).data

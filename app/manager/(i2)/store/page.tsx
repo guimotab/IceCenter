@@ -1,6 +1,6 @@
 "use client"
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label";
 import { Toaster } from "@/components/ui/toaster";
@@ -25,6 +25,7 @@ import { IoEyeOutline } from "react-icons/io5";
 import { TbWorldShare } from "react-icons/tb";
 import TableHistoric from "./components/TableHistoric";
 import { TbReload } from "react-icons/tb";
+import { cn } from "@/lib/utils";
 
 interface IDialogRevenue {
   name: flavorsIceCream | "Cone"
@@ -68,8 +69,6 @@ const Store = () => {
       }
     }
   }
-
-
 
   function handleCashVisibily() {
     setShowStoreCash(!showStoreCash)
@@ -140,15 +139,9 @@ const Store = () => {
                 :
                 <TooltipProvider delayDuration={300}>
                   <Tooltip>
-                    <TooltipTrigger>
-                      <Button
-                        variant={"secondary"}
-                        disabled
-                        size={"sm"}
-                        className="space-x-2">
-                        <TbWorldShare className="text-xl" />
-                        <p>Acessar na Web</p>
-                      </Button>
+                    <TooltipTrigger className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "space-x-2")}>
+                      <TbWorldShare className="text-xl" />
+                      <p>Acessar na Web</p>
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
                       <p>Abra a loja para poder acessar na web</p>
@@ -158,8 +151,10 @@ const Store = () => {
               }
               <AlertDialog>
                 {canOpenStore ?
-                  <AlertDialogTrigger>
-                    <Button variant={"outline"} className="text-xs px-2 py-1 sm:text-sm sm:px-4 sm:py-2 self-start" onClick={openStore}>Simular vendas</Button>
+                  <AlertDialogTrigger
+                    onClick={openStore}
+                    className={cn(buttonVariants({ variant: "outline", }), "text-xs px-2 py-1 sm:text-sm sm:px-4 sm:py-2 self-start")}>
+                    Simular vendas
                   </AlertDialogTrigger>
                   :
                   <Button className="text-xs px-2 py-1 sm:text-sm sm:px-4 sm:py-2 self-start" onClick={event => showError("Você não tem estoques para vender.", "A loja não foi aberta!")}>Simular vendas</Button>
