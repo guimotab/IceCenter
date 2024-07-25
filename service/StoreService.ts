@@ -20,12 +20,12 @@ export class StoreService extends HttpService<IStore> {
   }
 
   async getAllByCompanyId(idCompany: string) {
-    const resp = await axios.get(`${StoreService._urlCompany}/all/company/${idCompany}`).catch(e=> errorAxios)
+    const resp = await axios.get(`${StoreService._urlCompany}/byCompany/${idCompany}/getAll`).catch(e=> errorAxios)
     return resp.data as { resp: string, data?: IStore[] }
   }
 
   async getBySlug(slug: string) {
-    const resp = await axios.get(`http://localhost:3000/${slug}`).catch(e=> errorAxios)
+    const resp = await axios.get(`http://localhost:3000/bySlug/${slug}`).catch(e=> errorAxios)
     return resp.data as { resp: string, data?: IStore }
   }
 }

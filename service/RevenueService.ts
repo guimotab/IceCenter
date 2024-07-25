@@ -20,7 +20,7 @@ export class RevenueService extends HttpService<IRevenueStore> {
   }
 
   async getByStoreId(stockId: string) {
-    const resp = await axios.get(`${RevenueService._urlAddress}/stock/${stockId}`).catch(e => errorAxios)
+    const resp = await axios.get(`${RevenueService._urlAddress}/byStock/${stockId}`).catch(e => errorAxios)
     return resp.data as { resp: string, data?: IRevenueStore }
   }
 }

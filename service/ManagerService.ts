@@ -1,4 +1,3 @@
-import { IRevenueStore } from "@/interface/IRevenueStore";
 import axios from "axios";
 import { HttpService } from "./HttpService";
 import { IManager } from "@/interface/IManager";
@@ -17,7 +16,7 @@ export class ManagerService extends HttpService<IManager> {
   }
 
   async getByStoreId(storeId: string){
-    const resp = await axios.get(`${ManagerService._url}/store/${storeId}`)
+    const resp = await axios.get(`${ManagerService._url}/byStore/${storeId}`)
     return resp.data as { resp: string, data?: IManager }
   }
 

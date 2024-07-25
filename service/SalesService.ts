@@ -20,7 +20,7 @@ export class SalesService extends HttpService<ISales> {
   }
 
   async getAllByRevenueId(revenueId: string) {
-    const resp = await axios.get(`${SalesService._urlAddress}/all/${revenueId}`).catch(e=> errorAxios)
+    const resp = await axios.get(`${SalesService._urlAddress}/${revenueId}/getAll`).catch(e=> errorAxios)
     return resp.data as { resp: string, data?: ISales[] }
   }
 

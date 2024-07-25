@@ -16,7 +16,7 @@ export class AddressService extends HttpService<IAddress> {
   }
 
   async getByStoreId(storeId: string) {
-    const resp = await axios.get(`${AddressService._urlAddress}/byStoreId/${storeId}`)
+    const resp = await axios.get(`${AddressService._urlAddress}/byStore/${storeId}`)
     return resp.data as { resp: string, data?: IAddress }
   }
 }
