@@ -1,3 +1,4 @@
+"use client"
 import { Label } from "@/components/ui/label"
 import { StoreController } from "@/controller/StoreController"
 import useCurrentStore from "@/state/hooks/useCurrentStore"
