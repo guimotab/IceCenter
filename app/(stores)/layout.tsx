@@ -1,11 +1,7 @@
-import { Inter } from "next/font/google";
 import "../globals.css";
 import Header from "./components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import { Suspense } from "react";
-
-const inter = Inter({ subsets: ["latin"] });
-
 
 export default function RootLayout({
   children,
@@ -13,7 +9,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className={inter.className}>
+    <div >
       <Suspense fallback={<>Loading...</>}>
         <Header />
         {children}

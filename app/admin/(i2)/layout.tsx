@@ -1,11 +1,9 @@
-import { Inter } from "next/font/google";
+import { cookies } from "next/headers";
 import "../../globals.css";
 import Header from "./components/Header";
 import { Toaster } from "@/components/ui/sonner";
-import { TokenService } from "@/service/TokenService";
 import { redirect } from "next/navigation";
-
-const inter = Inter({ subsets: ["latin"] });
+import { TokenService } from "@/service/TokenService";
 
 export default function RootLayout({
   children,
@@ -13,15 +11,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const tokenService = new TokenService()
-  const resp = tokenService.get()
-  if (!resp.data) {
-    redirect(`/admin?erro=${resp.message}`)
+  const cookiesData = cookies().get(`token-icecenter-company`)
+  if (!cookiesData) {
+    redirect(`/admin?erro=Login não realizado!`)
   }
-  
+  const value = JSON.parse(cookiesData.value) as { token: string }
+  const token = TokenService.decodeCookie(value)
+  if (!token.data) {
+    redirect(`/admin?erro=${token.message}`)
+  }
+
   return (
-    <div className={inter.className}>
-      <Header idUser={resp.data.id}/>
+    <div >
+      <Header userId={token.data.id} />
       {children}
       <Toaster />
     </div>

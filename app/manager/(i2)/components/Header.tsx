@@ -1,5 +1,6 @@
 "use client"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { AuthController } from "@/controller/AuthController"
 import { ManagerController } from "@/controller/ManagerController"
 import { StoreController } from "@/controller/StoreController"
 import { TokenService } from "@/service/TokenService"
@@ -13,10 +14,10 @@ import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
 interface HeaderProps {
-  idUser: string;
+  userId: string
 }
 
-const Header = ({ idUser }: HeaderProps) => {
+const Header = ({ userId }: HeaderProps) => {
   const manager = useCurrentManager()
   const store = useCurrentStore()
   const setManager = useUpdateCurrentManager()
@@ -25,7 +26,7 @@ const Header = ({ idUser }: HeaderProps) => {
   
   useEffect(() => {
     async function verify() {
-      const manager = await ManagerController.get(idUser)
+      const manager = await ManagerController.get(userId)
       if (manager) {
         setManager(manager)
         const store = await StoreController.get(manager.storeId)
@@ -39,7 +40,7 @@ const Header = ({ idUser }: HeaderProps) => {
   }, [])
 
   function handleLogout() {
-    TokenService.deleteTokens()
+    AuthController.logoutCompany()
     router.push("/manager")
   }
 

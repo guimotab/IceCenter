@@ -9,10 +9,10 @@ interface IParamsProps {
 }
 
 export async function POST(res: Request, { params }: IParamsProps) {
-  const { ...data } = await res.json() as ISales[]
+  const { data } = await res.json() as { data: ISales[] }
 
   try {
-    const sales = await prisma.sales.createMany({ data })
+    const sales = await Promise.all(data.map(async thisData => await prisma.sales.create({ data: thisData })))
     return NextResponse.json({ resp: "Success", data: sales })
   } catch (error) {
     console.log(error);

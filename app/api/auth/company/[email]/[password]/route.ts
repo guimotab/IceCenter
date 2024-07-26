@@ -2,6 +2,7 @@
 import { prisma } from "@/lib/prisma"
 import * as bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 interface IParamsProps {
@@ -23,11 +24,11 @@ export async function GET(res: Request, { params }: IParamsProps) {
       return NextResponse.json({ resp: "Email ou senha incorretos!" })
     }
     const secret = process.env.SECRET!
-    const secretRefresh = process.env.REFRESH!
-    const token = jwt.sign({ id: owner.id, }, secret, { expiresIn: "5m" })
-    const refresh = jwt.sign({ id: owner.id, }, secretRefresh, { expiresIn: "30m" })
+    const token = jwt.sign({ id: owner.id, }, secret, { expiresIn: "1d" })
+    
+    cookies().set(`token-icecenter-company`, JSON.stringify({ token }))
 
-    return NextResponse.json({ resp: "Success", token: token, refresh: refresh, owner: owner })
+    return NextResponse.json({ resp: "Success", token: token, owner: owner })
   } catch (error) {
     console.log(error);
     return NextResponse.json({ resp: error })

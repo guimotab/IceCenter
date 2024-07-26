@@ -42,7 +42,7 @@ export async function DELETE(res: Request, { params }: IParamsProps) {
 export async function PUT(res: Request, { params }: IParamsProps) {
   const { ...data } = await res.json() as IStore
   const { storeId } = params
-
+  
   try {
     const checkStoreExist = await prisma.store.findUnique({ where: { name: data.name } })
     if (checkStoreExist && checkStoreExist.name !== data.name) {

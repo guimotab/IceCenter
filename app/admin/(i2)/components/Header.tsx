@@ -1,5 +1,6 @@
 "use client"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { AuthController } from "@/controller/AuthController"
 import { CompanyController } from "@/controller/CompanyController"
 import { OwnerController } from "@/controller/OwnerController"
 import { TokenService } from "@/service/TokenService"
@@ -13,9 +14,9 @@ import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
 interface HeaderProps {
-  idUser: string;
+  userId: string
 }
-const Header = ({ idUser }: HeaderProps) => {
+const Header = ({ userId }: HeaderProps) => {
   const owner = useCurrentOwner()
   const company = useCurrentCompany()
   const setOnwer = useUpdateCurrentOwner()
@@ -23,7 +24,7 @@ const Header = ({ idUser }: HeaderProps) => {
   const router = useRouter()
   useEffect(() => {
     async function verify() {
-      const owner = await OwnerController.get(idUser)
+      const owner = await OwnerController.get(userId)
       if (owner) {
         const company = await CompanyController.getByOwnerId(owner.id)
         if (company) {
@@ -36,7 +37,7 @@ const Header = ({ idUser }: HeaderProps) => {
     verify()
   }, [])
   function handleLogout() {
-    TokenService.deleteTokens()
+    AuthController.logoutCompany()
     router.push("/admin")
   }
   return (

@@ -56,7 +56,7 @@ export default function Login() {
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const auth = await AuthController.loginAdmin(values.email, values.password)
+    const auth = await AuthController.loginCompany(values.email, values.password)
     if (auth.resp === "Success") {
       setCurrentOwner(auth.owner!)
       setErrorUrl(undefined)

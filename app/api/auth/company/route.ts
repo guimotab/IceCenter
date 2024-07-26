@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import * as bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { v4 as uuid } from 'uuid';
 
@@ -41,12 +42,24 @@ export async function POST(res: Request) {
     })
 
     const secret = process.env.SECRET!
-    const secretRefresh = process.env.REFRESH!
 
-    const token = jwt.sign({ id: ownerId, }, secret, { expiresIn: "5m" })
-    const refresh = jwt.sign({ id: ownerId, }, secretRefresh, { expiresIn: "30m" })
+    const token = jwt.sign({ id: ownerId, }, secret, { expiresIn: "1d" })
 
-    return NextResponse.json({ resp: "Success", token: token, refresh: refresh, owner: newCompany.owner })
+    cookies().set(`token-icecenter-company`, JSON.stringify({ token }))
+
+    return NextResponse.json({ resp: "Success", token: token, owner: newCompany.owner })
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ resp: error })
+  }
+}
+
+export async function DELETE(res: Request) {
+  try {
+    
+    cookies().delete(`token-icecenter-company`)
+
+    return NextResponse.json({ resp: "Success" })
   } catch (error) {
     console.log(error);
     return NextResponse.json({ resp: error })

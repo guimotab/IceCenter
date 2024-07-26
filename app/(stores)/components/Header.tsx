@@ -19,7 +19,7 @@ const Header = () => {
 
   async function onPageLoad() {
     const result = await StoreController.getStoreBySlug(searchParams.slugStore)
-    if (result && result.data) {
+    if (result && result.data && result.data.isOpen) {
       return setStore(result.data)
     }
     router.push("/not-found")
