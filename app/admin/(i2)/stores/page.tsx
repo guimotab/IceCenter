@@ -67,8 +67,9 @@ const Home = () => {
               </Card>
             )
               :
-              <Label className="text-lg font-normal">Não há lojas no momento! <br />
-                Clique em <Badge variant={"outline"}>Nova loja</Badge> para adicionar sua loja</Label>
+              <Label className="text-lg font-normal">
+                Não há lojas no momento! <br />Clique em <Badge variant={"outline"}>Nova loja</Badge> para adicionar sua loja
+              </Label>
             }
           </div>
         </div>
