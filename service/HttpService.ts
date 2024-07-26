@@ -1,18 +1,13 @@
 import axios from "axios"
 import { IHttpService } from "./IHttpService"
+import env from "dotenv"
 
-// const errorAxios = {
-//   data: {
-//     resp: "Ocorreu um erro na conexão!"
-//   }
-// }
-
-
+env.config()
 export abstract class HttpService<T> implements IHttpService<T> {
   protected _url
 
   constructor(url: string) {
-    this._url = "http://localhost:3000/api/" + url
+    this._url = `${process.env.NEXT_PUBLIC_BASE_URL}api/` + url
   }
 
   async get(id: string) {

@@ -12,35 +12,37 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
-const Header = () => {
+interface HeaderProps {
+  idUser: string;
+}
+
+const Header = ({ idUser }: HeaderProps) => {
   const manager = useCurrentManager()
   const store = useCurrentStore()
   const setManager = useUpdateCurrentManager()
   const setStore = useUpdateCurrentStore()
   const router = useRouter()
+  
   useEffect(() => {
     async function verify() {
-      const tokenService = new TokenService()
-      const resp = tokenService.get()
-      if (resp.status) {
-        const manager = await ManagerController.get(resp.data!.id)
-        if (manager) {
-          setManager(manager)
-          const store = await StoreController.get(manager.storeId)
-          if (store.data) {
-            setStore(store.data)
-            return
-          }
+      const manager = await ManagerController.get(idUser)
+      if (manager) {
+        setManager(manager)
+        const store = await StoreController.get(manager.storeId)
+        if (store.data) {
+          setStore(store.data)
+          return
         }
       }
-      router.push(`/manager?erro=${resp.message}`)
     }
     verify()
   }, [])
+
   function handleLogout() {
     TokenService.deleteTokens()
     router.push("/manager")
   }
+
   return (
     <header className="flex flex-col items-center w-full border-b">
       <div className="flex items-center justify-between py-3 px-8 sm:px-10 max-w-[80rem] w-full">

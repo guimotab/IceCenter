@@ -22,7 +22,7 @@ export class TokenService {
       return { status: false, message: "Não logado" } as IResponseTokenService
     }
 
-    const secret = process.env.NEXT_PUBLIC_SECRET!
+    const secret = process.env.SECRET!
     let tokenId: { id: string }
 
     try {
@@ -48,8 +48,8 @@ export class TokenService {
 
   private refreshTokenVerify() {
 
-    const secret = process.env.NEXT_PUBLIC_SECRET!
-    const refresh = process.env.NEXT_PUBLIC_REFRESH!
+    const secret = process.env.SECRET!
+    const refresh = process.env.REFRESH!
 
     try {
 

@@ -12,7 +12,10 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
-const Header = () => {
+interface HeaderProps {
+  idUser: string;
+}
+const Header = ({ idUser }: HeaderProps) => {
   const owner = useCurrentOwner()
   const company = useCurrentCompany()
   const setOnwer = useUpdateCurrentOwner()
@@ -20,20 +23,15 @@ const Header = () => {
   const router = useRouter()
   useEffect(() => {
     async function verify() {
-      const tokenService = new TokenService()
-      const resp = tokenService.get()
-      if (resp.status) {
-        const owner = await OwnerController.get(resp.data!.id)
-        if (owner) {
-          const company = await CompanyController.getByOwnerId(owner.id)
-          if (company) {
-            setOnwer(owner)
-            setCompany(company)
-            return
-          }
+      const owner = await OwnerController.get(idUser)
+      if (owner) {
+        const company = await CompanyController.getByOwnerId(owner.id)
+        if (company) {
+          setOnwer(owner)
+          setCompany(company)
+          return
         }
       }
-      router.push(`/admin?erro=${resp.message}`)
     }
     verify()
   }, [])
