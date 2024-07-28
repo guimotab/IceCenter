@@ -2,12 +2,13 @@ import axios from "axios"
 import { IHttpService } from "./IHttpService"
 import env from "dotenv"
 
-env.config()
 export abstract class HttpService<T> implements IHttpService<T> {
   protected _url
 
   constructor(url: string) {
-    this._url = `${process.env.NEXT_PUBLIC_BASE_URL}api/` + url
+    env.config()
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/"
+    this._url = `${baseUrl}api/` + url
   }
 
   async get(id: string) {

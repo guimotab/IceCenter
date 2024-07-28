@@ -141,7 +141,7 @@ const Store = () => {
                   <Tooltip>
                     <TooltipTrigger className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "space-x-2")}>
                       <TbWorldShare className="text-xl" />
-                      <p>Acessar na Web</p>
+                      <p className="hidden sm:block">Acessar na Web</p>
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
                       <p>Abra a loja para poder acessar na web</p>
@@ -196,7 +196,7 @@ const Store = () => {
 
                     <div className="flex items-center gap-2">
                       <Label className="text-lg">Caixa da loja</Label>
-                      <div onMouseDown={handleCashVisibily} onMouseUp={handleCashVisibily}>
+                      <div onClick={handleCashVisibily}>
                         {showStoreCash ? <IoEyeSharp className="text-2xl" /> : <IoEyeOutline className="text-2xl" />}
                       </div>
                     </div>

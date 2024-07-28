@@ -148,7 +148,7 @@ const StoreInformations = ({ company, manager, store, address, setEditInformatio
                     <Tooltip>
                       <TooltipTrigger className={cn(buttonVariants({ variant: "secondary", size: "sm" }), "space-x-2")}>
                         <TbWorldShare className="text-xl" />
-                        <p>Acessar na Web</p>
+                        <p className="hidden sm:block">Acessar na Web</p>
                       </TooltipTrigger>
                       <TooltipContent side="bottom">
                         <p>Abra a loja pelo login de gerente para acessar</p>
