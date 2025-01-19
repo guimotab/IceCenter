@@ -30,7 +30,7 @@ No campo `DATABASE_URL`, substitua as letras maiúsculas pelos seus dados do ban
 Para baixar as dependências e rodar o projeto, use os comandos:
 ```
 npm i
-npm run build
 npx prisma migrate dev
+npm run build
 npm run start
 ```
